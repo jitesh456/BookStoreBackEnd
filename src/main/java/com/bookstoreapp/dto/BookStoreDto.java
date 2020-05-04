@@ -4,11 +4,11 @@ public class BookStoreDto {
     private String name;
     private Double price;
     private int quantity;
-    private String authorName;
-    private String bookCover;
+    private String authorname;
+    private String bookcover;
     private String isbn;
     private String category;
-    private String bookDetails;
+    private String bookdetails;
 
     public String getName() {
         return name;
@@ -34,20 +34,20 @@ public class BookStoreDto {
         this.quantity = quantity;
     }
 
-    public String getAuthorName() {
-        return authorName;
+    public String getAuthorname() {
+        return authorname;
     }
 
-    public void setAuthorName(String authorName) {
-        this.authorName = authorName;
+    public void setAuthorname(String authorname) {
+        this.authorname = authorname;
     }
 
-    public String getBookCover() {
-        return bookCover;
+    public String getBookcover() {
+        return bookcover;
     }
 
-    public void setBookCover(String bookCover) {
-        this.bookCover = bookCover;
+    public void setBookcover(String bookcover) {
+        this.bookcover = bookcover;
     }
 
     public String getIsbn() {
@@ -66,11 +66,11 @@ public class BookStoreDto {
         this.category = category;
     }
 
-    public String getBookDetails() {
-        return bookDetails;
+    public String getBookdetails() {
+        return bookdetails;
     }
 
-    public void setBookDetails(String bookDetails) {
-        this.bookDetails = bookDetails;
+    public void setBookdetails(String bookdetails) {
+        this.bookdetails = bookdetails;
     }
 }

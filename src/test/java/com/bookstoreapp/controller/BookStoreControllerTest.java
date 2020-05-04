@@ -55,10 +55,10 @@ public class BookStoreControllerTest {
         bookStoreDto.setName("Rajnish");
         bookStoreDto.setPrice(12000.0);
         bookStoreDto.setQuantity(12);
-        bookStoreDto.setBookCover("dsfsdfsf");
+        bookStoreDto.setBookcover("dsfsdfsf");
         bookStoreDto.setCategory("comics");
-        bookStoreDto.setAuthorName("Jitesh");
-        bookStoreDto.setBookDetails("kjvcgvhbjklkbjvh");
+        bookStoreDto.setAuthorname("Jitesh");
+        bookStoreDto.setBookdetails("kjvcgvhbjklkbjvh");
         bookStoreDto.setIsbn("ABCD1");
 
         Gson gson=new Gson();
