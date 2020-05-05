@@ -1,9 +1,11 @@
 package com.bookstoreapp.modal;
 
+import com.bookstoreapp.dto.BookStoreDto;
+
 import javax.persistence.*;
 
 @Entity
-@Table(name = "bookdetails_table")
+@Table(name = "bookdetails")
 public class BookStore {
 
     private String name;
@@ -17,6 +19,17 @@ public class BookStore {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+
+    public BookStore(BookStoreDto bookStoreDto) {
+        this.name=bookStoreDto.getName();
+        this.price=bookStoreDto.getPrice();
+        this.quantity=bookStoreDto.getQuantity();
+        this.bookcover=bookStoreDto.getBookcover();
+        this.category=bookStoreDto.getCategory();
+        this.authorname=bookStoreDto.getAuthorname();
+        this.bookdetails=bookStoreDto.getBookdetails();
+        this.isbn=bookStoreDto.getIsbn();
+    }
 
     public Integer getId() {
         return id;

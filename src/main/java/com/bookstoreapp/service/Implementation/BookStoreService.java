@@ -15,16 +15,8 @@ public class BookStoreService implements IBookStoreService {
 
     @Override
     public String addBook(BookStoreDto bookStoreDto) {
-        BookStore bookStore=new BookStore();
-        bookStore.setName(bookStoreDto.getName());
-        bookStore.setPrice(bookStoreDto.getPrice());
-        bookStore.setQuantity(bookStoreDto.getQuantity());
-        bookStore.setBookcover(bookStoreDto.getBookcover());
-        bookStore.setCategory(bookStoreDto.getCategory());
-        bookStore.setAuthorname(bookStoreDto.getAuthorname());
-        bookStore.setBookdetails(bookStoreDto.getBookdetails());
-        bookStore.setIsbn(bookStoreDto.getIsbn());
+        BookStore bookStore=new BookStore(bookStoreDto);
         iBookStoreRepository.save(bookStore);
-        return "Insertion Successful";
+            return "Insertion Successful";
     }
 }
