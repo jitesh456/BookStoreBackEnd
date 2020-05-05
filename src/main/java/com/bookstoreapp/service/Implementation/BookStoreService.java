@@ -8,6 +8,8 @@ import com.bookstoreapp.service.IBookStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class BookStoreService implements IBookStoreService {
 
@@ -19,5 +21,10 @@ public class BookStoreService implements IBookStoreService {
         BookStore bookStore=new BookStore(bookStoreDto);
         iBookStoreRepository.save(bookStore);
             return "Insertion Successful";
+    }
+
+    @Override
+    public List<BookStore> getAllBook() {
+        return null;
     }
 }
