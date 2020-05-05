@@ -19,7 +19,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -86,5 +88,39 @@ public class BookStoreControllerTest {
                 new Gson().fromJson(result.getResponse().getContentAsString(), ResponseDto.class).message);
     }
 
+    @Test
+    void givenWrongUrlPath_WhenChecked_ShouldReturnIncorrectUrlMessage() throws Exception {
+        bookStoreDto=new BookStoreDto("Rajnish",2000.0,
+                12,"dfsdfsf","comic",
+                "Jitesh","sdfsfd","ABCD");
+        Gson gson=new Gson();
+        String json=gson.toJson(bookStoreDto);
+        this.mockMvc.perform(post("/add/book").content(json)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
 
+    @Test
+    void givenWrongContentType_WhenChecked_ShouldReturnUnSupportedTypeException() throws Exception {
+        bookStoreDto=new BookStoreDto("Rajnish",2000.0,
+                12,"dfsdfsf","comic",
+                "Jitesh","sdfsfd","ABCD");
+        Gson gson=new Gson();
+        String json=gson.toJson(bookStoreDto);
+        this.mockMvc.perform(post("/add").content(json)
+                .contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE))
+                .andExpect(status().isUnsupportedMediaType());
+    }
+
+    @Test
+    void givenIncorrectMethod_WhenChecked_ShouldReturnMethodNotAllowed() throws Exception {
+        bookStoreDto=new BookStoreDto("Rajnish",2000.0,
+                12,"dfsdfsf","comic",
+                "Jitesh","sdfsfd","ABCD");
+        Gson gson=new Gson();
+        String json=gson.toJson(bookStoreDto);
+        this.mockMvc.perform(get("/add").content(json)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isMethodNotAllowed());
+    }
 }

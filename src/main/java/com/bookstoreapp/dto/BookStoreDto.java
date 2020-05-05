@@ -72,4 +72,5 @@ public class BookStoreDto {
     public String getBookDetails() {
         return bookDetails;
     }
+
 }

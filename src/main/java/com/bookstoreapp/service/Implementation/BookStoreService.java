@@ -1,6 +1,7 @@
 package com.bookstoreapp.service.Implementation;
 
 import com.bookstoreapp.dto.BookStoreDto;
+import com.bookstoreapp.exception.BookStoreException;
 import com.bookstoreapp.modal.BookStore;
 import com.bookstoreapp.repository.IBookStoreRepository;
 import com.bookstoreapp.service.IBookStoreService;
