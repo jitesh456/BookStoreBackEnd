@@ -1,10 +1,13 @@
 package com.bookstoreapp.controller;
 
 import com.bookstoreapp.dto.BookStoreDto;
+import com.bookstoreapp.response.ResponseDto;
 import com.bookstoreapp.service.IBookStoreService;
 import com.google.gson.Gson;
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,13 +16,10 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-
+import org.springframework.test.web.servlet.MvcResult;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -30,7 +30,7 @@ public class BookStoreControllerTest {
     BookStoreController bookStoreControllerTest;
 
     @MockBean
-    IBookStoreService iBookStoreService;
+    IBookStoreService ibookStoreService;
 
     BookStoreDto bookStoreDto;
 
@@ -51,26 +51,40 @@ public class BookStoreControllerTest {
 
     @Test
     void givenBookData_WhenInserted_ReturnProperMessage() throws Exception {
-        bookStoreDto=new BookStoreDto();
-        bookStoreDto.setName("Rajnish");
-        bookStoreDto.setPrice(12000.0);
-        bookStoreDto.setQuantity(12);
-        bookStoreDto.setBookcover("dsfsdfsf");
-        bookStoreDto.setCategory("comics");
-        bookStoreDto.setAuthorname("Jitesh");
-        bookStoreDto.setBookdetails("kjvcgvhbjklkbjvh");
-        bookStoreDto.setIsbn("ABCD1");
+        bookStoreDto=new BookStoreDto("Rajnish",2000.0,
+                12,"dfsdfsf","comic",
+                "Jitesh","sdfsfd","ABCD");
 
-        Gson gson=new Gson();
+        String bookStoreDto=new Gson().toJson(this.bookStoreDto);
 
-        given(iBookStoreService.addBook(any())).willReturn("Insertion Successful");
-        String s = gson.toJson(bookStoreDto);
+        Mockito.when(ibookStoreService.addBook(any())).thenReturn("Inserted Successful");
 
-        ResultActions perform = mockMvc.perform(post("/add")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(String.valueOf(s))).andExpect(content().string("Insertion Successful"));
+        MvcResult result = this.mockMvc.perform(post("/add")
+                .content(bookStoreDto)
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andReturn();
+        Assert.assertEquals(200,result.getResponse().getStatus());
+        Assert.assertEquals("Inserted",
+                new Gson().fromJson(result.getResponse().getContentAsString(), ResponseDto.class).message);
     }
 
+
+
+    @Test
+    void givenBookData_WhenNull_ReturnProperMessage() throws Exception {
+        bookStoreDto=new BookStoreDto("Rajnish",2000.0,
+                12,null,"comic",
+                "Jitesh","sdfsfd","ABCD");
+        Gson gson=new Gson();
+        String bookStoreDtoString = gson.toJson(bookStoreDto);
+        MvcResult result = this.mockMvc.perform(post("/add")
+                .content(bookStoreDtoString)
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andReturn();
+        Assert.assertEquals(400,result.getResponse().getStatus());
+        Assert.assertEquals("author name should not be null",
+                new Gson().fromJson(result.getResponse().getContentAsString(), ResponseDto.class).message);
+    }
 
 
 }

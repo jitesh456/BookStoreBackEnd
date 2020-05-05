@@ -3,18 +3,33 @@ package com.bookstoreapp.modal;
 import com.bookstoreapp.dto.BookStoreDto;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "bookdetails")
 public class BookStore {
 
+
     private String name;
+
+
     private double price;
+
     private int quantity;
+
+
     private String bookcover;
+
+
     private String category;
+
+
     private String authorname;
+
+
     private String bookdetails;
+
+
     private String isbn;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,10 +39,10 @@ public class BookStore {
         this.name=bookStoreDto.getName();
         this.price=bookStoreDto.getPrice();
         this.quantity=bookStoreDto.getQuantity();
-        this.bookcover=bookStoreDto.getBookcover();
+        this.bookcover=bookStoreDto.getBookCover();
         this.category=bookStoreDto.getCategory();
-        this.authorname=bookStoreDto.getAuthorname();
-        this.bookdetails=bookStoreDto.getBookdetails();
+        this.authorname=bookStoreDto.getAuthorName();
+        this.bookdetails=bookStoreDto.getBookDetails();
         this.isbn=bookStoreDto.getIsbn();
     }
 

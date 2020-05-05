@@ -26,15 +26,10 @@ public class BookStoreServiceTest {
 
     @Test
     void givenBookDetails_WhenAddedInStore_ShouldReturnAddedBook() {
-        bookStoreDto=new BookStoreDto();
-        bookStoreDto.setName("Rajnish");
-        bookStoreDto.setPrice(12000.0);
-        bookStoreDto.setQuantity(12);
-        bookStoreDto.setBookcover("dsfsdfsf");
-        bookStoreDto.setCategory("comics");
-        bookStoreDto.setAuthorname("Jitesh");
-        bookStoreDto.setBookdetails("kjvcgvhbjklkbjvh");
-        bookStoreDto.setIsbn("ABCD1");
+
+        bookStoreDto=new BookStoreDto("Rajnish",2000.0,
+                12,"dfsdfsf","comic",
+                "Jitesh","sdfsfd","ABCD");
         BookStore givenBook=new BookStore(bookStoreDto);
         String expectedresponse="Insertion Successful";
         when(iBookStoreRepository.save(any())).thenReturn(givenBook);

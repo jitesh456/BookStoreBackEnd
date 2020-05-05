@@ -1,76 +1,75 @@
 package com.bookstoreapp.dto;
 
+import javax.validation.constraints.NotNull;
+
 public class BookStoreDto {
+
+    @NotNull(message = "name should not be null")
     private String name;
+
+    @NotNull(message = "price should not be null")
     private Double price;
+
+    @NotNull(message = "quantity should not be null")
     private int quantity;
-    private String authorname;
-    private String bookcover;
+
+    @NotNull(message = "author name should not be null")
+    private String authorName;
+
+    @NotNull(message = "book cover should not be null")
+    private String bookCover;
+
+    @NotNull(message = "isbn should not be null")
     private String isbn;
+
+    @NotNull(message = "category should not be null")
     private String category;
-    private String bookdetails;
+
+    @NotNull(message = "book Details should not be null")
+    private String bookDetails;
+
+    public BookStoreDto(String name, Double price, int quantity, String authorName, String bookCover, String isbn,
+                        String category,
+                        String bookDetails) {
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.authorName = authorName;
+        this.bookCover = bookCover;
+        this.isbn = isbn;
+        this.category = category;
+        this.bookDetails = bookDetails;
+    }
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
     public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public String getAuthorName() {
+        return authorName;
     }
 
-    public String getAuthorname() {
-        return authorname;
-    }
-
-    public void setAuthorname(String authorname) {
-        this.authorname = authorname;
-    }
-
-    public String getBookcover() {
-        return bookcover;
-    }
-
-    public void setBookcover(String bookcover) {
-        this.bookcover = bookcover;
+    public String getBookCover() {
+        return bookCover;
     }
 
     public String getIsbn() {
         return isbn;
     }
 
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
-
     public String getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public String getBookdetails() {
-        return bookdetails;
-    }
-
-    public void setBookdetails(String bookdetails) {
-        this.bookdetails = bookdetails;
+    public String getBookDetails() {
+        return bookDetails;
     }
 }
