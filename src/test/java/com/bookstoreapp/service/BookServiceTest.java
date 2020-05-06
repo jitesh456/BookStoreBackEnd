@@ -59,7 +59,7 @@ public class BookServiceTest {
         bookList.add(book);
         bookList.add(book1);
         Iterable<Book> bookIterable=bookList;
-        Mockito.when(iBookRepository.findAll()).thenReturn(bookIterable);
+        Mockito.when(iBookRepository.findAll()).thenReturn((List<Book>) bookIterable);
         Iterable<Book> allBook = bookService.getAllBook();
         Assert.assertEquals(allBook,bookIterable);
 
