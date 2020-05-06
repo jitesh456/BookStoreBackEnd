@@ -56,14 +56,15 @@ public class BookControllerTest {
         headers.setContentType(MediaType.APPLICATION_JSON);
         bookDto =new BookDto("Rajnish",2000.0,
                 12,"dfsdfsf","comic",
-                "Jitesh","sdfsfd","ABCD");
+                "987564236578","sdfsfd","Adaptation of the first of J.K. Rowling's popular " +
+                "children's novels about Harry Potter, a boy who learns on his eleventh birthday that he is the orphaned son " );
         gson=new Gson();
     }
 
     @Test
     void givenBookData_WhenInserted_ReturnProperMessage() throws Exception {
 
-        String bookStoreDto=new Gson().toJson(this.bookDto);
+        String bookStoreDto=new Gson().toJson(bookDto);
         Mockito.when(ibookService.addBook(any())).thenReturn("Inserted Successful");
         MvcResult result = this.mockMvc.perform(post("/admin/update/book")
                 .content(bookStoreDto)
@@ -77,10 +78,11 @@ public class BookControllerTest {
 
 
     @Test
-    void givenBookData_WhenNull_ReturnProperMessage() throws Exception {
+    void givenBookData_WhenAuthorNull_ReturnProperMessage() throws Exception {
        BookDto bookDto1 =new BookDto("Rajnish",2000.0,
                 12,null,"comic",
-                "Jitesh","sdfsfd","ABCD");
+                "1234567895","sdfsfd","Adaptation of the first of J.K. Rowling's popular " +
+               "closest allies and help him discover the truth about his parents' mysterious deaths.");
 
         String bookStoreDtoString = gson.toJson(bookDto1);
         MvcResult result = this.mockMvc.perform(post("/admin/update/book")
@@ -92,6 +94,109 @@ public class BookControllerTest {
                 new Gson().fromJson(result.getResponse().getContentAsString(), ResponseDto.class).message);
     }
 
+    @Test
+    void givenBookData_WhenBookNameNull_ReturnProperMessage() throws Exception {
+        BookDto bookDto1 =new BookDto(null,2000.0,
+                12,"Jitesh","comic",
+                "1234567895","sdfsfd","Adaptation of the first of J.K. Rowling's popular " +
+                "closest allies and help him discover the truth about his parents' mysterious deaths.");
+
+        String bookStoreDtoString = gson.toJson(bookDto1);
+        MvcResult result = this.mockMvc.perform(post("/admin/update/book")
+                .content(bookStoreDtoString)
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andReturn();
+        Assert.assertEquals(400,result.getResponse().getStatus());
+        Assert.assertEquals("Book name should not be null",
+                new Gson().fromJson(result.getResponse().getContentAsString(), ResponseDto.class).message);
+    }
+
+
+
+    @Test
+    void givenBookData_WhenBookCoverNull_ReturnProperMessage() throws Exception {
+        BookDto bookDto1 =new BookDto("Rajnish",2000.0,
+                12,"jitesh",null,
+                "1234567895","sdfsfd","Adaptation of the first of J.K. Rowling's popular " +
+                "closest allies and help him discover the truth about his parents' mysterious deaths.");
+
+        String bookStoreDtoString = gson.toJson(bookDto1);
+        MvcResult result = this.mockMvc.perform(post("/admin/update/book")
+                .content(bookStoreDtoString)
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andReturn();
+        Assert.assertEquals(400,result.getResponse().getStatus());
+        Assert.assertEquals("book cover should not be null",
+                new Gson().fromJson(result.getResponse().getContentAsString(), ResponseDto.class).message);
+    }
+
+    @Test
+    void givenBookData_WhenIsbnNull_ReturnProperMessage() throws Exception {
+        BookDto bookDto1 =new BookDto("Rajnish",2000.0,
+                12,"Jitesh","comic",
+                null,"sdfsfd","Adaptation of the first of J.K. Rowling's popular " +
+                "closest allies and help him discover the truth about his parents' mysterious deaths.");
+
+        String bookStoreDtoString = gson.toJson(bookDto1);
+        MvcResult result = this.mockMvc.perform(post("/admin/update/book")
+                .content(bookStoreDtoString)
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andReturn();
+        Assert.assertEquals(400,result.getResponse().getStatus());
+        Assert.assertEquals("isbn should not be null",
+                new Gson().fromJson(result.getResponse().getContentAsString(), ResponseDto.class).message);
+    }
+
+
+    @Test
+    void givenBookData_WhenIsbnLessThenTen_ReturnProperMessage() throws Exception {
+        BookDto bookDto1 =new BookDto("Rajnish",2000.0,
+                12,"Jitesh","comic",
+                "123456","sdfsfd","Adaptation of the first of J.K. Rowling's popular " +
+                "closest allies and help him discover the truth about his parents' mysterious deaths.");
+
+        String bookStoreDtoString = gson.toJson(bookDto1);
+        MvcResult result = this.mockMvc.perform(post("/admin/update/book")
+                .content(bookStoreDtoString)
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andReturn();
+        Assert.assertEquals(400,result.getResponse().getStatus());
+        Assert.assertEquals("size must be between 10 and 13",
+                new Gson().fromJson(result.getResponse().getContentAsString(), ResponseDto.class).message);
+    }
+
+    @Test
+    void givenBookData_WhenCategoryNull_ReturnProperMessage() throws Exception {
+        BookDto bookDto1 =new BookDto("Rajnish",2000.0,
+                12,"Rahul","comic",
+                "1234567895",null,"Adaptation of the first of J.K. Rowling's popular " +
+                "closest allies and help him discover the truth about his parents' mysterious deaths.");
+
+        String bookStoreDtoString = gson.toJson(bookDto1);
+        MvcResult result = this.mockMvc.perform(post("/admin/update/book")
+                .content(bookStoreDtoString)
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andReturn();
+        Assert.assertEquals(400,result.getResponse().getStatus());
+        Assert.assertEquals("category should not be null",
+                new Gson().fromJson(result.getResponse().getContentAsString(), ResponseDto.class).message);
+    }
+
+    @Test
+    void givenBookData_WhenDetailsEmpty_ReturnProperMessage() throws Exception {
+        BookDto bookDto1 =new BookDto("Rajnish",200.0,
+                12,"makashi","comic",
+                "1234569875","Adventure","");
+
+        String bookStoreDtoString = gson.toJson(bookDto1);
+        MvcResult result = this.mockMvc.perform(post("/admin/update/book")
+                .content(bookStoreDtoString)
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andReturn();
+        Assert.assertEquals(400,result.getResponse().getStatus());
+        Assert.assertEquals("size must be between 10 and 250",
+                new Gson().fromJson(result.getResponse().getContentAsString(), ResponseDto.class).message);
+    }
 
     @Test
     void givenWrongUrlPath_WhenChecked_ShouldReturnIncorrectUrlMessage() throws Exception {
@@ -120,6 +225,7 @@ public class BookControllerTest {
                 .andExpect(status().isMethodNotAllowed());
     }
 
+
     @Test
     void getAllData() throws Exception {
         BookDto bookDto1 =new BookDto("Naruto",200.0,
@@ -136,5 +242,7 @@ public class BookControllerTest {
         Assert.assertEquals(302,result.getResponse().getStatus());
         Assert.assertEquals("Request Success",gson.fromJson(result.getResponse().getContentAsString(),ResponseDto.class).message);
     }
+
+
 
 }

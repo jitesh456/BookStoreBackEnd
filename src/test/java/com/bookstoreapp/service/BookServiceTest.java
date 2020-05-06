@@ -5,10 +5,15 @@ import com.bookstoreapp.modal.Book;
 import com.bookstoreapp.repository.IBookRepository;
 import com.bookstoreapp.service.Implementation.BookService;
 import org.junit.Assert;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -20,20 +25,43 @@ public class BookServiceTest {
   IBookRepository iBookRepository;
 
   @InjectMocks
-  BookService bookStoreService;
+  BookService bookService;
 
   BookDto bookDto;
+
+    @BeforeEach
+    void setUp() {
+        bookDto =new BookDto("Rajnish",2000.0,
+                12,"dfsdfsf","comic",
+                "Jitesh","sdfsfd","ABCD");
+    }
 
     @Test
     void givenBookDetails_WhenAddedInStore_ShouldReturnAddedBook() {
 
-        bookDto =new BookDto("Rajnish",2000.0,
-                12,"dfsdfsf","comic",
-                "Jitesh","sdfsfd","ABCD");
+
         Book givenBook=new Book(bookDto);
         String expectedresponse="Insertion Successful";
         when(iBookRepository.save(any())).thenReturn(givenBook);
-        String addedBook=bookStoreService.addBook(bookDto);
+        String addedBook=bookService.addBook(bookDto);
         Assert.assertEquals(expectedresponse,addedBook);
+    }
+
+    @Test
+    void getAllBook(){
+
+        BookDto bookDto1 =new BookDto("Naruto",200.0,
+                20,"makashi kissimoto","Manga",
+                "12345678","","story about ninja boy ");
+        Book book =new Book(bookDto);
+        Book book1 =new Book(bookDto1);
+        List<Book> bookList =new ArrayList<>();
+        bookList.add(book);
+        bookList.add(book1);
+        Iterable<Book> bookIterable=bookList;
+        Mockito.when(iBookRepository.findAll()).thenReturn(bookIterable);
+        Iterable<Book> allBook = bookService.getAllBook();
+        Assert.assertEquals(allBook,bookIterable);
+
     }
 }

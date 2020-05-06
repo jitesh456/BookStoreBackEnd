@@ -1,31 +1,38 @@
 package com.bookstoreapp.dto;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class BookDto {
 
-    @NotNull(message = "name should not be null")
+    @NotEmpty(message = "Book name should not be null")
     private String name;
 
-    @NotNull(message = "price should not be null")
+    @Min(100)
+    @NotNull(message = "price should not be empty")
     private Double price;
 
     @NotNull(message = "quantity should not be null")
     private int quantity;
 
+    @Size(min=3,max = 10)
     @NotNull(message = "author name should not be null")
     private String authorName;
 
-    @NotNull(message = "book cover should not be null")
+    @NotEmpty(message = "book cover should not be null")
     private String bookCover;
 
+    @Size(min = 10,max = 13)
     @NotNull(message = "isbn should not be null")
     private String isbn;
+
 
     @NotNull(message = "category should not be null")
     private String category;
 
-    @NotNull(message = "book Details should not be null")
+    @Size(min = 10,max = 250)
     private String bookDetails;
 
     public BookDto(String name, Double price, int quantity, String authorName, String bookCover, String isbn,
