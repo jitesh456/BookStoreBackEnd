@@ -1,42 +1,41 @@
 package com.bookstoreapp.controller;
 
-import com.bookstoreapp.dto.BookStoreDto;
-import com.bookstoreapp.modal.BookStore;
+import com.bookstoreapp.dto.BookDto;
+import com.bookstoreapp.modal.Book;
 import com.bookstoreapp.response.ResponseDto;
-import com.bookstoreapp.service.IBookStoreService;
+import com.bookstoreapp.service.IBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+
+@CrossOrigin
 @RestController
-public class BookStoreController {
+public class BookController {
 
 
     @Autowired
-    IBookStoreService iBookStoreService;
+    IBookService iBookService;
 
 
-    @PostMapping("/add")
-    public ResponseEntity<ResponseDto> addBook(@Valid @RequestBody BookStoreDto bookStoreDto,
+    @PostMapping("/admin/update/book")
+    public ResponseEntity<ResponseDto> addBook(@Valid @RequestBody BookDto bookDto,
                                              BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             return new ResponseEntity<ResponseDto>(new ResponseDto(bindingResult.getAllErrors().get(0).getDefaultMessage(),101,"Empty Field"), HttpStatus.BAD_REQUEST);
         }
-        String responseMessage= iBookStoreService.addBook(bookStoreDto);
+        String responseMessage= iBookService.addBook(bookDto);
         return new ResponseEntity<ResponseDto>(new ResponseDto("Inserted",200, responseMessage),
                 HttpStatus.OK);
     }
 
-    @GetMapping("/get")
+    @GetMapping("/admin/books")
     public ResponseEntity<ResponseDto> getAllData(){
-        Iterable<BookStore> allBook = iBookStoreService.getAllBook();
+        Iterable<Book> allBook = iBookService.getAllBook();
         return new ResponseEntity<>(new ResponseDto("Request Success",200,allBook),HttpStatus.FOUND);
     }
 }

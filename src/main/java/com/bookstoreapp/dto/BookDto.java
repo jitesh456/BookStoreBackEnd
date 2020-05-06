@@ -2,7 +2,7 @@ package com.bookstoreapp.dto;
 
 import javax.validation.constraints.NotNull;
 
-public class BookStoreDto {
+public class BookDto {
 
     @NotNull(message = "name should not be null")
     private String name;
@@ -28,9 +28,9 @@ public class BookStoreDto {
     @NotNull(message = "book Details should not be null")
     private String bookDetails;
 
-    public BookStoreDto(String name, Double price, int quantity, String authorName, String bookCover, String isbn,
-                        String category,
-                        String bookDetails) {
+    public BookDto(String name, Double price, int quantity, String authorName, String bookCover, String isbn,
+                   String category,
+                   String bookDetails) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;

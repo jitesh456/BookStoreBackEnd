@@ -1,9 +1,9 @@
 package com.bookstoreapp.controller;
 
-import com.bookstoreapp.dto.BookStoreDto;
-import com.bookstoreapp.modal.BookStore;
+import com.bookstoreapp.dto.BookDto;
+import com.bookstoreapp.modal.Book;
 import com.bookstoreapp.response.ResponseDto;
-import com.bookstoreapp.service.IBookStoreService;
+import com.bookstoreapp.service.IBookService;
 import com.google.gson.Gson;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,21 +25,20 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @AutoConfigureMockMvc
-public class BookStoreControllerTest {
+public class BookControllerTest {
 
     @Autowired
-    BookStoreController bookStoreControllerTest;
+    BookController bookControllerTest;
 
     @MockBean
-    IBookStoreService ibookStoreService;
+    IBookService ibookService;
 
-    BookStoreDto bookStoreDto;
+    BookDto bookDto;
 
     @Autowired
     MockMvc mockMvc;
@@ -55,7 +54,7 @@ public class BookStoreControllerTest {
     void setUp() {
         headers=new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        bookStoreDto=new BookStoreDto("Rajnish",2000.0,
+        bookDto =new BookDto("Rajnish",2000.0,
                 12,"dfsdfsf","comic",
                 "Jitesh","sdfsfd","ABCD");
         gson=new Gson();
@@ -64,9 +63,9 @@ public class BookStoreControllerTest {
     @Test
     void givenBookData_WhenInserted_ReturnProperMessage() throws Exception {
 
-        String bookStoreDto=new Gson().toJson(this.bookStoreDto);
-        Mockito.when(ibookStoreService.addBook(any())).thenReturn("Inserted Successful");
-        MvcResult result = this.mockMvc.perform(post("/add")
+        String bookStoreDto=new Gson().toJson(this.bookDto);
+        Mockito.when(ibookService.addBook(any())).thenReturn("Inserted Successful");
+        MvcResult result = this.mockMvc.perform(post("/admin/update/book")
                 .content(bookStoreDto)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
@@ -79,12 +78,12 @@ public class BookStoreControllerTest {
 
     @Test
     void givenBookData_WhenNull_ReturnProperMessage() throws Exception {
-       BookStoreDto bookStoreDto1=new BookStoreDto("Rajnish",2000.0,
+       BookDto bookDto1 =new BookDto("Rajnish",2000.0,
                 12,null,"comic",
                 "Jitesh","sdfsfd","ABCD");
 
-        String bookStoreDtoString = gson.toJson(bookStoreDto1);
-        MvcResult result = this.mockMvc.perform(post("/add")
+        String bookStoreDtoString = gson.toJson(bookDto1);
+        MvcResult result = this.mockMvc.perform(post("/admin/update/book")
                 .content(bookStoreDtoString)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
@@ -93,12 +92,12 @@ public class BookStoreControllerTest {
                 new Gson().fromJson(result.getResponse().getContentAsString(), ResponseDto.class).message);
     }
 
+
     @Test
     void givenWrongUrlPath_WhenChecked_ShouldReturnIncorrectUrlMessage() throws Exception {
 
-
-        String json=gson.toJson(bookStoreDto);
-        this.mockMvc.perform(post("/add/book").content(json)
+        String json=gson.toJson(bookDto);
+        this.mockMvc.perform(post("/admin/book").content(json)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
@@ -106,8 +105,8 @@ public class BookStoreControllerTest {
     @Test
     void givenWrongContentType_WhenChecked_ShouldReturnUnSupportedTypeException() throws Exception {
 
-        String json=gson.toJson(bookStoreDto);
-        this.mockMvc.perform(post("/add").content(json)
+        String json=gson.toJson(bookDto);
+        this.mockMvc.perform(post("/admin/update/book").content(json)
                 .contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE))
                 .andExpect(status().isUnsupportedMediaType());
     }
@@ -115,25 +114,25 @@ public class BookStoreControllerTest {
     @Test
     void givenIncorrectMethod_WhenChecked_ShouldReturnMethodNotAllowed() throws Exception {
 
-        String json=gson.toJson(bookStoreDto);
-        this.mockMvc.perform(get("/add").content(json)
+        String json=gson.toJson(bookDto);
+        this.mockMvc.perform(get("/admin/update/book").content(json)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isMethodNotAllowed());
     }
 
     @Test
     void getAllData() throws Exception {
-        BookStoreDto bookStoreDto1=new  BookStoreDto("Naruto",200.0,
+        BookDto bookDto1 =new BookDto("Naruto",200.0,
                 20,"makashi kissimoto","Manga",
                 "12345678","","story about ninja boy ");
-        BookStore bookStore=new BookStore(bookStoreDto);
-        BookStore bookStore1=new BookStore(bookStoreDto1);
-        List<BookStore> bookStoreList=new ArrayList<>();
-        bookStoreList.add(bookStore);
-        bookStoreList.add(bookStore1);
-        Mockito.when(ibookStoreService.getAllBook()).thenReturn(bookStoreList);
-        String expectedList = gson.toJson(bookStoreList);
-        MvcResult result = this.mockMvc.perform(get("/get")).andReturn();
+        Book book =new Book(bookDto);
+        Book book1 =new Book(bookDto1);
+        List<Book> bookList =new ArrayList<>();
+        bookList.add(book);
+        bookList.add(book1);
+        Mockito.when(ibookService.getAllBook()).thenReturn(bookList);
+        String expectedList = gson.toJson(bookList);
+        MvcResult result = this.mockMvc.perform(get("/admin/books")).andReturn();
         Assert.assertEquals(302,result.getResponse().getStatus());
         Assert.assertEquals("Request Success",gson.fromJson(result.getResponse().getContentAsString(),ResponseDto.class).message);
     }
