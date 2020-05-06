@@ -4,6 +4,7 @@ import com.bookstoreapp.dto.BookStoreDto;
 import com.bookstoreapp.modal.BookStore;
 import com.bookstoreapp.repository.IBookStoreRepository;
 import com.bookstoreapp.service.Implementation.BookStoreService;
+import com.google.gson.Gson;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

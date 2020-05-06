@@ -1,14 +1,11 @@
 package com.bookstoreapp.service.Implementation;
 
 import com.bookstoreapp.dto.BookStoreDto;
-import com.bookstoreapp.exception.BookStoreException;
 import com.bookstoreapp.modal.BookStore;
 import com.bookstoreapp.repository.IBookStoreRepository;
 import com.bookstoreapp.service.IBookStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class BookStoreService implements IBookStoreService {
@@ -24,7 +21,7 @@ public class BookStoreService implements IBookStoreService {
     }
 
     @Override
-    public List<BookStore> getAllBook() {
-        return null;
+    public Iterable<BookStore> getAllBook() {
+        return iBookStoreRepository.findAll();
     }
 }

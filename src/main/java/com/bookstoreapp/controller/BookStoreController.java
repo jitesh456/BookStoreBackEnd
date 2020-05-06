@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 public class BookStoreController {
@@ -35,9 +34,9 @@ public class BookStoreController {
                 HttpStatus.OK);
     }
 
-    @GetMapping("get")
+    @GetMapping("/get")
     public ResponseEntity<ResponseDto> getAllData(){
-        List<BookStore> allBook = iBookStoreService.getAllBook();
+        Iterable<BookStore> allBook = iBookStoreService.getAllBook();
         return new ResponseEntity<>(new ResponseDto("Request Success",200,allBook),HttpStatus.FOUND);
     }
 }
