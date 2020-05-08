@@ -34,8 +34,10 @@ public class BookController {
     }
 
     @GetMapping("/admin/books")
-    public ResponseEntity<ResponseDto> getAllData(){
+    public ResponseDto getAllData(){
         Iterable<Book> allBook = iBookService.getAllBook();
-        return new ResponseEntity<>(new ResponseDto("Request Success",200,allBook),HttpStatus.FOUND);
+//        return new ResponseEntity<>(new ResponseDto("Request Success",200,allBook),HttpStatus.FOUND);
+        ResponseDto response=new ResponseDto("Request Success",200,allBook);
+        return response;
     }
 }

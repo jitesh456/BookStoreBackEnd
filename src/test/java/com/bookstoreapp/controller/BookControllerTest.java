@@ -239,10 +239,7 @@ public class BookControllerTest {
         Mockito.when(ibookService.getAllBook()).thenReturn(bookList);
         String expectedList = gson.toJson(bookList);
         MvcResult result = this.mockMvc.perform(get("/admin/books")).andReturn();
-        Assert.assertEquals(302,result.getResponse().getStatus());
+        Assert.assertEquals(200,result.getResponse().getStatus());
         Assert.assertEquals("Request Success",gson.fromJson(result.getResponse().getContentAsString(),ResponseDto.class).message);
     }
-
-
-
 }
