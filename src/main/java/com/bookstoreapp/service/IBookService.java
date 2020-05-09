@@ -1,6 +1,7 @@
 package com.bookstoreapp.service;
 
 import com.bookstoreapp.dto.BookDto;
+import com.bookstoreapp.dto.UpdateBookDto;
 import com.bookstoreapp.modal.Book;
 
 public interface IBookService {
@@ -8,4 +9,6 @@ public interface IBookService {
     String addBook(BookDto bookDto);
 
     Iterable<Book> getAllBook();
+
+    String updatePrice(UpdateBookDto bookDto);
 }

@@ -1,6 +1,7 @@
 package com.bookstoreapp.service.Implementation;
 
 import com.bookstoreapp.dto.BookDto;
+import com.bookstoreapp.dto.UpdateBookDto;
 import com.bookstoreapp.exception.BookException;
 import com.bookstoreapp.modal.Book;
 import com.bookstoreapp.repository.IBookRepository;
@@ -30,5 +31,10 @@ public class BookService implements IBookService {
     @Override
     public Iterable<Book> getAllBook() {
         return iBookRepository.findAll();
+    }
+
+    @Override
+    public String updatePrice(UpdateBookDto bookDto) {
+        return null;
     }
 }

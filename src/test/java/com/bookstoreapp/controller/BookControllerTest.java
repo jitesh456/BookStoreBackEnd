@@ -1,9 +1,11 @@
 package com.bookstoreapp.controller;
 
 import com.bookstoreapp.dto.BookDto;
+import com.bookstoreapp.dto.UpdateBookDto;
 import com.bookstoreapp.modal.Book;
 import com.bookstoreapp.response.ResponseDto;
 import com.bookstoreapp.service.IBookService;
+import com.bookstoreapp.service.Implementation.BookService;
 import com.google.gson.Gson;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,7 +38,7 @@ public class BookControllerTest {
     BookController bookControllerTest;
 
     @MockBean
-    IBookService ibookService;
+    BookService ibookService;
 
     BookDto bookDto;
 
@@ -64,7 +66,7 @@ public class BookControllerTest {
     @Test
     void givenBookData_WhenInserted_ReturnProperMessage() throws Exception {
 
-        String bookStoreDto=new Gson().toJson(bookDto);
+        String bookStoreDto=new Gson().toJson(this.bookDto);
         Mockito.when(ibookService.addBook(any())).thenReturn("Inserted Successful");
         MvcResult result = this.mockMvc.perform(post("/admin/update/book")
                 .content(bookStoreDto)
@@ -201,7 +203,7 @@ public class BookControllerTest {
     @Test
     void givenWrongUrlPath_WhenChecked_ShouldReturnIncorrectUrlMessage() throws Exception {
 
-        String json=gson.toJson(bookDto);
+        String json=gson.toJson(this.bookDto);
         this.mockMvc.perform(post("/admin/book").content(json)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
@@ -210,7 +212,7 @@ public class BookControllerTest {
     @Test
     void givenWrongContentType_WhenChecked_ShouldReturnUnSupportedTypeException() throws Exception {
 
-        String json=gson.toJson(bookDto);
+        String json=gson.toJson(this.bookDto);
         this.mockMvc.perform(post("/admin/update/book").content(json)
                 .contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE))
                 .andExpect(status().isUnsupportedMediaType());
@@ -219,7 +221,7 @@ public class BookControllerTest {
     @Test
     void givenIncorrectMethod_WhenChecked_ShouldReturnMethodNotAllowed() throws Exception {
 
-        String json=gson.toJson(bookDto);
+        String json=gson.toJson(this.bookDto);
         this.mockMvc.perform(get("/admin/update/book").content(json)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isMethodNotAllowed());
@@ -241,5 +243,20 @@ public class BookControllerTest {
         MvcResult result = this.mockMvc.perform(get("/admin/books")).andReturn();
         Assert.assertEquals(200,result.getResponse().getStatus());
         Assert.assertEquals("Request Success",gson.fromJson(result.getResponse().getContentAsString(),ResponseDto.class).message);
+    }
+
+    @Test
+    void givenBookDataPrice_WhenUpdated_ReturnProperMessage() throws Exception {
+        UpdateBookDto bookDto1 =new UpdateBookDto(2000.0, "1234567895");
+
+        String bookStoreDtoString = gson.toJson(bookDto1);
+        Mockito.when(ibookService.addBook(any())).thenReturn("Updated Successful");
+        MvcResult result = this.mockMvc.perform(post("/admin/update/price")
+                .content(bookStoreDtoString)
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andReturn();
+        Assert.assertEquals(200,result.getResponse().getStatus());
+        Assert.assertEquals("Updated",
+                new Gson().fromJson(result.getResponse().getContentAsString(), ResponseDto.class).message);
     }
 }

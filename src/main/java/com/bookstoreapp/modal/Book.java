@@ -43,6 +43,7 @@ public class Book {
         this.authorname= bookDto.getAuthorName();
         this.bookdetails= bookDto.getBookDetails();
         this.isbn= bookDto.getIsbn();
+        this.id=null;
     }
 
     public Integer getId() {
