@@ -13,12 +13,16 @@ public class UpdateBookDto {
     @NotNull(message = "isbn should not be null")
     private String isbn;
 
+    @NotNull(message = "quantity should not be null")
+    private int quantity;
+
     public UpdateBookDto() {
     }
 
-    public UpdateBookDto(Double price, String isbn) {
+    public UpdateBookDto(Double price, String isbn,int quantity) {
         this.price = price;
         this.isbn = isbn;
+        this.quantity=quantity;
     }
 
     public Double getPrice() {
@@ -27,5 +31,9 @@ public class UpdateBookDto {
 
     public String getIsbn() {
         return isbn;
+    }
+
+    public int getQuantity() {
+        return quantity;
     }
 }

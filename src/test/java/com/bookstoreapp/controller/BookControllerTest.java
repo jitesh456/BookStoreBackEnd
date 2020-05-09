@@ -247,7 +247,7 @@ public class BookControllerTest {
 
     @Test
     void givenBookDataPrice_WhenUpdated_ReturnProperMessage() throws Exception {
-        UpdateBookDto bookDto1 =new UpdateBookDto(2000.0, "1234567895");
+        UpdateBookDto bookDto1 =new UpdateBookDto(2000.0, "1234567895",5);
 
         String bookStoreDtoString = gson.toJson(bookDto1);
         Mockito.when(ibookService.addBook(any())).thenReturn("Updated Successful");
@@ -262,7 +262,7 @@ public class BookControllerTest {
 
     @Test
     void givenBookDataPrice_WhenPriceZero_ReturnProperMessage() throws Exception {
-        UpdateBookDto bookDto1 =new UpdateBookDto(0.0, "1234567895");
+        UpdateBookDto bookDto1 =new UpdateBookDto(0.0, "1234567895",5);
 
         String bookStoreDtoString = gson.toJson(bookDto1);
         MvcResult result = this.mockMvc.perform(post("/admin/update/price")
