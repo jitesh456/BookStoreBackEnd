@@ -259,4 +259,18 @@ public class BookControllerTest {
         Assert.assertEquals("Updated",
                 new Gson().fromJson(result.getResponse().getContentAsString(), ResponseDto.class).message);
     }
+
+    @Test
+    void givenBookDataPrice_WhenPriceZero_ReturnProperMessage() throws Exception {
+        UpdateBookDto bookDto1 =new UpdateBookDto(0.0, "1234567895");
+
+        String bookStoreDtoString = gson.toJson(bookDto1);
+        MvcResult result = this.mockMvc.perform(post("/admin/update/price")
+                .content(bookStoreDtoString)
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andReturn();
+        Assert.assertEquals(400,result.getResponse().getStatus());
+        Assert.assertEquals("must be greater than or equal to 100",
+                new Gson().fromJson(result.getResponse().getContentAsString(), ResponseDto.class).message);
+    }
 }

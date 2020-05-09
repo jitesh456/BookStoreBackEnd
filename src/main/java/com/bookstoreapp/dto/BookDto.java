@@ -38,6 +38,11 @@ public class BookDto {
     public BookDto() {
     }
 
+    public BookDto(Double price, String isbn) {
+        this.price = price;
+        this.isbn = isbn;
+    }
+
     public BookDto(String name, Double price, int quantity, String authorName, String bookCover, String isbn,
                    String category,
                    String bookDetails) {
