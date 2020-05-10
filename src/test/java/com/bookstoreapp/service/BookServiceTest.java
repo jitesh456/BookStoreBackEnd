@@ -68,4 +68,16 @@ public class BookServiceTest {
         Assert.assertEquals(allBook,bookIterable);
 
     }
+
+    @Test
+    void givenBookDataPrice_WhenUpdated_ReturnProperMessage() throws Exception {
+        Book givenBook=new Book(bookDto);
+
+        UpdateBookDto bookDto1 =new UpdateBookDto(2450.0, "1234567895",12);
+        String expectedresponse="Updated Successfully";
+        when(iBookRepository.findByIsbn(any())).thenReturn(java.util.Optional.of(givenBook));
+        when(iBookRepository.save(any())).thenReturn(givenBook);
+        String actualresponse=bookService.updatePrice(bookDto1);
+        Assert.assertEquals(expectedresponse,actualresponse);
+    }
 }
