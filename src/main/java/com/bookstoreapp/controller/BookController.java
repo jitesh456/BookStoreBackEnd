@@ -24,7 +24,7 @@ public class BookController {
     BookService iBookService;
 
 
-    @PostMapping("/admin/update/book")
+    @PostMapping("/admin/book")
     public ResponseEntity<ResponseDto> addBook(@Valid @RequestBody BookDto bookDto,
                                              BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
@@ -38,12 +38,11 @@ public class BookController {
     @GetMapping("/admin/books")
     public ResponseDto getAllData(){
         Iterable<Book> allBook = iBookService.getAllBook();
-//        return new ResponseEntity(new ResponseDto("Request Success",200,allBook),HttpStatus.FOUND);
         ResponseDto response=new ResponseDto("Request Success",200,allBook);
         return response;
     }
 
-    @PostMapping("/admin/update/price")
+    @PutMapping("/admin/update/price")
     public ResponseEntity<ResponseDto> updatePrice(@Valid @RequestBody UpdateBookDto bookDto, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             return new ResponseEntity<ResponseDto>(new ResponseDto(bindingResult.getAllErrors().get(0).getDefaultMessage(),

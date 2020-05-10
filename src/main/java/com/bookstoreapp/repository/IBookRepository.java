@@ -9,5 +9,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IBookRepository extends JpaRepository<Book,Integer> {
-Optional<Book> findByIsbn(String isbn);
+    Optional<Book> findByIsbn(String isbn);
 }

@@ -17,6 +17,9 @@ public class BookService implements IBookService {
     @Autowired
     IBookRepository iBookRepository;
 
+    public BookService() {
+    }
+
     @Override
     public String addBook(BookDto bookDto) {
         Book book =new Book(bookDto);
@@ -35,6 +38,14 @@ public class BookService implements IBookService {
 
     @Override
     public String updatePrice(UpdateBookDto bookDto) {
-        return null;
+        Optional<Book> findBookByIsbn=iBookRepository.findByIsbn(bookDto.getIsbn());
+        if (findBookByIsbn.isPresent()){
+            Book book=findBookByIsbn.get();
+            book.setPrice(bookDto.getPrice());
+            book.setQuantity(bookDto.getQuantity());
+            iBookRepository.save(book);
+            return "Updated Successfully";
+        }
+        throw new BookException("BOOK DOES NOT EXISTS",BookException.ExceptionType.BOOK_DOES_NOT_EXIST);
     }
 }

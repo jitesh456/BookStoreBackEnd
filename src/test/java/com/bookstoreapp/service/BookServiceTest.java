@@ -1,9 +1,12 @@
 package com.bookstoreapp.service;
 
 import com.bookstoreapp.dto.BookDto;
+import com.bookstoreapp.dto.UpdateBookDto;
 import com.bookstoreapp.modal.Book;
 import com.bookstoreapp.repository.IBookRepository;
+import com.bookstoreapp.response.ResponseDto;
 import com.bookstoreapp.service.Implementation.BookService;
+import com.google.gson.Gson;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,12 +14,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @SpringBootTest
 public class BookServiceTest {
@@ -38,8 +44,6 @@ public class BookServiceTest {
 
     @Test
     void givenBookDetails_WhenAddedInStore_ShouldReturnAddedBook() {
-
-
         Book givenBook=new Book(bookDto);
         String expectedresponse="Insertion Successful";
         when(iBookRepository.save(any())).thenReturn(givenBook);
