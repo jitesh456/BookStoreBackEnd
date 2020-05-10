@@ -13,6 +13,7 @@ public class UpdateBookDto {
     @NotNull(message = "isbn should not be null")
     private String isbn;
 
+    @Min(10)
     @NotNull(message = "quantity should not be null")
     private int quantity;
 

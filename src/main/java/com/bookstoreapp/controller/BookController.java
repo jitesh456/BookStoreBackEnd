@@ -46,7 +46,8 @@ public class BookController {
     @PostMapping("/admin/update/price")
     public ResponseEntity<ResponseDto> updatePrice(@Valid @RequestBody UpdateBookDto bookDto, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
-            return new ResponseEntity<ResponseDto>(new ResponseDto(bindingResult.getAllErrors().get(0).getDefaultMessage(),101,"Empty Field"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<ResponseDto>(new ResponseDto(bindingResult.getAllErrors().get(0).getDefaultMessage(),
+                    101,"Empty Field"), HttpStatus.BAD_REQUEST);
         }
         String responseMessage= iBookService.updatePrice(bookDto);
         return new ResponseEntity<ResponseDto>(new ResponseDto("Updated",200, responseMessage),

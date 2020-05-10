@@ -35,13 +35,7 @@ public class BookDto {
     @Size(min = 10,max = 250)
     private String bookDetails;
 
-    public BookDto() {
-    }
-
-    public BookDto(Double price, String isbn) {
-        this.price = price;
-        this.isbn = isbn;
-    }
+    public BookDto() { }
 
     public BookDto(String name, Double price, int quantity, String authorName, String bookCover, String isbn,
                    String category,
