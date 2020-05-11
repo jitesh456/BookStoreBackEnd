@@ -9,7 +9,7 @@ public class UpdateBookDto {
     @NotNull(message = "price should not be empty")
     private Double price;
 
-    @Size(min = 10,max = 13)
+    @Size(min = 10,max = 13,message = "must be greater than or equal to 10")
     @NotNull(message = "isbn should not be null")
     private String isbn;
 

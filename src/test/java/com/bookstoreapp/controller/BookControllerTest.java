@@ -20,12 +20,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -67,7 +67,7 @@ public class BookControllerTest {
 
         String bookStoreDto=new Gson().toJson(this.bookDto);
         Mockito.when(ibookService.addBook(any())).thenReturn("Inserted Successful");
-        MvcResult result = this.mockMvc.perform(post("/admin/update/book")
+        MvcResult result = this.mockMvc.perform(post("/admin/book")
                 .content(bookStoreDto)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
@@ -86,7 +86,7 @@ public class BookControllerTest {
                "closest allies and help him discover the truth about his parents' mysterious deaths.");
 
         String bookStoreDtoString = gson.toJson(bookDto1);
-        MvcResult result = this.mockMvc.perform(post("/admin/update/book")
+        MvcResult result = this.mockMvc.perform(post("/admin/book")
                 .content(bookStoreDtoString)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
@@ -103,7 +103,7 @@ public class BookControllerTest {
                 "closest allies and help him discover the truth about his parents' mysterious deaths.");
 
         String bookStoreDtoString = gson.toJson(bookDto1);
-        MvcResult result = this.mockMvc.perform(post("/admin/update/book")
+        MvcResult result = this.mockMvc.perform(post("/admin/book")
                 .content(bookStoreDtoString)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
@@ -122,7 +122,7 @@ public class BookControllerTest {
                 "closest allies and help him discover the truth about his parents' mysterious deaths.");
 
         String bookStoreDtoString = gson.toJson(bookDto1);
-        MvcResult result = this.mockMvc.perform(post("/admin/update/book")
+        MvcResult result = this.mockMvc.perform(post("/admin/book")
                 .content(bookStoreDtoString)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
@@ -139,7 +139,7 @@ public class BookControllerTest {
                 "closest allies and help him discover the truth about his parents' mysterious deaths.");
 
         String bookStoreDtoString = gson.toJson(bookDto1);
-        MvcResult result = this.mockMvc.perform(post("/admin/update/book")
+        MvcResult result = this.mockMvc.perform(post("/admin/book")
                 .content(bookStoreDtoString)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
@@ -157,7 +157,7 @@ public class BookControllerTest {
                 "closest allies and help him discover the truth about his parents' mysterious deaths.");
 
         String bookStoreDtoString = gson.toJson(bookDto1);
-        MvcResult result = this.mockMvc.perform(post("/admin/update/book")
+        MvcResult result = this.mockMvc.perform(post("/admin/book")
                 .content(bookStoreDtoString)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
@@ -174,7 +174,7 @@ public class BookControllerTest {
                 "closest allies and help him discover the truth about his parents' mysterious deaths.");
 
         String bookStoreDtoString = gson.toJson(bookDto1);
-        MvcResult result = this.mockMvc.perform(post("/admin/update/book")
+        MvcResult result = this.mockMvc.perform(post("/admin/book")
                 .content(bookStoreDtoString)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
@@ -190,12 +190,12 @@ public class BookControllerTest {
                 "1234569875","Adventure","");
 
         String bookStoreDtoString = gson.toJson(bookDto1);
-        MvcResult result = this.mockMvc.perform(post("/admin/update/book")
+        MvcResult result = this.mockMvc.perform(post("/admin/book")
                 .content(bookStoreDtoString)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
         Assert.assertEquals(400,result.getResponse().getStatus());
-        Assert.assertEquals("size must be between 10 and 250",
+        Assert.assertEquals("size must be between 10 and 500",
                 new Gson().fromJson(result.getResponse().getContentAsString(), ResponseDto.class).message);
     }
 
@@ -203,7 +203,7 @@ public class BookControllerTest {
     void givenWrongUrlPath_WhenChecked_ShouldReturnIncorrectUrlMessage() throws Exception {
 
         String json=gson.toJson(this.bookDto);
-        this.mockMvc.perform(post("/admin/book").content(json)
+        this.mockMvc.perform(post("/admin/update/book").content(json)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
@@ -212,7 +212,7 @@ public class BookControllerTest {
     void givenWrongContentType_WhenChecked_ShouldReturnUnSupportedTypeException() throws Exception {
 
         String json=gson.toJson(this.bookDto);
-        this.mockMvc.perform(post("/admin/update/book").content(json)
+        this.mockMvc.perform(post("/admin/book").content(json)
                 .contentType(MediaType.APPLICATION_OCTET_STREAM_VALUE))
                 .andExpect(status().isUnsupportedMediaType());
     }
@@ -221,7 +221,7 @@ public class BookControllerTest {
     void givenIncorrectMethod_WhenChecked_ShouldReturnMethodNotAllowed() throws Exception {
 
         String json=gson.toJson(this.bookDto);
-        this.mockMvc.perform(get("/admin/update/book").content(json)
+        this.mockMvc.perform(get("/admin/book").content(json)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isMethodNotAllowed());
     }
@@ -250,7 +250,7 @@ public class BookControllerTest {
 
         String bookStoreDtoString = gson.toJson(bookDto1);
         Mockito.when(ibookService.addBook(any())).thenReturn("Updated Successful");
-        MvcResult result = this.mockMvc.perform(post("/admin/update/price")
+        MvcResult result = this.mockMvc.perform(put("/admin/update/price")
                 .content(bookStoreDtoString)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
@@ -264,7 +264,7 @@ public class BookControllerTest {
         UpdateBookDto bookDto1 =new UpdateBookDto(0.0, "1234567895",5);
 
         String bookStoreDtoString = gson.toJson(bookDto1);
-        MvcResult result = this.mockMvc.perform(post("/admin/update/price")
+        MvcResult result = this.mockMvc.perform(put("/admin/update/price")
                 .content(bookStoreDtoString)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
@@ -278,7 +278,7 @@ public class BookControllerTest {
         UpdateBookDto bookDto1 =new UpdateBookDto(2000.0, null,5);
 
         String bookStoreDtoString = gson.toJson(bookDto1);
-        MvcResult result = this.mockMvc.perform(post("/admin/update/price")
+        MvcResult result = this.mockMvc.perform(put("/admin/update/price")
                 .content(bookStoreDtoString)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
@@ -292,21 +292,21 @@ public class BookControllerTest {
         UpdateBookDto bookDto1 =new UpdateBookDto(2000.0, null,5);
 
         String bookStoreDtoString = gson.toJson(bookDto1);
-        MvcResult result = this.mockMvc.perform(post("/admin/update/price")
+        MvcResult result = this.mockMvc.perform(put("/admin/update/price")
                 .content(bookStoreDtoString)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
         Assert.assertEquals(400,result.getResponse().getStatus());
-        Assert.assertEquals("must be greater than or equal to 10",
+        Assert.assertEquals("isbn should not be null",
                 new Gson().fromJson(result.getResponse().getContentAsString(), ResponseDto.class).message);
     }
 
     @Test
     void givenBookDatarice_WhenQuantityIsZero_ReturnProperMessage() throws Exception {
-        UpdateBookDto bookDto1 =new UpdateBookDto(2000.0, null,0);
+        UpdateBookDto bookDto1 =new UpdateBookDto(2000.0, "2",0);
 
         String bookStoreDtoString = gson.toJson(bookDto1);
-        MvcResult result = this.mockMvc.perform(post("/admin/update/price")
+        MvcResult result = this.mockMvc.perform(put("/admin/update/price")
                 .content(bookStoreDtoString)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
