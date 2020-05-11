@@ -1,4 +1,4 @@
-package com.bookstoreapp.modal;
+package com.bookstoreapp.model;
 
 import com.bookstoreapp.dto.BookDto;
 

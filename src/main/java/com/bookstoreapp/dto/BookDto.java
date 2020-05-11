@@ -17,7 +17,7 @@ public class BookDto {
     @NotNull(message = "quantity should not be null")
     private int quantity;
 
-    @Size(min=3,max = 10)
+    @Size(min=3,max = 20)
     @NotNull(message = "author name should not be null")
     private String authorName;
 
@@ -32,7 +32,7 @@ public class BookDto {
     @NotNull(message = "category should not be null")
     private String category;
 
-    @Size(min = 10,max = 250)
+    @Size(min = 10,max = 500)
     private String bookDetails;
 
     public BookDto() { }

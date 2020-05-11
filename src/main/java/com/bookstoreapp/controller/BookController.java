@@ -2,9 +2,8 @@ package com.bookstoreapp.controller;
 
 import com.bookstoreapp.dto.BookDto;
 import com.bookstoreapp.dto.UpdateBookDto;
-import com.bookstoreapp.modal.Book;
+import com.bookstoreapp.model.Book;
 import com.bookstoreapp.response.ResponseDto;
-import com.bookstoreapp.service.IBookService;
 import com.bookstoreapp.service.Implementation.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -2,7 +2,7 @@ package com.bookstoreapp.service;
 
 import com.bookstoreapp.dto.BookDto;
 import com.bookstoreapp.dto.UpdateBookDto;
-import com.bookstoreapp.modal.Book;
+import com.bookstoreapp.model.Book;
 
 public interface IBookService {
 

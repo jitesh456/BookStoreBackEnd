@@ -3,7 +3,7 @@ package com.bookstoreapp.service.Implementation;
 import com.bookstoreapp.dto.BookDto;
 import com.bookstoreapp.dto.UpdateBookDto;
 import com.bookstoreapp.exception.BookException;
-import com.bookstoreapp.modal.Book;
+import com.bookstoreapp.model.Book;
 import com.bookstoreapp.repository.IBookRepository;
 import com.bookstoreapp.service.IBookService;
 import org.springframework.beans.factory.annotation.Autowired;
