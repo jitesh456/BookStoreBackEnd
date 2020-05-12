@@ -7,15 +7,15 @@ import javax.validation.constraints.Size;
 public class UpdateBookDto {
     @Min(100)
     @NotNull(message = "price should not be empty")
-    private Double price;
+    public Double price;
 
     @Size(min = 10,max = 13,message = "must be greater than or equal to 10")
     @NotNull(message = "isbn should not be null")
-    private String isbn;
+    public String isbn;
 
     @Min(0)
     @NotNull(message = "quantity should not be null")
-    private int quantity;
+    public int quantity;
 
     public UpdateBookDto() {
     }
@@ -24,17 +24,5 @@ public class UpdateBookDto {
         this.price = price;
         this.isbn = isbn;
         this.quantity=quantity;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public int getQuantity() {
-        return quantity;
     }
 }

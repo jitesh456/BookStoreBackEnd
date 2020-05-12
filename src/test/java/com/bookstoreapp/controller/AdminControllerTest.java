@@ -31,10 +31,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @AutoConfigureMockMvc
-public class BookControllerTest {
+public class AdminControllerTest {
 
     @Autowired
-    BookController bookControllerTest;
+    AdminController adminControllerTest;
 
     @MockBean
     BookService ibookService;

@@ -23,8 +23,8 @@ public class BookService implements IBookService {
     @Override
     public String addBook(BookDto bookDto) {
         Book book =new Book(bookDto);
-        Optional<Book> findBookByIsbn=iBookRepository.findByIsbn(bookDto.getIsbn());
-        if (findBookByIsbn.isPresent()){
+        Optional<Book> fetchBookIsbn=iBookRepository.findByIsbn(bookDto.isbn);
+        if (fetchBookIsbn.isPresent()){
             throw new BookException("BOOK ALREADY EXISTS",BookException.ExceptionType.BOOK_ALREADY_EXIST);
         }
         iBookRepository.save(book);
@@ -38,11 +38,11 @@ public class BookService implements IBookService {
 
     @Override
     public String updatePrice(UpdateBookDto bookDto) {
-        Optional<Book> findBookByIsbn=iBookRepository.findByIsbn(bookDto.getIsbn());
-        if (findBookByIsbn.isPresent()){
-            Book book=findBookByIsbn.get();
-            book.setPrice(bookDto.getPrice());
-            book.setQuantity(bookDto.getQuantity());
+        Optional<Book> fetchBookIsbn=iBookRepository.findByIsbn(bookDto.isbn);
+        if (fetchBookIsbn.isPresent()){
+            Book book=fetchBookIsbn.get();
+            book.setPrice(bookDto.price);
+            book.setQuantity(bookDto.quantity);
             iBookRepository.save(book);
             return "Updated Successfully";
         }

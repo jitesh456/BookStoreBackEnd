@@ -16,7 +16,7 @@ import javax.validation.Valid;
 
 @CrossOrigin
 @RestController
-public class BookController {
+public class AdminController {
 
 
     @Autowired

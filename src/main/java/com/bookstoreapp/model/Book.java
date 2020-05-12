@@ -35,14 +35,14 @@ public class Book {
     private Integer id;
 
     public Book(BookDto bookDto) {
-        this.name= bookDto.getName();
-        this.price= bookDto.getPrice();
-        this.quantity= bookDto.getQuantity();
-        this.bookcover= bookDto.getBookCover();
-        this.category= bookDto.getCategory();
-        this.authorname= bookDto.getAuthorName();
-        this.bookdetails= bookDto.getBookDetails();
-        this.isbn= bookDto.getIsbn();
+        this.name= bookDto.name;
+        this.price= bookDto.price;
+        this.quantity= bookDto.quantity;
+        this.bookcover= bookDto.bookCover;
+        this.category= bookDto.category;
+        this.authorname= bookDto.authorName;
+        this.bookdetails= bookDto.bookDetails;
+        this.isbn= bookDto.isbn;
         this.id=null;
     }
 
