@@ -228,29 +228,12 @@ public class AdminControllerTest {
 
 
     @Test
-    void getAllData() throws Exception {
-        BookDto bookDto1 =new BookDto("Naruto",200.0,
-                20,"makashi kissimoto","Manga",
-                "12345678","","story about ninja boy ");
-        Book book =new Book(bookDto);
-        Book book1 =new Book(bookDto1);
-        List<Book> bookList =new ArrayList<>();
-        bookList.add(book);
-        bookList.add(book1);
-        Mockito.when(ibookService.getAllBook()).thenReturn(bookList);
-        String expectedList = gson.toJson(bookList);
-        MvcResult result = this.mockMvc.perform(get("/admin/books")).andReturn();
-        Assert.assertEquals(200,result.getResponse().getStatus());
-        Assert.assertEquals("Request Success",gson.fromJson(result.getResponse().getContentAsString(),ResponseDto.class).message);
-    }
-
-    @Test
     void givenBookDataPrice_WhenUpdated_ReturnProperMessage() throws Exception {
         UpdateBookDto bookDto1 =new UpdateBookDto(2000.0, "1234567895",5);
 
         String bookStoreDtoString = gson.toJson(bookDto1);
         Mockito.when(ibookService.addBook(any())).thenReturn("Updated Successful");
-        MvcResult result = this.mockMvc.perform(put("/admin/update/price")
+        MvcResult result = this.mockMvc.perform(put("/admin/update")
                 .content(bookStoreDtoString)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
@@ -264,7 +247,7 @@ public class AdminControllerTest {
         UpdateBookDto bookDto1 =new UpdateBookDto(0.0, "1234567895",5);
 
         String bookStoreDtoString = gson.toJson(bookDto1);
-        MvcResult result = this.mockMvc.perform(put("/admin/update/price")
+        MvcResult result = this.mockMvc.perform(put("/admin/update")
                 .content(bookStoreDtoString)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
@@ -278,7 +261,7 @@ public class AdminControllerTest {
         UpdateBookDto bookDto1 =new UpdateBookDto(2000.0, null,5);
 
         String bookStoreDtoString = gson.toJson(bookDto1);
-        MvcResult result = this.mockMvc.perform(put("/admin/update/price")
+        MvcResult result = this.mockMvc.perform(put("/admin/update")
                 .content(bookStoreDtoString)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
@@ -292,7 +275,7 @@ public class AdminControllerTest {
         UpdateBookDto bookDto1 =new UpdateBookDto(2000.0, null,5);
 
         String bookStoreDtoString = gson.toJson(bookDto1);
-        MvcResult result = this.mockMvc.perform(put("/admin/update/price")
+        MvcResult result = this.mockMvc.perform(put("/admin/update")
                 .content(bookStoreDtoString)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
@@ -306,7 +289,7 @@ public class AdminControllerTest {
         UpdateBookDto bookDto1 =new UpdateBookDto(2000.0, "2",0);
 
         String bookStoreDtoString = gson.toJson(bookDto1);
-        MvcResult result = this.mockMvc.perform(put("/admin/update/price")
+        MvcResult result = this.mockMvc.perform(put("/admin/update")
                 .content(bookStoreDtoString)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();

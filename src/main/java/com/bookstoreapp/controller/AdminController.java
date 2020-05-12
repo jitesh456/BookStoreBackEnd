@@ -15,6 +15,7 @@ import javax.validation.Valid;
 
 
 @CrossOrigin
+@RequestMapping("/admin")
 @RestController
 public class AdminController {
 
@@ -23,7 +24,7 @@ public class AdminController {
     BookService iBookService;
 
 
-    @PostMapping("/admin/book")
+    @PostMapping("/book")
     public ResponseEntity<ResponseDto> addBook(@Valid @RequestBody BookDto bookDto,
                                              BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
@@ -34,15 +35,9 @@ public class AdminController {
                 HttpStatus.OK);
     }
 
-    @GetMapping("/admin/books")
-    public ResponseDto getAllData(){
-        Iterable<Book> allBook = iBookService.getAllBook();
-        ResponseDto response=new ResponseDto("Request Success",200,allBook);
-        return response;
-    }
 
-    @PutMapping("/admin/update/price")
-    public ResponseEntity<ResponseDto> updatePrice(@Valid @RequestBody UpdateBookDto bookDto, BindingResult bindingResult) {
+    @PutMapping("/update")
+    public ResponseEntity<ResponseDto> editBook(@Valid @RequestBody UpdateBookDto bookDto, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             return new ResponseEntity<ResponseDto>(new ResponseDto(bindingResult.getAllErrors().get(0).getDefaultMessage(),
                     101,"Empty Field"), HttpStatus.BAD_REQUEST);
