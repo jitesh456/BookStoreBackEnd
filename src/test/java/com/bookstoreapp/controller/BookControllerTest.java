@@ -96,4 +96,23 @@ public class BookControllerTest {
                 .getContentAsString(), ResponseDto.class).message);
     }
 
+
+    @Test
+    void givenPrice_WhenNull_ShouldReturnErrorMessage() throws Exception {
+        BookDto bookDto1 =new BookDto("Naruto",200.0,
+                20,"makashi kissimoto","Manga",
+                "12345678","","story about ninja boy ");
+        Book book =new Book(bookDto);
+        Book book1 =new Book(bookDto1);
+        List<Book> bookList =new ArrayList<>();
+        bookList.add(book1);
+        Mockito.when(ibookService.getSortedBook(any())).thenReturn(bookList);
+        String expectedList=gson.toJson(bookList);
+        MvcResult result=this.mockMvc.perform(get("/api/v2/books?field=")).andReturn();
+        Assert.assertEquals(400,gson.fromJson(result.getResponse()
+                .getContentAsString(), ResponseDto.class).getStatusCode());
+        Assert.assertEquals("SortField cant be null",gson.fromJson(result.getResponse()
+                .getContentAsString(), ResponseDto.class).message);
+    }
+
 }

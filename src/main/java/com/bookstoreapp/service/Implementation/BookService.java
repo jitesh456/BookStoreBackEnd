@@ -7,6 +7,7 @@ import com.bookstoreapp.model.Book;
 import com.bookstoreapp.repository.IBookRepository;
 import com.bookstoreapp.service.IBookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -51,7 +52,8 @@ public class BookService implements IBookService {
 
     @Override
     public Iterable<Book> getSortedBook(String sortBookDto) {
-        return null;
+
+        return iBookRepository.findAll(Sort.by(Sort.Direction.ASC, sortBookDto));
     }
 
 
