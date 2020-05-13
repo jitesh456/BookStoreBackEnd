@@ -51,9 +51,11 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public Iterable<Book> getSortedBook(String sortBookDto) {
-
-        return iBookRepository.findAll(Sort.by(Sort.Direction.ASC, sortBookDto));
+    public Iterable<Book> getSortedBook(String sortField) {
+        if(sortField != null) {
+            return iBookRepository.findAll(Sort.by(Sort.Direction.ASC, sortField));
+        }
+        throw new BookException("SORT FIELD CAN NOT NULL",BookException.ExceptionType.SORT_FIELD_CAN_NOT_NULL);
     }
 
 
