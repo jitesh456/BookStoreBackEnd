@@ -48,4 +48,11 @@ public class BookService implements IBookService {
         }
         throw new BookException("BOOK DOES NOT EXISTS",BookException.ExceptionType.BOOK_DOES_NOT_EXIST);
     }
+
+    @Override
+    public Iterable<Book> getSortedBook(String sortBookDto) {
+        return null;
+    }
+
+
 }

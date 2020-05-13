@@ -19,9 +19,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 
@@ -71,9 +73,27 @@ public class BookControllerTest {
         bookList.add(book1);
         Mockito.when(ibookService.getAllBook()).thenReturn(bookList);
         String expectedList = gson.toJson(bookList);
-        MvcResult result = this.mockMvc.perform(get("/books")).andReturn();
+        MvcResult result = this.mockMvc.perform(get("/api/v1/books")).andReturn();
         Assert.assertEquals(200,result.getResponse().getStatus());
-        Assert.assertEquals("Request Success",gson.fromJson(result.getResponse().getContentAsString(), ResponseDto.class).message);
+        Assert.assertEquals("Request Success",gson.fromJson(result.getResponse().
+                getContentAsString(), ResponseDto.class).message);
+    }
+
+    @Test
+    void givenPrice_WhenProper_ShouldReturnAllBookHavingPriceLessThenGivenPrice() throws Exception {
+        BookDto bookDto1 =new BookDto("Naruto",200.0,
+                20,"makashi kissimoto","Manga",
+                "12345678","","story about ninja boy ");
+        Book book =new Book(bookDto);
+        Book book1 =new Book(bookDto1);
+        List<Book> bookList =new ArrayList<>();
+        bookList.add(book1);
+        Mockito.when(ibookService.getSortedBook(any())).thenReturn(bookList);
+        String expectedList=gson.toJson(bookList);
+        MvcResult result=this.mockMvc.perform(get("/api/v2/books?field=price")).andReturn();
+        Assert.assertEquals(200,result.getResponse().getStatus());
+        Assert.assertEquals("Request Success",gson.fromJson(result.getResponse()
+                .getContentAsString(), ResponseDto.class).message);
     }
 
 }
