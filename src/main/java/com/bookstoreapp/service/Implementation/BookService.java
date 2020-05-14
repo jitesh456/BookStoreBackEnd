@@ -24,8 +24,8 @@ public class BookService implements IBookService {
     @Override
     public String addBook(BookDto bookDto) {
         Book book =new Book(bookDto);
-        Optional<Book> fetchBookIsbn=iBookRepository.findByIsbn(bookDto.isbn);
-        if (fetchBookIsbn.isPresent()){
+        Optional<Book> isbn = iBookRepository.findByIsbn(bookDto.isbn);
+        if (isbn.isPresent()){
             throw new BookException("BOOK ALREADY EXISTS",BookException.ExceptionType.BOOK_ALREADY_EXIST);
         }
         iBookRepository.save(book);
