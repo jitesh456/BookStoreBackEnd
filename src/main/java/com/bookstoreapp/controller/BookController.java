@@ -16,15 +16,19 @@ public class BookController {
     @Autowired
     BookService iBookService;
 
-    @GetMapping("/api/v1/books")
+    @GetMapping("/books")
     public ResponseDto getAllData(){
         Iterable<Book> allBook = iBookService.getAllBook();
         ResponseDto response=new ResponseDto("Request Success",200,allBook);
         return response;
     }
 
-    @GetMapping("/api/v2/books")
+    @GetMapping("/books/field")
     public ResponseDto getSortedBook(@RequestParam ("field")String field){
+        if(field.isEmpty())
+        {
+            return  new ResponseDto("Field cant be null for sorting",400,null);
+        }
         Iterable<Book> sortedBook = iBookService.getSortedBook(field);
         ResponseDto response=new ResponseDto("Request Success",200,sortedBook);
         return response;

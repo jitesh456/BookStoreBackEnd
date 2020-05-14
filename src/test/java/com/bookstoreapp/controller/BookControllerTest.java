@@ -1,6 +1,7 @@
 package com.bookstoreapp.controller;
 
 import com.bookstoreapp.dto.BookDto;
+import com.bookstoreapp.exception.BookException;
 import com.bookstoreapp.model.Book;
 import com.bookstoreapp.response.ResponseDto;
 import com.bookstoreapp.service.Implementation.BookService;
@@ -31,8 +32,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @AutoConfigureMockMvc
 public class BookControllerTest {
 
-    @Autowired
-    BookController bookController;
+
+
 
     @MockBean
     BookService ibookService;
@@ -73,7 +74,7 @@ public class BookControllerTest {
         bookList.add(book1);
         Mockito.when(ibookService.getAllBook()).thenReturn(bookList);
         String expectedList = gson.toJson(bookList);
-        MvcResult result = this.mockMvc.perform(get("/api/v1/books")).andReturn();
+        MvcResult result = this.mockMvc.perform(get("/books")).andReturn();
         Assert.assertEquals(200,result.getResponse().getStatus());
         Assert.assertEquals("Request Success",gson.fromJson(result.getResponse().
                 getContentAsString(), ResponseDto.class).message);
@@ -90,7 +91,7 @@ public class BookControllerTest {
         bookList.add(book1);
         Mockito.when(ibookService.getSortedBook(any())).thenReturn(bookList);
         String expectedList=gson.toJson(bookList);
-        MvcResult result=this.mockMvc.perform(get("/api/v2/books?field=price")).andReturn();
+        MvcResult result=this.mockMvc.perform(get("/books/field?field=price")).andReturn();
         Assert.assertEquals(200,result.getResponse().getStatus());
         Assert.assertEquals("Request Success",gson.fromJson(result.getResponse()
                 .getContentAsString(), ResponseDto.class).message);
@@ -108,11 +109,28 @@ public class BookControllerTest {
         bookList.add(book1);
         Mockito.when(ibookService.getSortedBook(any())).thenReturn(bookList);
         String expectedList=gson.toJson(bookList);
-        MvcResult result=this.mockMvc.perform(get("/api/v2/books?field=")).andReturn();
+        MvcResult result=this.mockMvc.perform(get("/books/field?field=")).andReturn();
         Assert.assertEquals(400,gson.fromJson(result.getResponse()
                 .getContentAsString(), ResponseDto.class).getStatusCode());
-        Assert.assertEquals("SortField cant be null",gson.fromJson(result.getResponse()
+        Assert.assertEquals("Field cant be null for sorting",gson.fromJson(result.getResponse()
                 .getContentAsString(), ResponseDto.class).message);
+    }
+
+    @Test
+    void givenASortField_WhenNull_ShouldThrowException()throws Exception {
+        try{
+                BookDto bookDto1 = new BookDto("Naruto", 200.0,
+                        20, "makashi kissimoto", "Manga",
+                        "12345678", "", "story about ninja boy ");
+                Book book = new Book(bookDto);
+                Book book1 = new Book(bookDto1);
+                List<Book> bookList = new ArrayList<>();
+                bookList.add(book);
+                bookList.add(book1);
+                Mockito.when(ibookService.getSortedBook(any())).thenThrow( new BookException("SORT FIELD CAN NOT NULL",BookException.ExceptionType.SORT_FIELD_CAN_NOT_NULL));
+                MvcResult result = this.mockMvc.perform(get("/books/field?field=")).andReturn();
+        }catch(BookException e){
+            Assert.assertEquals(BookException.ExceptionType.SORT_FIELD_CAN_NOT_NULL,e.exceptionType);}
     }
 
 }

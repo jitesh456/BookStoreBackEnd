@@ -9,6 +9,10 @@ import javax.persistence.*;
 public class Book {
 
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
+
     private String name;
 
 
@@ -30,9 +34,7 @@ public class Book {
 
 
     private String isbn;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+
 
     public Book(BookDto bookDto) {
         this.name= bookDto.name;

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-@ControllerAdvice(assignableTypes = AdminController.class)
+@ControllerAdvice
 public class BookExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(BookException.class)
     public ResponseEntity<ResponseDto> bookHandler(BookException bookException){

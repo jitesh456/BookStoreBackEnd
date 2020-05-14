@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class UpdateBookDto {
-    @Min(100)
+    @Min(value = 100,message = "Price must be greater then 100")
     @NotNull(message = "price should not be empty")
     public Double price;
 

@@ -36,7 +36,7 @@ public class AdminController {
     }
 
 
-    @PutMapping("/update")
+    @PutMapping("/book")
     public ResponseEntity<ResponseDto> editBook(@Valid @RequestBody UpdateBookDto bookDto, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             return new ResponseEntity<ResponseDto>(new ResponseDto(bindingResult.getAllErrors().get(0).getDefaultMessage(),
