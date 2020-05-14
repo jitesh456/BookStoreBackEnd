@@ -81,7 +81,7 @@ public class AdminControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
         Assert.assertEquals(400,result.getResponse().getStatus());
-        Assert.assertEquals("author name should not be null",
+        Assert.assertEquals("Author name should not be null",
                 new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
 
@@ -117,7 +117,7 @@ public class AdminControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
         Assert.assertEquals(400,result.getResponse().getStatus());
-        Assert.assertEquals("book cover should not be null",
+        Assert.assertEquals("Book cover should not be null",
                 new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
 
@@ -134,7 +134,7 @@ public class AdminControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
         Assert.assertEquals(400,result.getResponse().getStatus());
-        Assert.assertEquals("isbn should not be null",
+        Assert.assertEquals("ISBN should not be null",
                 new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
 
@@ -169,7 +169,7 @@ public class AdminControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
         Assert.assertEquals(400,result.getResponse().getStatus());
-        Assert.assertEquals("category should not be null",
+        Assert.assertEquals("Category should not be null",
                 new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
 
@@ -185,7 +185,7 @@ public class AdminControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
         Assert.assertEquals(400,result.getResponse().getStatus());
-        Assert.assertEquals("size must be between 10 and 500",
+        Assert.assertEquals("Book Details should include 10 to 500 characters",
                 new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
 
@@ -242,21 +242,7 @@ public class AdminControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
         Assert.assertEquals(400,result.getResponse().getStatus());
-        Assert.assertEquals("Price must be greater then 100",
-                new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
-    }
-
-    @Test
-    void givenBookDataPrice_WhenIsbnIsNull_ReturnProperMessage() throws Exception {
-        UpdateBookDto bookDto1 =new UpdateBookDto(2000.0, null,5);
-
-        String bookStoreDtoString = gson.toJson(bookDto1);
-        MvcResult result = this.mockMvc.perform(put("/admin/book")
-                .content(bookStoreDtoString)
-                .contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andReturn();
-        Assert.assertEquals(400,result.getResponse().getStatus());
-        Assert.assertEquals("isbn should not be null",
+        Assert.assertEquals("Price must be greater than 100",
                 new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
 
@@ -270,20 +256,20 @@ public class AdminControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
         Assert.assertEquals(400,result.getResponse().getStatus());
-        Assert.assertEquals("isbn should not be null",
+        Assert.assertEquals("ISBN should not be null",
                 new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
 
     @Test
-    void givenBookData_WhenQuantityIsZero_ReturnProperMessage() throws Exception {
-        UpdateBookDto bookDto1 =new UpdateBookDto(2000.0, "2",0);
+    void givenBookData_WhenIsbnIsNotProper_ReturnProperMessage() throws Exception {
+        UpdateBookDto bookDto1 =new UpdateBookDto(2000.0, "123456",0);
         String bookStoreDtoString = gson.toJson(bookDto1);
         MvcResult result = this.mockMvc.perform(put("/admin/book")
                 .content(bookStoreDtoString)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
         Assert.assertEquals(400,result.getResponse().getStatus());
-        Assert.assertEquals("must be greater than or equal to 10",
+        Assert.assertEquals("ISBN must include 10 or 13 characters",
                 new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
 }

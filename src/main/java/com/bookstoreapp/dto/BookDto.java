@@ -10,29 +10,29 @@ public class BookDto {
     @NotEmpty(message = "Book name should not be null")
     public String name;
 
-    @Min(100)
-    @NotNull(message = "price should not be empty")
+    @Min(value = 100,message = "Price must be greater than 100")
+    @NotNull(message = "Price should not be empty")
     public Double price;
 
-    @NotNull(message = "quantity should not be null")
+    @NotNull(message = "Quantity should not be null")
     public int quantity;
 
     @Size(min=3,max = 20)
-    @NotNull(message = "author name should not be null")
+    @NotNull(message = "Author name should not be null")
     public String authorName;
 
-    @NotEmpty(message = "book cover should not be null")
+    @NotEmpty(message = "Book cover should not be null")
     public String bookCover;
 
     @Size(min = 10,max = 13)
-    @NotNull(message = "isbn should not be null")
+    @NotNull(message = "ISBN should not be null")
     public String isbn;
 
 
-    @NotNull(message = "category should not be null")
+    @NotNull(message = "Category should not be null")
     public String category;
 
-    @Size(min = 10,max = 500)
+    @Size(min = 10,max = 500,message = "Book Details should include 10 to 500 characters")
     public String bookDetails;
 
     public BookDto() { }

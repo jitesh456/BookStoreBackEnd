@@ -5,16 +5,16 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class UpdateBookDto {
-    @Min(value = 100,message = "Price must be greater then 100")
+    @Min(value = 100,message = "Price must be greater than 100")
     @NotNull(message = "price should not be empty")
     public Double price;
 
-    @Size(min = 10,max = 13,message = "must be greater than or equal to 10")
-    @NotNull(message = "isbn should not be null")
+    @Size(min = 10,max = 13,message = "ISBN must include 10 or 13 characters")
+    @NotNull(message = "ISBN should not be null")
     public String isbn;
 
     @Min(0)
-    @NotNull(message = "quantity should not be null")
+    @NotNull(message = "Quantity should not be null")
     public int quantity;
 
     public UpdateBookDto() {
