@@ -34,9 +34,9 @@ public class BookServiceTest {
 
     @BeforeEach
     void setUp() {
-        bookDto =new BookDto("Rajnish",2000.0,
-                12,"dfsdfsf","comic",
-                "Jitesh","sdfsfd","ABCD");
+        bookDto =new BookDto("Secret of nagas",2000.0,
+                12,"Amish Tiwari","comic",
+                "998542365","sdfsfd","ABCD");
     }
 
     @Test

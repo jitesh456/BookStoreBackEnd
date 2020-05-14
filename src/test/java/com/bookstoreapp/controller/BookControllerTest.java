@@ -51,15 +51,15 @@ public class BookControllerTest {
         headers=new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         gson=new Gson();
-        bookDto =new BookDto("Rajnish",2000.0,
-                12,"dfsdfsf","comic",
+        bookDto =new BookDto("Secret of nagas",2000.0,
+                12,"Amish Tiwari","comic",
                 "987564236578","sdfsfd","Adaptation of the first of J.K. Rowling's popular " +
                 "children's novels about Harry Potter, a boy who learns on his eleventh birthday that he is the orphaned son " );
     }
 
 
     @Test
-    void getAllData() throws Exception {
+    void whenBookFound_ShouldReturnProperMessage() throws Exception {
         BookDto bookDto1 =new BookDto("Naruto",200.0,
                 20,"makashi kissimoto","Manga",
                 "12345678","","story about ninja boy ");
@@ -72,7 +72,7 @@ public class BookControllerTest {
         String expectedList = gson.toJson(bookList);
         MvcResult result = this.mockMvc.perform(get("/books")).andReturn();
         Assert.assertEquals(200,result.getResponse().getStatus());
-        Assert.assertEquals("Request Success",gson.fromJson(result.getResponse().
+        Assert.assertEquals("Fetched Books",gson.fromJson(result.getResponse().
                 getContentAsString(), Response.class).message);
     }
 
@@ -89,7 +89,7 @@ public class BookControllerTest {
         String expectedList=gson.toJson(bookList);
         MvcResult result=this.mockMvc.perform(get("/books/field?field=price")).andReturn();
         Assert.assertEquals(200,result.getResponse().getStatus());
-        Assert.assertEquals("Request Success",gson.fromJson(result.getResponse()
+        Assert.assertEquals("Book List is Sorted On basic of given field",gson.fromJson(result.getResponse()
                 .getContentAsString(), Response.class).message);
     }
 

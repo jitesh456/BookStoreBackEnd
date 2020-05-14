@@ -17,7 +17,7 @@ public class BookController {
     @GetMapping("/books")
     public Response getAllData(){
         Iterable<Book> allBook = iBookService.getAllBook();
-        Response response=new Response("Request Success",200,allBook);
+        Response response=new Response("Fetched Books",200,allBook);
         return response;
     }
 
@@ -28,7 +28,7 @@ public class BookController {
             return  new Response("Field cant be null for sorting",400,null);
         }
         Iterable<Book> sortedBook = iBookService.getSortedBook(field);
-        Response response=new Response("Request Success",200,sortedBook);
+        Response response=new Response("Book List is Sorted On basic of given field",200,sortedBook);
         return response;
     }
 }

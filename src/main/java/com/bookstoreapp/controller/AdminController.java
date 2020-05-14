@@ -30,7 +30,7 @@ public class AdminController {
             return new ResponseEntity<Response>(new Response(bindingResult.getAllErrors().get(0).getDefaultMessage(),101,"Empty Field"), HttpStatus.BAD_REQUEST);
         }
         String responseMessage= iBookService.addBook(bookDto);
-        return new ResponseEntity<Response>(new Response("Inserted",200, responseMessage),
+        return new ResponseEntity<Response>(new Response("Book Added Successfully",200, responseMessage),
                 HttpStatus.OK);
     }
 
@@ -42,7 +42,7 @@ public class AdminController {
                     101,"Empty Field"), HttpStatus.BAD_REQUEST);
         }
         String responseMessage= iBookService.updatePrice(bookDto);
-        return new ResponseEntity<Response>(new Response("Updated",200, responseMessage),
+        return new ResponseEntity<Response>(new Response("Book is Updated",200, responseMessage),
                 HttpStatus.OK);
     }
 }

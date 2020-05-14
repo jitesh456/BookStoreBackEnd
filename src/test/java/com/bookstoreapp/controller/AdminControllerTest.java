@@ -45,9 +45,9 @@ public class AdminControllerTest {
     void setUp() {
         headers=new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        bookDto =new BookDto("Rajnish",2000.0,
-                12,"dfsdfsf","comic",
-                "987564236578","sdfsfd","Adaptation of the first of J.K. Rowling's popular " +
+        bookDto =new BookDto("Secret of nagas",2000.0,
+                12,"Amish Tiwari","comic",
+                "987564236578","Adventure","Adaptation of the first of J.K. Rowling's popular " +
                 "children's novels about Harry Potter, a boy who learns on his eleventh birthday that he is the orphaned son " );
         gson=new Gson();
     }
@@ -62,7 +62,7 @@ public class AdminControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
         Assert.assertEquals(200,result.getResponse().getStatus());
-        Assert.assertEquals("Inserted",
+        Assert.assertEquals("Book Added Successfully",
                 new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
 
@@ -70,9 +70,9 @@ public class AdminControllerTest {
 
     @Test
     void givenBookData_WhenAuthorNull_ReturnProperMessage() throws Exception {
-       BookDto bookDto1 =new BookDto("Rajnish",2000.0,
+       BookDto bookDto1 =new BookDto("Secret of nagas",2000.0,
                 12,null,"comic",
-                "1234567895","sdfsfd","Adaptation of the first of J.K. Rowling's popular " +
+                "1234567895","Adventure","Adaptation of the first of J.K. Rowling's popular " +
                "closest allies and help him discover the truth about his parents' mysterious deaths.");
 
         String bookStoreDtoString = gson.toJson(bookDto1);
@@ -88,7 +88,7 @@ public class AdminControllerTest {
     @Test
     void givenBookData_WhenBookNameNull_ReturnProperMessage() throws Exception {
         BookDto bookDto1 =new BookDto(null,2000.0,
-                12,"Jitesh","comic",
+                12,"Amish Tiwari","comic",
                 "1234567895","sdfsfd","Adaptation of the first of J.K. Rowling's popular " +
                 "closest allies and help him discover the truth about his parents' mysterious deaths.");
 
@@ -106,8 +106,8 @@ public class AdminControllerTest {
 
     @Test
     void givenBookData_WhenBookCoverNull_ReturnProperMessage() throws Exception {
-        BookDto bookDto1 =new BookDto("Rajnish",2000.0,
-                12,"jitesh",null,
+        BookDto bookDto1 =new BookDto("Secret of nagas",2000.0,
+                12,"Amish Tiwari",null,
                 "1234567895","sdfsfd","Adaptation of the first of J.K. Rowling's popular " +
                 "closest allies and help him discover the truth about his parents' mysterious deaths.");
 
@@ -123,8 +123,8 @@ public class AdminControllerTest {
 
     @Test
     void givenBookData_WhenIsbnNull_ReturnProperMessage() throws Exception {
-        BookDto bookDto1 =new BookDto("Rajnish",2000.0,
-                12,"Jitesh","comic",
+        BookDto bookDto1 =new BookDto("Secret of nagas",2000.0,
+                12,"Amiish Tiwari","comic",
                 null,"sdfsfd","Adaptation of the first of J.K. Rowling's popular " +
                 "closest allies and help him discover the truth about his parents' mysterious deaths.");
 
@@ -141,8 +141,8 @@ public class AdminControllerTest {
 
     @Test
     void givenBookData_WhenIsbnLessThenTen_ReturnProperMessage() throws Exception {
-        BookDto bookDto1 =new BookDto("Rajnish",2000.0,
-                12,"Jitesh","comic",
+        BookDto bookDto1 =new BookDto("Secret of nagas",2000.0,
+                12,"Amish Tiwari","comic",
                 "123456","sdfsfd","Adaptation of the first of J.K. Rowling's popular " +
                 "closest allies and help him discover the truth about his parents' mysterious deaths.");
 
@@ -158,8 +158,8 @@ public class AdminControllerTest {
 
     @Test
     void givenBookData_WhenCategoryNull_ReturnProperMessage() throws Exception {
-        BookDto bookDto1 =new BookDto("Rajnish",2000.0,
-                12,"Rahul","comic",
+        BookDto bookDto1 =new BookDto("Secret of nagas",2000.0,
+                12,"Amish Tiwari","comic",
                 "1234567895",null,"Adaptation of the first of J.K. Rowling's popular " +
                 "closest allies and help him discover the truth about his parents' mysterious deaths.");
 
@@ -175,8 +175,8 @@ public class AdminControllerTest {
 
     @Test
     void givenBookData_WhenDetailsEmpty_ReturnProperMessage() throws Exception {
-        BookDto bookDto1 =new BookDto("Rajnish",200.0,
-                12,"makashi","comic",
+        BookDto bookDto1 =new BookDto("Secret of nagas",200.0,
+                12,"Amish Tiwari","comic",
                 "1234569875","Adventure","");
 
         String bookStoreDtoString = gson.toJson(bookDto1);
@@ -228,7 +228,7 @@ public class AdminControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
         Assert.assertEquals(200,result.getResponse().getStatus());
-        Assert.assertEquals("Updated",
+        Assert.assertEquals("Book is Updated",
                 new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
 
