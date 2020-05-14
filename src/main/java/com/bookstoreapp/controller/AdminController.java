@@ -2,8 +2,7 @@ package com.bookstoreapp.controller;
 
 import com.bookstoreapp.dto.BookDto;
 import com.bookstoreapp.dto.UpdateBookDto;
-import com.bookstoreapp.model.Book;
-import com.bookstoreapp.response.ResponseDto;
+import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.Implementation.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,25 +24,25 @@ public class AdminController {
 
 
     @PostMapping("/book")
-    public ResponseEntity<ResponseDto> addBook(@Valid @RequestBody BookDto bookDto,
-                                             BindingResult bindingResult) {
+    public ResponseEntity<Response> addBook(@Valid @RequestBody BookDto bookDto,
+                                            BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
-            return new ResponseEntity<ResponseDto>(new ResponseDto(bindingResult.getAllErrors().get(0).getDefaultMessage(),101,"Empty Field"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Response>(new Response(bindingResult.getAllErrors().get(0).getDefaultMessage(),101,"Empty Field"), HttpStatus.BAD_REQUEST);
         }
         String responseMessage= iBookService.addBook(bookDto);
-        return new ResponseEntity<ResponseDto>(new ResponseDto("Inserted",200, responseMessage),
+        return new ResponseEntity<Response>(new Response("Inserted",200, responseMessage),
                 HttpStatus.OK);
     }
 
 
     @PutMapping("/book")
-    public ResponseEntity<ResponseDto> editBook(@Valid @RequestBody UpdateBookDto bookDto, BindingResult bindingResult) {
+    public ResponseEntity<Response> editBook(@Valid @RequestBody UpdateBookDto bookDto, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
-            return new ResponseEntity<ResponseDto>(new ResponseDto(bindingResult.getAllErrors().get(0).getDefaultMessage(),
+            return new ResponseEntity<Response>(new Response(bindingResult.getAllErrors().get(0).getDefaultMessage(),
                     101,"Empty Field"), HttpStatus.BAD_REQUEST);
         }
         String responseMessage= iBookService.updatePrice(bookDto);
-        return new ResponseEntity<ResponseDto>(new ResponseDto("Updated",200, responseMessage),
+        return new ResponseEntity<Response>(new Response("Updated",200, responseMessage),
                 HttpStatus.OK);
     }
 }

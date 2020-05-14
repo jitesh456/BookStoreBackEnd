@@ -3,7 +3,7 @@ package com.bookstoreapp.controller;
 import com.bookstoreapp.dto.BookDto;
 import com.bookstoreapp.exception.BookException;
 import com.bookstoreapp.model.Book;
-import com.bookstoreapp.response.ResponseDto;
+import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.Implementation.BookService;
 import com.google.gson.Gson;
 import org.junit.Assert;
@@ -20,7 +20,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,9 +30,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @AutoConfigureMockMvc
 public class BookControllerTest {
-
-
-
 
     @MockBean
     BookService ibookService;
@@ -77,7 +73,7 @@ public class BookControllerTest {
         MvcResult result = this.mockMvc.perform(get("/books")).andReturn();
         Assert.assertEquals(200,result.getResponse().getStatus());
         Assert.assertEquals("Request Success",gson.fromJson(result.getResponse().
-                getContentAsString(), ResponseDto.class).message);
+                getContentAsString(), Response.class).message);
     }
 
     @Test
@@ -94,7 +90,7 @@ public class BookControllerTest {
         MvcResult result=this.mockMvc.perform(get("/books/field?field=price")).andReturn();
         Assert.assertEquals(200,result.getResponse().getStatus());
         Assert.assertEquals("Request Success",gson.fromJson(result.getResponse()
-                .getContentAsString(), ResponseDto.class).message);
+                .getContentAsString(), Response.class).message);
     }
 
 
@@ -111,9 +107,9 @@ public class BookControllerTest {
         String expectedList=gson.toJson(bookList);
         MvcResult result=this.mockMvc.perform(get("/books/field?field=")).andReturn();
         Assert.assertEquals(400,gson.fromJson(result.getResponse()
-                .getContentAsString(), ResponseDto.class).getStatusCode());
+                .getContentAsString(), Response.class).statusCode);
         Assert.assertEquals("Field cant be null for sorting",gson.fromJson(result.getResponse()
-                .getContentAsString(), ResponseDto.class).message);
+                .getContentAsString(), Response.class).message);
     }
 
     @Test

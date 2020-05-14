@@ -2,7 +2,7 @@ package com.bookstoreapp.controller;
 
 import com.bookstoreapp.dto.BookDto;
 import com.bookstoreapp.dto.UpdateBookDto;
-import com.bookstoreapp.response.ResponseDto;
+import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.Implementation.BookService;
 import com.google.gson.Gson;
 import org.junit.Assert;
@@ -63,7 +63,7 @@ public class AdminControllerTest {
                 .andReturn();
         Assert.assertEquals(200,result.getResponse().getStatus());
         Assert.assertEquals("Inserted",
-                new Gson().fromJson(result.getResponse().getContentAsString(), ResponseDto.class).message);
+                new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
 
 
@@ -82,7 +82,7 @@ public class AdminControllerTest {
                 .andReturn();
         Assert.assertEquals(400,result.getResponse().getStatus());
         Assert.assertEquals("author name should not be null",
-                new Gson().fromJson(result.getResponse().getContentAsString(), ResponseDto.class).message);
+                new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
 
     @Test
@@ -99,7 +99,7 @@ public class AdminControllerTest {
                 .andReturn();
         Assert.assertEquals(400,result.getResponse().getStatus());
         Assert.assertEquals("Book name should not be null",
-                new Gson().fromJson(result.getResponse().getContentAsString(), ResponseDto.class).message);
+                new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
 
 
@@ -118,7 +118,7 @@ public class AdminControllerTest {
                 .andReturn();
         Assert.assertEquals(400,result.getResponse().getStatus());
         Assert.assertEquals("book cover should not be null",
-                new Gson().fromJson(result.getResponse().getContentAsString(), ResponseDto.class).message);
+                new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
 
     @Test
@@ -135,7 +135,7 @@ public class AdminControllerTest {
                 .andReturn();
         Assert.assertEquals(400,result.getResponse().getStatus());
         Assert.assertEquals("isbn should not be null",
-                new Gson().fromJson(result.getResponse().getContentAsString(), ResponseDto.class).message);
+                new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
 
 
@@ -153,7 +153,7 @@ public class AdminControllerTest {
                 .andReturn();
         Assert.assertEquals(400,result.getResponse().getStatus());
         Assert.assertEquals("size must be between 10 and 13",
-                new Gson().fromJson(result.getResponse().getContentAsString(), ResponseDto.class).message);
+                new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
 
     @Test
@@ -170,7 +170,7 @@ public class AdminControllerTest {
                 .andReturn();
         Assert.assertEquals(400,result.getResponse().getStatus());
         Assert.assertEquals("category should not be null",
-                new Gson().fromJson(result.getResponse().getContentAsString(), ResponseDto.class).message);
+                new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
 
     @Test
@@ -186,7 +186,7 @@ public class AdminControllerTest {
                 .andReturn();
         Assert.assertEquals(400,result.getResponse().getStatus());
         Assert.assertEquals("size must be between 10 and 500",
-                new Gson().fromJson(result.getResponse().getContentAsString(), ResponseDto.class).message);
+                new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
 
     @Test
@@ -229,7 +229,7 @@ public class AdminControllerTest {
                 .andReturn();
         Assert.assertEquals(200,result.getResponse().getStatus());
         Assert.assertEquals("Updated",
-                new Gson().fromJson(result.getResponse().getContentAsString(), ResponseDto.class).message);
+                new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
 
     @Test
@@ -243,7 +243,7 @@ public class AdminControllerTest {
                 .andReturn();
         Assert.assertEquals(400,result.getResponse().getStatus());
         Assert.assertEquals("Price must be greater then 100",
-                new Gson().fromJson(result.getResponse().getContentAsString(), ResponseDto.class).message);
+                new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
 
     @Test
@@ -257,7 +257,7 @@ public class AdminControllerTest {
                 .andReturn();
         Assert.assertEquals(400,result.getResponse().getStatus());
         Assert.assertEquals("isbn should not be null",
-                new Gson().fromJson(result.getResponse().getContentAsString(), ResponseDto.class).message);
+                new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
 
     @Test
@@ -271,7 +271,7 @@ public class AdminControllerTest {
                 .andReturn();
         Assert.assertEquals(400,result.getResponse().getStatus());
         Assert.assertEquals("isbn should not be null",
-                new Gson().fromJson(result.getResponse().getContentAsString(), ResponseDto.class).message);
+                new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
 
     @Test
@@ -284,6 +284,6 @@ public class AdminControllerTest {
                 .andReturn();
         Assert.assertEquals(400,result.getResponse().getStatus());
         Assert.assertEquals("must be greater than or equal to 10",
-                new Gson().fromJson(result.getResponse().getContentAsString(), ResponseDto.class).message);
+                new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
 }
