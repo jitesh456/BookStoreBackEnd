@@ -1,6 +1,7 @@
 package com.bookstoreapp.service;
 
 import com.bookstoreapp.dto.BookDto;
+import com.bookstoreapp.dto.CartDto;
 import com.bookstoreapp.dto.UpdateBookDto;
 import com.bookstoreapp.model.Book;
 
@@ -14,5 +15,5 @@ public interface IBookService {
 
     Iterable<Book> getSortedBook(String sortBookDto);
 
-    String addToCart(Object any);
+    String addToCart(CartDto cartDto);
 }
