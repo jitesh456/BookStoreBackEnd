@@ -119,4 +119,16 @@ public class BookServiceTest {
         String expectedMessage = bookService.updateQuantity(updateCartDto);
         Assert.assertEquals("Book Quantity Updated",expectedMessage);
     }
+
+    @Test
+    void givenISBN_Number_WhenProper_ShouldRemoveItem()
+    {
+        UpdateCartDto updateCartDto=new UpdateCartDto("1234567895",14);
+        Cart book=new Cart(cartDto);
+        String ISBN="1234567895";
+        Mockito.when(iCartRepository.findByIsbn(any())).thenReturn(java.util.Optional.of(book));
+        Mockito.when(iCartRepository.deleteByIsbn(any())).thenReturn(java.util.Optional.of(book));
+        String expectedMessage = bookService.removeFromCart(ISBN);
+        Assert.assertEquals("Book Deleted Successfully",expectedMessage);
+    }
 }
