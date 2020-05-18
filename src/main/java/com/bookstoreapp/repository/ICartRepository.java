@@ -8,4 +8,6 @@ import java.util.Optional;
 
 public interface ICartRepository extends JpaRepository<Cart,Integer> {
     Optional<Cart> findByIsbn(String ISBN);
+
+    Optional<Cart> deleteByIsbn(String ISBN);
 }

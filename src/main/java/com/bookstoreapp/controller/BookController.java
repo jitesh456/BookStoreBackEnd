@@ -64,8 +64,12 @@ public class BookController {
 
     @DeleteMapping("/book")
     public ResponseEntity<Response> removeBook(@RequestParam(value="ISBN")  String ISBN){
+        if(ISBN.length()<10){
+            return new ResponseEntity<Response>(new Response("ISBN number must be of 10 to 13 digits",
+                    101,"Empty Field"), HttpStatus.BAD_REQUEST);
+        }
         String responseMessage= bookService.removeFromCart(ISBN);
-        return new ResponseEntity(new Response("Book Deleted Successfully",200, responseMessage),
+        return new ResponseEntity(new Response("ISBN Length"+ISBN.length(),200, responseMessage),
                 HttpStatus.OK);
     }
 }

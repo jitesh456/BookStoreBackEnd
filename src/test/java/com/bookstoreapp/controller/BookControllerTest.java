@@ -54,128 +54,129 @@ public class BookControllerTest {
 
     @BeforeEach
     void setUp() {
-        headers=new HttpHeaders();
+        headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        gson=new Gson();
-        bookDto =new BookDto("Secret of nagas",2000.0,
-                12,"Amish Tiwari","comic",
-                "987564236578","sdfsfd","Adaptation of the first of J.K. Rowling's popular " +
-                "children's novels about Harry Potter, a boy who learns on his eleventh birthday that he is the orphaned son " );
-        cartDto=new CartDto("Secret of nagas",2000.0,12,"Amish Tiwari","987564236578","imagesrc");
+        gson = new Gson();
+        bookDto = new BookDto("Secret of nagas", 2000.0,
+                12, "Amish Tiwari", "comic",
+                "987564236578", "sdfsfd", "Adaptation of the first of J.K. Rowling's popular " +
+                "children's novels about Harry Potter, a boy who learns on his eleventh birthday that he is the orphaned son ");
+        cartDto = new CartDto("Secret of nagas", 2000.0, 12, "Amish Tiwari", "987564236578", "imagesrc");
     }
 
 
     @Test
     void whenBookFound_ShouldReturnProperMessage() throws Exception {
-        BookDto bookDto1 =new BookDto("Naruto",200.0,
-                20,"makashi kissimoto","Manga",
-                "12345678","","story about ninja boy ");
-        Book book =new Book(bookDto);
-        Book book1 =new Book(bookDto1);
-        List<Book> bookList =new ArrayList<>();
+        BookDto bookDto1 = new BookDto("Naruto", 200.0,
+                20, "makashi kissimoto", "Manga",
+                "12345678", "", "story about ninja boy ");
+        Book book = new Book(bookDto);
+        Book book1 = new Book(bookDto1);
+        List<Book> bookList = new ArrayList<>();
         bookList.add(book);
         bookList.add(book1);
         Mockito.when(bookService.getAllBook()).thenReturn(bookList);
         String expectedList = gson.toJson(bookList);
         MvcResult result = this.mockMvc.perform(get("/books")).andReturn();
-        Assert.assertEquals(200,result.getResponse().getStatus());
-        Assert.assertEquals("Fetched Books",gson.fromJson(result.getResponse().
+        Assert.assertEquals(200, result.getResponse().getStatus());
+        Assert.assertEquals("Fetched Books", gson.fromJson(result.getResponse().
                 getContentAsString(), Response.class).message);
     }
 
     @Test
     void givenPrice_WhenProper_ShouldReturnAllBookHavingPriceLessThenGivenPrice() throws Exception {
-        BookDto bookDto1 =new BookDto("Naruto",200.0,
-                20,"makashi kissimoto","Manga",
-                "12345678","","story about ninja boy ");
-        Book book =new Book(bookDto);
-        Book book1 =new Book(bookDto1);
-        List<Book> bookList =new ArrayList<>();
+        BookDto bookDto1 = new BookDto("Naruto", 200.0,
+                20, "makashi kissimoto", "Manga",
+                "12345678", "", "story about ninja boy ");
+        Book book = new Book(bookDto);
+        Book book1 = new Book(bookDto1);
+        List<Book> bookList = new ArrayList<>();
         bookList.add(book1);
         Mockito.when(bookService.getSortedBook(any())).thenReturn(bookList);
-        String expectedList=gson.toJson(bookList);
-        MvcResult result=this.mockMvc.perform(get("/books/field?field=price")).andReturn();
-        Assert.assertEquals(200,result.getResponse().getStatus());
-        Assert.assertEquals("Book List is Sorted On basic of given field",gson.fromJson(result.getResponse()
+        String expectedList = gson.toJson(bookList);
+        MvcResult result = this.mockMvc.perform(get("/books/field?field=price")).andReturn();
+        Assert.assertEquals(200, result.getResponse().getStatus());
+        Assert.assertEquals("Book List is Sorted On basic of given field", gson.fromJson(result.getResponse()
                 .getContentAsString(), Response.class).message);
     }
 
 
     @Test
     void givenPrice_WhenNull_ShouldReturnErrorMessage() throws Exception {
-        BookDto bookDto1 =new BookDto("Naruto",200.0,
-                20,"makashi kissimoto","Manga",
-                "12345678","","story about ninja boy ");
-        Book book =new Book(bookDto);
-        Book book1 =new Book(bookDto1);
-        List<Book> bookList =new ArrayList<>();
+        BookDto bookDto1 = new BookDto("Naruto", 200.0,
+                20, "makashi kissimoto", "Manga",
+                "12345678", "", "story about ninja boy ");
+        Book book = new Book(bookDto);
+        Book book1 = new Book(bookDto1);
+        List<Book> bookList = new ArrayList<>();
         bookList.add(book1);
         Mockito.when(bookService.getSortedBook(any())).thenReturn(bookList);
-        String expectedList=gson.toJson(bookList);
-        MvcResult result=this.mockMvc.perform(get("/books/field?field=")).andReturn();
-        Assert.assertEquals(400,gson.fromJson(result.getResponse()
+        String expectedList = gson.toJson(bookList);
+        MvcResult result = this.mockMvc.perform(get("/books/field?field=")).andReturn();
+        Assert.assertEquals(400, gson.fromJson(result.getResponse()
                 .getContentAsString(), Response.class).statusCode);
-        Assert.assertEquals("Field cant be null for sorting",gson.fromJson(result.getResponse()
+        Assert.assertEquals("Field cant be null for sorting", gson.fromJson(result.getResponse()
                 .getContentAsString(), Response.class).message);
     }
 
     @Test
-    void givenASortField_WhenNull_ShouldThrowException()throws Exception {
-        try{
-                BookDto bookDto1 = new BookDto("Naruto", 200.0,
-                        20, "makashi kissimoto", "Manga",
-                        "12345678", "", "story about ninja boy ");
-                Book book = new Book(bookDto);
-                Book book1 = new Book(bookDto1);
-                List<Book> bookList = new ArrayList<>();
-                bookList.add(book);
-                bookList.add(book1);
-                Mockito.when(bookService.getSortedBook(any())).thenThrow( new BookException("SORT FIELD CAN NOT NULL",BookException.ExceptionType.SORT_FIELD_CAN_NOT_NULL));
-                MvcResult result = this.mockMvc.perform(get("/books/field?field=")).andReturn();
-        }catch(BookException e){
-            Assert.assertEquals(BookException.ExceptionType.SORT_FIELD_CAN_NOT_NULL,e.exceptionType);}
+    void givenASortField_WhenNull_ShouldThrowException() throws Exception {
+        try {
+            BookDto bookDto1 = new BookDto("Naruto", 200.0,
+                    20, "makashi kissimoto", "Manga",
+                    "12345678", "", "story about ninja boy ");
+            Book book = new Book(bookDto);
+            Book book1 = new Book(bookDto1);
+            List<Book> bookList = new ArrayList<>();
+            bookList.add(book);
+            bookList.add(book1);
+            Mockito.when(bookService.getSortedBook(any())).thenThrow(new BookException("SORT FIELD CAN NOT NULL", BookException.ExceptionType.SORT_FIELD_CAN_NOT_NULL));
+            MvcResult result = this.mockMvc.perform(get("/books/field?field=")).andReturn();
+        } catch (BookException e) {
+            Assert.assertEquals(BookException.ExceptionType.SORT_FIELD_CAN_NOT_NULL, e.exceptionType);
+        }
     }
 
     @Test
     void givenBook_WhenAddedToCart_ShouldReturnProperMessage() throws Exception {
-        String cartDto=new Gson().toJson(this.cartDto);
+        String cartDto = new Gson().toJson(this.cartDto);
 
 
         Mockito.when(bookService.addToCart(any())).thenReturn("Inserted Successfully");
-        MvcResult result=this.mockMvc.perform(post("/book")
+        MvcResult result = this.mockMvc.perform(post("/book")
                 .content(cartDto)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
-        Assert.assertEquals(200,result.getResponse().getStatus());
+        Assert.assertEquals(200, result.getResponse().getStatus());
         Assert.assertEquals("Book Added To Cart",
-                new Gson().fromJson(result.getResponse().getContentAsString(),Response.class).message);
+                new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
 
     @Test
     void givenBookQuantity_WhenUpdated_ShouldReturnProperMessage() throws Exception {
-        UpdateCartDto updateCartDto=new UpdateCartDto("1234567895",14);
-        String cartDtoString=gson.toJson(updateCartDto);
+        UpdateCartDto updateCartDto = new UpdateCartDto("1234567895", 14);
+        String cartDtoString = gson.toJson(updateCartDto);
         Mockito.when(bookService.updateQuantity(any())).thenReturn("Book Quantity Updated");
-        MvcResult result=this.mockMvc.perform(put("/book")
+        MvcResult result = this.mockMvc.perform(put("/book")
                 .content(cartDtoString)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
-        Assert.assertEquals(200,result.getResponse().getStatus());
+        Assert.assertEquals(200, result.getResponse().getStatus());
         Assert.assertEquals("Book Quantity Updated",
-                new Gson().fromJson(result.getResponse().getContentAsString(),Response.class).message);
+                new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
 
     @Test
     void givenBookISBN_WhenDeleted_ShouldReturnProperMessage() throws Exception {
-        String ISBN="1234567894";
-        String cartDtoString=gson.toJson(ISBN);
+        String ISBN = "1234567894";
+        String cartDtoString = gson.toJson(ISBN);
         Mockito.when(bookService.removeFromCart(any())).thenReturn("Book Deleted Successfully");
-        MvcResult result=this.mockMvc.perform(delete("/book?ISBN="+ISBN+" ")
+        MvcResult result = this.mockMvc.perform(delete("/book?ISBN="+ISBN+"")
                 .content(cartDtoString)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
-        Assert.assertEquals(200,result.getResponse().getStatus());
+        Assert.assertEquals(200, result.getResponse().getStatus());
         Assert.assertEquals("Book Deleted Successfully",
-                new Gson().fromJson(result.getResponse().getContentAsString(),Response.class).message);
+                new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
 }

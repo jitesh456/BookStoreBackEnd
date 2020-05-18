@@ -85,6 +85,11 @@ public class BookService implements IBookService {
     }
 
     public String removeFromCart(String ISBN) {
-        return null;
+        Optional<Cart> book = iCartRepository.findByIsbn(ISBN);
+        if (book.isPresent()){
+            iCartRepository.deleteByIsbn(ISBN);
+            return "Book Deleted Successfully";
+        }
+        throw new BookException("BOOK DOES NOT EXISTS",BookException.ExceptionType.BOOK_DOES_NOT_EXIST);
     }
 }
