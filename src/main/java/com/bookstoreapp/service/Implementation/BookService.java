@@ -3,6 +3,7 @@ package com.bookstoreapp.service.Implementation;
 import com.bookstoreapp.dto.BookDto;
 import com.bookstoreapp.dto.CartDto;
 import com.bookstoreapp.dto.UpdateBookDto;
+import com.bookstoreapp.dto.UpdateCartDto;
 import com.bookstoreapp.exception.BookException;
 import com.bookstoreapp.model.Book;
 import com.bookstoreapp.model.Cart;
@@ -45,12 +46,12 @@ public class BookService implements IBookService {
 
     @Override
     public String updatePrice(UpdateBookDto bookDto) {
-        Optional<Book> fetchBookIsbn=iBookRepository.findByIsbn(bookDto.isbn);
-        if (fetchBookIsbn.isPresent()){
-            Book book=fetchBookIsbn.get();
-            book.setPrice(bookDto.price);
-            book.setQuantity(bookDto.quantity);
-            iBookRepository.save(book);
+        Optional<Book> book=iBookRepository.findByIsbn(bookDto.isbn);
+        if (book.isPresent()){
+            Book book1=book.get();
+            book1.setPrice(bookDto.price);
+            book1.setQuantity(bookDto.quantity);
+            iBookRepository.save(book1);
             return "Updated Successfully";
         }
         throw new BookException("BOOK DOES NOT EXISTS",BookException.ExceptionType.BOOK_DOES_NOT_EXIST);
@@ -72,7 +73,15 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public String updateQuantity(Object any) {
-        return null;
+    public String updateQuantity(UpdateCartDto updateCartDto) {
+        Optional<Cart> book = iCartRepository.findByIsbn(updateCartDto.isbn);
+        if (book.isPresent()){
+            Cart book1=book.get();
+            book1.setQuantity(updateCartDto.quantity);
+            iCartRepository.save(book1);
+            return "Book Quantity Updated";
+        }
+        throw new BookException("BOOK DOES NOT EXISTS",BookException.ExceptionType.BOOK_DOES_NOT_EXIST);
+
     }
 }

@@ -3,6 +3,7 @@ package com.bookstoreapp.service;
 import com.bookstoreapp.dto.BookDto;
 import com.bookstoreapp.dto.CartDto;
 import com.bookstoreapp.dto.UpdateBookDto;
+import com.bookstoreapp.dto.UpdateCartDto;
 import com.bookstoreapp.model.Book;
 import com.bookstoreapp.model.Cart;
 import com.bookstoreapp.repository.IBookRepository;
@@ -107,5 +108,15 @@ public class BookServiceTest {
         Mockito.when(iCartRepository.save(any())).thenReturn(book);
         String expectedMessage = bookService.addToCart(cartDto);
         Assert.assertEquals("Book Added To Cart",expectedMessage);
+    }
+
+    @Test
+    void givenQuantityAndPrice_WhenProper_ShouldUpdateBookQuantity()
+    {
+        UpdateCartDto updateCartDto=new UpdateCartDto("1234567895",14);
+        Cart book=new Cart(cartDto);
+        Mockito.when(iCartRepository.findByIsbn(any())).thenReturn(java.util.Optional.of(book));
+        String expectedMessage = bookService.updateQuantity(updateCartDto);
+        Assert.assertEquals("Book Quantity Updated",expectedMessage);
     }
 }

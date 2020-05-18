@@ -3,6 +3,7 @@ package com.bookstoreapp.service;
 import com.bookstoreapp.dto.BookDto;
 import com.bookstoreapp.dto.CartDto;
 import com.bookstoreapp.dto.UpdateBookDto;
+import com.bookstoreapp.dto.UpdateCartDto;
 import com.bookstoreapp.model.Book;
 
 public interface IBookService {
@@ -17,5 +18,5 @@ public interface IBookService {
 
     String addToCart(CartDto cartDto);
 
-    String updateQuantity(Object any);
+    String updateQuantity(UpdateCartDto updateCartDto);
 }
