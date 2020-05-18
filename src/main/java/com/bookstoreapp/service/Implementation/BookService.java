@@ -23,6 +23,7 @@ public class BookService implements IBookService {
 
     @Autowired
     ICartRepository iCartRepository;
+
     public BookService() {
     }
 
@@ -70,5 +71,8 @@ public class BookService implements IBookService {
         return "Book Added To Cart";
     }
 
-
+    @Override
+    public String updateQuantity(Object any) {
+        return null;
+    }
 }

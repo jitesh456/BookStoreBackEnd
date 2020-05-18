@@ -2,6 +2,8 @@ package com.bookstoreapp.controller;
 
 import com.bookstoreapp.dto.BookDto;
 import com.bookstoreapp.dto.CartDto;
+import com.bookstoreapp.dto.UpdateBookDto;
+import com.bookstoreapp.dto.UpdateCartDto;
 import com.bookstoreapp.model.Book;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.Implementation.BookService;
@@ -46,6 +48,17 @@ public class BookController {
         }
         String responseMessage= bookService.addToCart(cartDto);
         return new ResponseEntity<Response>(new Response("Book Added To Cart",200, responseMessage),
+                HttpStatus.OK);
+    }
+
+    @PutMapping("/book")
+    public ResponseEntity<Response> editBook(@Valid @RequestBody UpdateCartDto updateCartDto, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            return new ResponseEntity<Response>(new Response(bindingResult.getAllErrors().get(0).getDefaultMessage(),
+                    101,"Empty Field"), HttpStatus.BAD_REQUEST);
+        }
+        String responseMessage= bookService.updateQuantity(updateCartDto);
+        return new ResponseEntity<Response>(new Response("Book Quantity Updated",200, responseMessage),
                 HttpStatus.OK);
     }
 }

@@ -103,14 +103,9 @@ public class BookServiceTest {
 
     @Test
     void givenBookData_WhenProper_ShouldAddToCart() {
-
         Cart book=new Cart(cartDto);
         Mockito.when(iCartRepository.save(any())).thenReturn(book);
         String expectedMessage = bookService.addToCart(cartDto);
         Assert.assertEquals("Book Added To Cart",expectedMessage);
-
     }
-
-
-
 }

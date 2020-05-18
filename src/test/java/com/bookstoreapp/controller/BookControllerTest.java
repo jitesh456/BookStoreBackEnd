@@ -2,6 +2,8 @@ package com.bookstoreapp.controller;
 
 import com.bookstoreapp.dto.BookDto;
 import com.bookstoreapp.dto.CartDto;
+import com.bookstoreapp.dto.UpdateBookDto;
+import com.bookstoreapp.dto.UpdateCartDto;
 import com.bookstoreapp.exception.BookException;
 import com.bookstoreapp.model.Book;
 import com.bookstoreapp.repository.ICartRepository;
@@ -26,8 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -43,8 +44,6 @@ public class BookControllerTest {
 
     @Autowired
     MockMvc mockMvc;
-
-
 
     @Autowired
     TestRestTemplate testRestTemplate;
@@ -149,6 +148,20 @@ public class BookControllerTest {
                 .andReturn();
         Assert.assertEquals(200,result.getResponse().getStatus());
         Assert.assertEquals("Book Added To Cart",
+                new Gson().fromJson(result.getResponse().getContentAsString(),Response.class).message);
+    }
+
+    @Test
+    void givenBookQuantity_WhenUpdated_ShouldReturnProperMessage() throws Exception {
+        UpdateCartDto updateCartDto=new UpdateCartDto("1234567895",14);
+        String cartDtoString=gson.toJson(updateCartDto);
+        Mockito.when(bookService.updateQuantity(any())).thenReturn("Book Quantity Updated");
+        MvcResult result=this.mockMvc.perform(put("/book")
+                .content(cartDtoString)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        Assert.assertEquals(200,result.getResponse().getStatus());
+        Assert.assertEquals("Book Quantity Updated",
                 new Gson().fromJson(result.getResponse().getContentAsString(),Response.class).message);
     }
 }
