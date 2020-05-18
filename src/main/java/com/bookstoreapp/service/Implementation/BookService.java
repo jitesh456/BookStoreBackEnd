@@ -82,6 +82,9 @@ public class BookService implements IBookService {
             return "Book Quantity Updated";
         }
         throw new BookException("BOOK DOES NOT EXISTS",BookException.ExceptionType.BOOK_DOES_NOT_EXIST);
+    }
 
+    public String removeFromCart(String ISBN) {
+        return null;
     }
 }

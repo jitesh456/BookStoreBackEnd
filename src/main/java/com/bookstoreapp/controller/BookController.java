@@ -61,4 +61,11 @@ public class BookController {
         return new ResponseEntity<Response>(new Response("Book Quantity Updated",200, responseMessage),
                 HttpStatus.OK);
     }
+
+    @DeleteMapping("/book")
+    public ResponseEntity<Response> removeBook(@RequestParam(value="ISBN")  String ISBN){
+        String responseMessage= bookService.removeFromCart(ISBN);
+        return new ResponseEntity(new Response("Book Deleted Successfully",200, responseMessage),
+                HttpStatus.OK);
+    }
 }

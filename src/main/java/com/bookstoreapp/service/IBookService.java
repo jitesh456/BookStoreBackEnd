@@ -19,4 +19,6 @@ public interface IBookService {
     String addToCart(CartDto cartDto);
 
     String updateQuantity(UpdateCartDto updateCartDto);
+
+    String removeFromCart(String ISBN);
 }

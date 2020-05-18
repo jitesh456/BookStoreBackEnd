@@ -164,4 +164,18 @@ public class BookControllerTest {
         Assert.assertEquals("Book Quantity Updated",
                 new Gson().fromJson(result.getResponse().getContentAsString(),Response.class).message);
     }
+
+    @Test
+    void givenBookISBN_WhenDeleted_ShouldReturnProperMessage() throws Exception {
+        String ISBN="1234567894";
+        String cartDtoString=gson.toJson(ISBN);
+        Mockito.when(bookService.removeFromCart(any())).thenReturn("Book Deleted Successfully");
+        MvcResult result=this.mockMvc.perform(delete("/book?ISBN="+ISBN+" ")
+                .content(cartDtoString)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        Assert.assertEquals(200,result.getResponse().getStatus());
+        Assert.assertEquals("Book Deleted Successfully",
+                new Gson().fromJson(result.getResponse().getContentAsString(),Response.class).message);
+    }
 }
