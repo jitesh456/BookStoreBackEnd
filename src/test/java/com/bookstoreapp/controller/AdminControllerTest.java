@@ -54,7 +54,6 @@ public class AdminControllerTest {
 
     @Test
     void givenBookData_WhenInserted_ReturnProperMessage() throws Exception {
-
         String bookStoreDto=new Gson().toJson(this.bookDto);
         Mockito.when(bookService.addBook(any())).thenReturn("Inserted Successful");
         MvcResult result = this.mockMvc.perform(post("/admin/book")

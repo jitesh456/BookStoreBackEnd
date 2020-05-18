@@ -18,10 +18,8 @@ import javax.validation.Valid;
 @RestController
 public class AdminController {
 
-
     @Autowired
-    BookService iBookService;
-
+    BookService bookService;
 
     @PostMapping("/book")
     public ResponseEntity<Response> addBook(@Valid @RequestBody BookDto bookDto,
@@ -29,19 +27,19 @@ public class AdminController {
         if(bindingResult.hasErrors()) {
             return new ResponseEntity<Response>(new Response(bindingResult.getAllErrors().get(0).getDefaultMessage(),101,"Empty Field"), HttpStatus.BAD_REQUEST);
         }
-        String responseMessage= iBookService.addBook(bookDto);
+        String responseMessage= bookService.addBook(bookDto);
         return new ResponseEntity<Response>(new Response("Book Added Successfully",200, responseMessage),
                 HttpStatus.OK);
     }
 
 
     @PutMapping("/book")
-    public ResponseEntity<Response> editBook(@Valid @RequestBody UpdateBookDto bookDto, BindingResult bindingResult) {
+    public ResponseEntity<Response> editBook(@Valid @RequestBody UpdateBookDto updateBookDto, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             return new ResponseEntity<Response>(new Response(bindingResult.getAllErrors().get(0).getDefaultMessage(),
                     101,"Empty Field"), HttpStatus.BAD_REQUEST);
         }
-        String responseMessage= iBookService.updatePrice(bookDto);
+        String responseMessage= bookService.updatePrice(updateBookDto);
         return new ResponseEntity<Response>(new Response("Book is Updated",200, responseMessage),
                 HttpStatus.OK);
     }

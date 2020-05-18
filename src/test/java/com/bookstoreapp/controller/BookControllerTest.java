@@ -1,6 +1,7 @@
 package com.bookstoreapp.controller;
 
 import com.bookstoreapp.dto.BookDto;
+import com.bookstoreapp.dto.CartDto;
 import com.bookstoreapp.exception.BookException;
 import com.bookstoreapp.model.Book;
 import com.bookstoreapp.response.Response;
@@ -25,6 +26,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -32,9 +34,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 public class BookControllerTest {
 
     @MockBean
-    BookService ibookService;
+    BookService bookService;
 
     BookDto bookDto;
+
+    CartDto cartDto;
 
     @Autowired
     MockMvc mockMvc;
@@ -55,6 +59,7 @@ public class BookControllerTest {
                 12,"Amish Tiwari","comic",
                 "987564236578","sdfsfd","Adaptation of the first of J.K. Rowling's popular " +
                 "children's novels about Harry Potter, a boy who learns on his eleventh birthday that he is the orphaned son " );
+        cartDto=new CartDto("Secret of nagas",2000.0,12,"Amish Tiwari","987564236578","imagesrc");
     }
 
 
@@ -68,7 +73,7 @@ public class BookControllerTest {
         List<Book> bookList =new ArrayList<>();
         bookList.add(book);
         bookList.add(book1);
-        Mockito.when(ibookService.getAllBook()).thenReturn(bookList);
+        Mockito.when(bookService.getAllBook()).thenReturn(bookList);
         String expectedList = gson.toJson(bookList);
         MvcResult result = this.mockMvc.perform(get("/books")).andReturn();
         Assert.assertEquals(200,result.getResponse().getStatus());
@@ -85,7 +90,7 @@ public class BookControllerTest {
         Book book1 =new Book(bookDto1);
         List<Book> bookList =new ArrayList<>();
         bookList.add(book1);
-        Mockito.when(ibookService.getSortedBook(any())).thenReturn(bookList);
+        Mockito.when(bookService.getSortedBook(any())).thenReturn(bookList);
         String expectedList=gson.toJson(bookList);
         MvcResult result=this.mockMvc.perform(get("/books/field?field=price")).andReturn();
         Assert.assertEquals(200,result.getResponse().getStatus());
@@ -103,7 +108,7 @@ public class BookControllerTest {
         Book book1 =new Book(bookDto1);
         List<Book> bookList =new ArrayList<>();
         bookList.add(book1);
-        Mockito.when(ibookService.getSortedBook(any())).thenReturn(bookList);
+        Mockito.when(bookService.getSortedBook(any())).thenReturn(bookList);
         String expectedList=gson.toJson(bookList);
         MvcResult result=this.mockMvc.perform(get("/books/field?field=")).andReturn();
         Assert.assertEquals(400,gson.fromJson(result.getResponse()
@@ -123,10 +128,22 @@ public class BookControllerTest {
                 List<Book> bookList = new ArrayList<>();
                 bookList.add(book);
                 bookList.add(book1);
-                Mockito.when(ibookService.getSortedBook(any())).thenThrow( new BookException("SORT FIELD CAN NOT NULL",BookException.ExceptionType.SORT_FIELD_CAN_NOT_NULL));
+                Mockito.when(bookService.getSortedBook(any())).thenThrow( new BookException("SORT FIELD CAN NOT NULL",BookException.ExceptionType.SORT_FIELD_CAN_NOT_NULL));
                 MvcResult result = this.mockMvc.perform(get("/books/field?field=")).andReturn();
         }catch(BookException e){
             Assert.assertEquals(BookException.ExceptionType.SORT_FIELD_CAN_NOT_NULL,e.exceptionType);}
     }
 
+    @Test
+    void givenBook_WhenAddedToCart_ShouldReturnProperMessage() throws Exception {
+        String cartDto=new Gson().toJson(this.cartDto);
+        Mockito.when(bookService.addToCart(any())).thenReturn("Inserted Successfully");
+        MvcResult result=this.mockMvc.perform(post("/book")
+                .content(cartDto)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        Assert.assertEquals(200,result.getResponse().getStatus());
+        Assert.assertEquals("Book Added To Cart",
+                new Gson().fromJson(result.getResponse().getContentAsString(),Response.class).message);
+    }
 }

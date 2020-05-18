@@ -13,4 +13,6 @@ public interface IBookService {
     String updatePrice(UpdateBookDto bookDto);
 
     Iterable<Book> getSortedBook(String sortBookDto);
+
+    String addToCart(Object any);
 }

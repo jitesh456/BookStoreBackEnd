@@ -58,5 +58,10 @@ public class BookService implements IBookService {
         throw new BookException("SORT FIELD CAN NOT NULL",BookException.ExceptionType.SORT_FIELD_CAN_NOT_NULL);
     }
 
+    @Override
+    public String addToCart(Object any) {
+        return null;
+    }
+
 
 }
