@@ -6,6 +6,7 @@ import com.bookstoreapp.dto.UpdateBookDto;
 import com.bookstoreapp.dto.UpdateCartDto;
 import com.bookstoreapp.exception.BookException;
 import com.bookstoreapp.model.Book;
+import com.bookstoreapp.model.Cart;
 import com.bookstoreapp.repository.ICartRepository;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.Implementation.BookService;
@@ -178,5 +179,18 @@ public class BookControllerTest {
         Assert.assertEquals(200, result.getResponse().getStatus());
         Assert.assertEquals("Book Deleted Successfully",
                 new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
+    }
+
+    @Test
+    void whenBookFoundInCart_ShouldReturnProperMessage() throws Exception {
+        Cart book=new Cart(cartDto);
+        List<Cart> cartList=new ArrayList<>();
+        cartList.add(book);
+        Mockito.when(bookService.getCartBooks()).thenReturn(cartList);
+        String expectedBooks=gson.toJson(cartList);
+        MvcResult result=this.mockMvc.perform(get("/books/cart")).andReturn();
+        Assert.assertEquals(200,result.getResponse().getStatus());
+        Assert.assertEquals("Fetched Cart Books",gson.fromJson(result.getResponse().
+                getContentAsString(),Response.class).message);
     }
 }

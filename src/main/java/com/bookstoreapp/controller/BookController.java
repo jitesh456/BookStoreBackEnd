@@ -5,6 +5,7 @@ import com.bookstoreapp.dto.CartDto;
 import com.bookstoreapp.dto.UpdateBookDto;
 import com.bookstoreapp.dto.UpdateCartDto;
 import com.bookstoreapp.model.Book;
+import com.bookstoreapp.model.Cart;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.Implementation.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +70,14 @@ public class BookController {
                     101,"Empty Field"), HttpStatus.BAD_REQUEST);
         }
         String responseMessage= bookService.removeFromCart(ISBN);
-        return new ResponseEntity(new Response("ISBN Length"+ISBN.length(),200, responseMessage),
+        return new ResponseEntity(new Response("Book Deleted Successfully",200, responseMessage),
                 HttpStatus.OK);
+    }
+
+    @GetMapping("/books/cart")
+    public Response getBooks(){
+        Iterable<Cart> allBook = bookService.getCartBooks();
+        Response response=new Response("Fetched Cart Books",200,allBook);
+        return response;
     }
 }

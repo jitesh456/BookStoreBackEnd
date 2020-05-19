@@ -5,6 +5,7 @@ import com.bookstoreapp.dto.CartDto;
 import com.bookstoreapp.dto.UpdateBookDto;
 import com.bookstoreapp.dto.UpdateCartDto;
 import com.bookstoreapp.model.Book;
+import com.bookstoreapp.model.Cart;
 
 public interface IBookService {
 
@@ -21,4 +22,6 @@ public interface IBookService {
     String updateQuantity(UpdateCartDto updateCartDto);
 
     String removeFromCart(String ISBN);
+
+    Iterable<Cart> getCartBooks();
 }
