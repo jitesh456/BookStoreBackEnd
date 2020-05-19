@@ -1,14 +1,11 @@
 package com.bookstoreapp.service.Implementation;
 
 import com.bookstoreapp.dto.BookDto;
-import com.bookstoreapp.dto.CartDto;
 import com.bookstoreapp.dto.UpdateBookDto;
 import com.bookstoreapp.dto.UpdateCartDto;
 import com.bookstoreapp.exception.BookException;
 import com.bookstoreapp.model.Book;
-import com.bookstoreapp.model.Cart;
 import com.bookstoreapp.repository.IBookRepository;
-import com.bookstoreapp.repository.ICartRepository;
 import com.bookstoreapp.service.IBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -21,9 +18,6 @@ public class BookService implements IBookService {
 
     @Autowired
     IBookRepository iBookRepository;
-
-    @Autowired
-    ICartRepository iCartRepository;
 
     public BookService() {
     }
@@ -66,35 +60,16 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public String addToCart(CartDto cartDto) {
-        Cart cart=new Cart(cartDto);
-        iCartRepository.save(cart);
-        return "Book Added To Cart";
-    }
-
-    @Override
     public String updateQuantity(UpdateCartDto updateCartDto) {
-        Optional<Cart> book = iCartRepository.findByIsbn(updateCartDto.isbn);
+        Optional<Book> book=iBookRepository.findByIsbn(updateCartDto.isbn);
         if (book.isPresent()){
-            Cart book1=book.get();
+            Book book1=book.get();
             book1.setQuantity(updateCartDto.quantity);
-            iCartRepository.save(book1);
+            iBookRepository.save(book1);
             return "Book Quantity Updated";
         }
         throw new BookException("BOOK DOES NOT EXISTS",BookException.ExceptionType.BOOK_DOES_NOT_EXIST);
     }
 
-    public String removeFromCart(String ISBN) {
-        Optional<Cart> book = iCartRepository.findByIsbn(ISBN);
-        if (book.isPresent()){
-            iCartRepository.deleteByIsbn(ISBN);
-            return "Book Deleted Successfully";
-        }
-        throw new BookException("BOOK DOES NOT EXISTS",BookException.ExceptionType.BOOK_DOES_NOT_EXIST);
-    }
 
-    @Override
-    public Iterable<Cart> getCartBooks() {
-        return null;
-    }
 }

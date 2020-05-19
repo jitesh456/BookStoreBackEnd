@@ -1,13 +1,9 @@
 package com.bookstoreapp.controller;
 
 import com.bookstoreapp.dto.BookDto;
-import com.bookstoreapp.dto.CartDto;
-import com.bookstoreapp.dto.UpdateBookDto;
 import com.bookstoreapp.dto.UpdateCartDto;
 import com.bookstoreapp.exception.BookException;
 import com.bookstoreapp.model.Book;
-import com.bookstoreapp.model.Cart;
-import com.bookstoreapp.repository.ICartRepository;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.Implementation.BookService;
 import com.google.gson.Gson;
@@ -41,8 +37,6 @@ public class BookControllerTest {
 
     BookDto bookDto;
 
-    CartDto cartDto;
-
     @Autowired
     MockMvc mockMvc;
 
@@ -62,7 +56,6 @@ public class BookControllerTest {
                 12, "Amish Tiwari", "comic",
                 "987564236578", "sdfsfd", "Adaptation of the first of J.K. Rowling's popular " +
                 "children's novels about Harry Potter, a boy who learns on his eleventh birthday that he is the orphaned son ");
-        cartDto = new CartDto("Secret of nagas", 2000.0, 12, "Amish Tiwari", "987564236578", "imagesrc");
     }
 
 
@@ -139,21 +132,6 @@ public class BookControllerTest {
     }
 
     @Test
-    void givenBook_WhenAddedToCart_ShouldReturnProperMessage() throws Exception {
-        String cartDto = new Gson().toJson(this.cartDto);
-
-
-        Mockito.when(bookService.addToCart(any())).thenReturn("Inserted Successfully");
-        MvcResult result = this.mockMvc.perform(post("/book")
-                .content(cartDto)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andReturn();
-        Assert.assertEquals(200, result.getResponse().getStatus());
-        Assert.assertEquals("Book Added To Cart",
-                new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
-    }
-
-    @Test
     void givenBookQuantity_WhenUpdated_ShouldReturnProperMessage() throws Exception {
         UpdateCartDto updateCartDto = new UpdateCartDto("1234567895", 14);
         String cartDtoString = gson.toJson(updateCartDto);
@@ -167,30 +145,7 @@ public class BookControllerTest {
                 new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
 
-    @Test
-    void givenBookISBN_WhenDeleted_ShouldReturnProperMessage() throws Exception {
-        String ISBN = "1234567894";
-        String cartDtoString = gson.toJson(ISBN);
-        Mockito.when(bookService.removeFromCart(any())).thenReturn("Book Deleted Successfully");
-        MvcResult result = this.mockMvc.perform(delete("/book?ISBN="+ISBN+"")
-                .content(cartDtoString)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andReturn();
-        Assert.assertEquals(200, result.getResponse().getStatus());
-        Assert.assertEquals("Book Deleted Successfully",
-                new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
-    }
 
-    @Test
-    void whenBookFoundInCart_ShouldReturnProperMessage() throws Exception {
-        Cart book=new Cart(cartDto);
-        List<Cart> cartList=new ArrayList<>();
-        cartList.add(book);
-        Mockito.when(bookService.getCartBooks()).thenReturn(cartList);
-        String expectedBooks=gson.toJson(cartList);
-        MvcResult result=this.mockMvc.perform(get("/books/cart")).andReturn();
-        Assert.assertEquals(200,result.getResponse().getStatus());
-        Assert.assertEquals("Fetched Cart Books",gson.fromJson(result.getResponse().
-                getContentAsString(),Response.class).message);
-    }
+
+
 }
