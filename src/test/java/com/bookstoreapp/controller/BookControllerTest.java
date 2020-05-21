@@ -130,22 +130,4 @@ public class BookControllerTest {
             Assert.assertEquals(BookException.ExceptionType.SORT_FIELD_CAN_NOT_NULL, e.exceptionType);
         }
     }
-
-    @Test
-    void givenBookQuantity_WhenUpdated_ShouldReturnProperMessage() throws Exception {
-        UpdateCartDto updateCartDto = new UpdateCartDto("1234567895", 14);
-        String cartDtoString = gson.toJson(updateCartDto);
-        Mockito.when(bookService.updateQuantity(any())).thenReturn("Book Quantity Updated");
-        MvcResult result = this.mockMvc.perform(put("/book")
-                .content(cartDtoString)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andReturn();
-        Assert.assertEquals(200, result.getResponse().getStatus());
-        Assert.assertEquals("Book Quantity Updated",
-                new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
-    }
-
-
-
-
 }

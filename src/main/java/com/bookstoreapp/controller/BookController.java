@@ -36,15 +36,4 @@ public class BookController {
         Response response=new Response("Book List is Sorted On basic of given field",200,sortedBook);
         return response;
     }
-
-    @PutMapping("/book")
-    public ResponseEntity<Response> editBook(@Valid @RequestBody UpdateCartDto updateCartDto, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
-            return new ResponseEntity<Response>(new Response(bindingResult.getAllErrors().get(0).getDefaultMessage(),
-                    101,"Empty Field"), HttpStatus.BAD_REQUEST);
-        }
-        String responseMessage= bookService.updateQuantity(updateCartDto);
-        return new ResponseEntity<Response>(new Response("Book Quantity Updated",200, responseMessage),
-                HttpStatus.OK);
-    }
 }
