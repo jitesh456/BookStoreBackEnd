@@ -1,6 +1,7 @@
 package com.bookstoreapp.service;
 
 import com.bookstoreapp.dto.BookDto;
+import com.bookstoreapp.dto.NotificationDto;
 import com.bookstoreapp.dto.UpdateBookDto;
 import com.bookstoreapp.dto.UpdateCartDto;
 import com.bookstoreapp.model.Book;
@@ -15,6 +16,7 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Sort;
 
+import javax.mail.MessagingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,15 +98,14 @@ public class BookServiceTest {
     }
 
     @Test
-    void givenQuantity_WhenProper_ShouldUpdateBookQuantity()
-    {
-        Book givenBook=new Book(bookDto);
+    void givenQuantity_WhenProper_ShouldUpdateBookQuantity() {
+        Book givenBook = new Book(bookDto);
 
-        UpdateCartDto updateCartDto =new UpdateCartDto("1234567895",5);
-        String expectedresponse="Book Quantity Updated";
+        UpdateCartDto updateCartDto = new UpdateCartDto("1234567895", 5);
+        String expectedresponse = "Book Quantity Updated";
         when(iBookRepository.findByIsbn(any())).thenReturn(java.util.Optional.of(givenBook));
         when(iBookRepository.save(any())).thenReturn(givenBook);
-        String actualresponse=bookService.updateQuantity(updateCartDto);
-        Assert.assertEquals(expectedresponse,actualresponse);
+        String actualresponse = bookService.updateQuantity(updateCartDto);
+        Assert.assertEquals(expectedresponse, actualresponse);
     }
 }

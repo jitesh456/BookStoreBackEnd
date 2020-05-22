@@ -1,9 +1,13 @@
 package com.bookstoreapp.service;
 
 import com.bookstoreapp.dto.BookDto;
+import com.bookstoreapp.dto.NotificationDto;
 import com.bookstoreapp.dto.UpdateBookDto;
 import com.bookstoreapp.dto.UpdateCartDto;
 import com.bookstoreapp.model.Book;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 
 public interface IBookService {
 
@@ -17,5 +21,5 @@ public interface IBookService {
 
     String updateQuantity(UpdateCartDto updateCartDto);
 
-    String sendMail(Object any);
+    String sendMail(NotificationDto notificationDto) throws MessagingException;
 }

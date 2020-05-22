@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 
 @CrossOrigin
@@ -31,7 +32,7 @@ public class CartController {
     }
     
     @PostMapping("/mail")
-    public Response sendMail(@RequestBody NotificationDto notificationDto){
+    public Response sendMail(@RequestBody NotificationDto notificationDto) throws MessagingException {
         String mailConfirmation = bookService.sendMail(notificationDto);
         Response response=new Response("Mail Sent Successfully",200,mailConfirmation);
         return response;
