@@ -1,6 +1,5 @@
 package com.bookstoreapp.controller;
 
-import com.bookstoreapp.dto.BookDto;
 import com.bookstoreapp.dto.NotificationDto;
 import com.bookstoreapp.dto.UpdateCartDto;
 import com.bookstoreapp.response.Response;

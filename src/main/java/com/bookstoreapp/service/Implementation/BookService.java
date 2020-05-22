@@ -54,8 +54,8 @@ public class BookService implements IBookService {
         Optional<Book> book=iBookRepository.findByIsbn(bookDto.isbn);
         if (book.isPresent()){
             Book book1=book.get();
-            book1.setPrice(bookDto.price);
-            book1.setQuantity(bookDto.quantity);
+            book1.price=bookDto.price;
+            book1.quantity=bookDto.quantity;
             iBookRepository.save(book1);
             return "Updated Successfully";
         }
@@ -75,7 +75,7 @@ public class BookService implements IBookService {
         Optional<Book> book=iBookRepository.findByIsbn(updateCartDto.isbn);
         if (book.isPresent()){
             Book book1=book.get();
-            book1.setQuantity(updateCartDto.quantity);
+            book1.quantity=updateCartDto.quantity;
             iBookRepository.save(book1);
             return "Book Quantity Updated";
         }
