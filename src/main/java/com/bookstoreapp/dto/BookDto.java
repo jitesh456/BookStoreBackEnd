@@ -1,5 +1,7 @@
 package com.bookstoreapp.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;

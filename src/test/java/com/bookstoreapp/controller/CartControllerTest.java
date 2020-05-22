@@ -1,6 +1,7 @@
 package com.bookstoreapp.controller;
 
 import com.bookstoreapp.dto.BookDto;
+import com.bookstoreapp.dto.NotificationDto;
 import com.bookstoreapp.dto.UpdateCartDto;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.Implementation.BookService;
@@ -20,6 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -59,4 +61,17 @@ public class CartControllerTest {
                 new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
 
+    @Test
+    void givenEmailAddress_WhenMailSent_ReturnProperMessage() throws Exception {
+        NotificationDto notificationDto=new NotificationDto("rajnish.kahar1996@gmail.com","Test","Hello User");
+        String notificationString=gson.toJson(notificationDto);
+        Mockito.when(bookService.sendMail(any())).thenReturn("Mail Sent Successfully");
+        MvcResult result=this.mockMvc.perform(post("/mail")
+                .content(notificationString)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        Assert.assertEquals(200,result.getResponse().getStatus());
+        Assert.assertEquals("Mail Sent Successfully",
+                new Gson().fromJson(result.getResponse().getContentAsString(),Response.class).message);
+    }
 }

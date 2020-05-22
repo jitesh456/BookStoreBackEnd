@@ -20,7 +20,6 @@ public class Book {
 
     private int quantity;
 
-
     private String bookcover;
 
 

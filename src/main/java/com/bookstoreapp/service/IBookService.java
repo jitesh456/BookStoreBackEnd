@@ -16,4 +16,6 @@ public interface IBookService {
     Iterable<Book> getSortedBook(String sortBookDto);
 
     String updateQuantity(UpdateCartDto updateCartDto);
+
+    String sendMail(Object any);
 }
