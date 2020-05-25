@@ -2,6 +2,7 @@ package com.bookstoreapp.controller;
 
 import com.bookstoreapp.dto.BookDto;
 import com.bookstoreapp.dto.UpdateBookDto;
+import com.bookstoreapp.response.FileResponse;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.Implementation.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import javax.validation.Valid;
 
 @CrossOrigin
@@ -40,5 +44,12 @@ public class AdminController {
         String responseMessage= bookService.updatePrice(updateBookDto);
         return new ResponseEntity<Response>(new Response("Book is Updated",200, responseMessage),
                 HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/uploadImage")
+    public FileResponse uploadFile(@RequestParam("file") MultipartFile file)
+    {
+        FileResponse fileResponse = bookService.uploadBookCover(file);
+        return fileResponse;
     }
 }

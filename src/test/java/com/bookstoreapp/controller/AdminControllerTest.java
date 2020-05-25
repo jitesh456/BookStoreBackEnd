@@ -16,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -268,5 +269,16 @@ public class AdminControllerTest {
         Assert.assertEquals(400,result.getResponse().getStatus());
         Assert.assertEquals("ISBN must include 10 or 13 characters",
                 new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
+    }
+    @Test
+    void givenImageAsMultipart_shouldReturnImageViewURL() throws Exception {
+        MockMultipartFile imageFile = new MockMultipartFile("file","1.png",
+                "image/png","Some data".getBytes());
+
+        MvcResult result = this.mockMvc.perform(multipart("/admin/uploadImage")
+                .file(imageFile))
+                .andReturn();
+
+        Assert.assertEquals(200,result.getResponse().getStatus());
     }
 }

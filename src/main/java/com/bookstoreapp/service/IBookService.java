@@ -5,6 +5,8 @@ import com.bookstoreapp.dto.NotificationDto;
 import com.bookstoreapp.dto.UpdateBookDto;
 import com.bookstoreapp.dto.UpdateCartDto;
 import com.bookstoreapp.model.Book;
+import com.bookstoreapp.response.FileResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
 
@@ -21,4 +23,7 @@ public interface IBookService {
     String updateQuantity(UpdateCartDto updateCartDto);
 
     String sendMail(NotificationDto notificationDto) throws MessagingException;
+
+    FileResponse uploadBookCover(MultipartFile file);
+
 }

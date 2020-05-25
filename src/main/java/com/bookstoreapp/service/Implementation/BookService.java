@@ -7,14 +7,24 @@ import com.bookstoreapp.dto.UpdateCartDto;
 import com.bookstoreapp.exception.BookException;
 import com.bookstoreapp.model.Book;
 import com.bookstoreapp.repository.IBookRepository;
+import com.bookstoreapp.response.FileResponse;
 import com.bookstoreapp.service.IBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import javax.mail.*;
 import javax.mail.internet.MimeMessage;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 
 
@@ -91,6 +101,8 @@ public class BookService implements IBookService {
         return "Mail Sent Successfully";
     }
 
-
-
+    @Override
+    public FileResponse uploadBookCover(MultipartFile file) {
+        return null;
+    }
 }
