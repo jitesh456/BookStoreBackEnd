@@ -7,7 +7,6 @@ import com.bookstoreapp.dto.UpdateCartDto;
 import com.bookstoreapp.model.Book;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
 
 public interface IBookService {
 

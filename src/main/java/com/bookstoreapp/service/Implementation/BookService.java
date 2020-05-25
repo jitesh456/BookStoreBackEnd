@@ -9,26 +9,24 @@ import com.bookstoreapp.model.Book;
 import com.bookstoreapp.repository.IBookRepository;
 import com.bookstoreapp.service.IBookService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-
 import javax.mail.*;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Optional;
-import java.util.Properties;
+
 
 @Service
 public class BookService implements IBookService {
-    @Value("${gmail.username}")
-    private String username;
-    @Value("${gmail.password}")
-    private String password;
+
 
     @Autowired
     IBookRepository iBookRepository;
+
+    @Autowired
+    JavaMailSender javaMailSender;
 
     public BookService() {
     }
@@ -84,27 +82,15 @@ public class BookService implements IBookService {
 
     @Override
     public String sendMail(NotificationDto notificationDto) throws MessagingException {
-        Properties properties=new Properties();
-        properties.put("mail.smtp.auth","true");
-        properties.put("mail.smtp.starttls.enable","true");
-        properties.put("mail.smtp.host","smtp.gmail.com");
-        properties.put("mail.smtp.posrt","587");
-
-        Session session=Session.getInstance(properties,
-                new javax.mail.Authenticator(){
-                    protected PasswordAuthentication getPasswordAuthentication(){
-                        return new PasswordAuthentication(username,password);
-                    }
-                });
-
-        Message msg=new MimeMessage(session);
-        msg.setFrom(new InternetAddress(username,false));
-        msg.setRecipients(Message.RecipientType.TO,InternetAddress.parse(notificationDto.recipientAddress));
-        msg.setSubject(notificationDto.subject);
-        msg.setContent(notificationDto.body,"text/html");
-        Transport.send(msg);
+        MimeMessage message=javaMailSender.createMimeMessage();
+        MimeMessageHelper messageHelper=new MimeMessageHelper(message);
+        messageHelper.setTo(notificationDto.recipientAddress);
+        messageHelper.setSubject(notificationDto.subject);
+        messageHelper.setText(notificationDto.body);
+        javaMailSender.send(message);
         return "Mail Sent Successfully";
     }
+
 
 
 }

@@ -1,7 +1,6 @@
 package com.bookstoreapp.service;
 
 import com.bookstoreapp.dto.BookDto;
-import com.bookstoreapp.dto.NotificationDto;
 import com.bookstoreapp.dto.UpdateBookDto;
 import com.bookstoreapp.dto.UpdateCartDto;
 import com.bookstoreapp.model.Book;
@@ -16,13 +15,11 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Sort;
 
-import javax.mail.MessagingException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @SpringBootTest
 public class BookServiceTest {

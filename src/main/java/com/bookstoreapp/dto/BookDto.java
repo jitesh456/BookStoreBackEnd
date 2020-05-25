@@ -39,7 +39,7 @@ public class BookDto {
 
     public BookDto() { }
 
-    public BookDto(String name, Double price, int quantity, String authorName, String bookCover, String isbn,
+    public BookDto(String name, Double price, int quantity, String authorName,String bookCover, String isbn,
                    String category,
                    String bookDetails) {
         this.name = name;
