@@ -103,6 +103,22 @@ public class BookService implements IBookService {
 
     @Override
     public FileResponse uploadBookCover(MultipartFile file) {
-        return null;
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        String fileBasePath = System.getProperty("user.dir") + "\\src\\main\\resources\\Images\\";
+        if (!(fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".png"))) {
+            throw new BookException("Only Image Files Can Be Uploaded",BookException.ExceptionType.BOOK_ALREADY_EXIST);
+        }
+        Path path = Paths.get(fileBasePath + fileName);
+        try {
+            Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/downloadFile/")
+                .path(fileName)
+                .toUriString();
+        return new FileResponse(fileName, fileDownloadUri,
+                file.getContentType(), file.getSize());
     }
 }
