@@ -130,6 +130,17 @@ private String imagePath;
 
     @Override
     public Resource loadFile(String fileName) {
-        return null;
+        try {
+            String fileBasePath = System.getProperty("user.dir")+imagePath;
+            Path path = Paths.get(fileBasePath + fileName);
+            Resource resource = new UrlResource(path.toUri());
+            if(resource.exists()) {
+                return resource;
+            } else {
+                throw new BookException("File not found " + fileName, BookException.ExceptionType.FILE_NOT_FOUND);
+            }
+        } catch (MalformedURLException ex) {
+            throw new BookException("File not found " + fileName, BookException.ExceptionType.FILE_NOT_FOUND);
+        }
     }
 }
