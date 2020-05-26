@@ -10,15 +10,21 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -27,6 +33,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @AutoConfigureMockMvc
 public class AdminControllerTest {
+
+//    @Value("${image.file.path}")
+//    private String imagePath;
 
     @MockBean
     BookService bookService;
@@ -279,6 +288,19 @@ public class AdminControllerTest {
                 .file(imageFile))
                 .andReturn();
 
+        Assert.assertEquals(200,result.getResponse().getStatus());
+    }
+
+    @Test
+    void givenFileName_WhenFound_ReturnsFile() throws Exception {
+        String fileName="dragon-ball-z-kakarot-reviews.original.jpg";
+        String imagePath="\\src\\main\\resources\\Images\\";
+        String fileBasePath = System.getProperty("user.dir")+imagePath;
+        Path path = Paths.get(fileBasePath + fileName);
+        Resource resource = new UrlResource(path.toUri());
+        Mockito.when(bookService.loadFile(any())).thenReturn(resource);
+        MvcResult result = this.mockMvc.perform(get("/admin/downloadFile/fileName?fileName=imageName"))
+                .andReturn();
         Assert.assertEquals(200,result.getResponse().getStatus());
     }
 }

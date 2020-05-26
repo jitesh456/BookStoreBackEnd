@@ -1,10 +1,10 @@
 package com.bookstoreapp.response;
 
 public class FileResponse {
-    private String fileName;
-    private String fileDownloadUri;
-    private String fileType;
-    private long size;
+    public String fileName;
+    public String fileDownloadUri;
+    public String fileType;
+    public long size;
 
     public FileResponse(String fileName, String fileDownloadUri, String fileType, long size) {
         this.fileName = fileName;
@@ -12,22 +12,4 @@ public class FileResponse {
         this.fileType = fileType;
         this.size = size;
     }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public String getFileDownloadUri() {
-        return fileDownloadUri;
-    }
-
-    public String getFileType() {
-        return fileType;
-    }
-
-    public long getSize() {
-        return size;
-    }
-
-    // Getters and Setters (Omitted for brevity)
 }

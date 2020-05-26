@@ -10,6 +10,9 @@ import com.bookstoreapp.repository.IBookRepository;
 import com.bookstoreapp.response.FileResponse;
 import com.bookstoreapp.service.IBookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Sort;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -20,7 +23,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.mail.*;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -30,7 +35,8 @@ import java.util.Optional;
 
 @Service
 public class BookService implements IBookService {
-
+@Value("${image.file.path}")
+private String imagePath;
 
     @Autowired
     IBookRepository iBookRepository;
@@ -104,9 +110,9 @@ public class BookService implements IBookService {
     @Override
     public FileResponse uploadBookCover(MultipartFile file) {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        String fileBasePath = System.getProperty("user.dir") + "\\src\\main\\resources\\Images\\";
+        String fileBasePath = System.getProperty("user.dir") + imagePath;
         if (!(fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".png"))) {
-            throw new BookException("Only Image Files Can Be Uploaded",BookException.ExceptionType.BOOK_ALREADY_EXIST);
+            throw new BookException("Only Image Files Can Be Uploaded",BookException.ExceptionType.INVALID_FILE_TYPE);
         }
         Path path = Paths.get(fileBasePath + fileName);
         try {
@@ -120,5 +126,10 @@ public class BookService implements IBookService {
                 .toUriString();
         return new FileResponse(fileName, fileDownloadUri,
                 file.getContentType(), file.getSize());
+    }
+
+    @Override
+    public Resource loadFile(String fileName) {
+        return null;
     }
 }
