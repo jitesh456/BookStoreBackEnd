@@ -28,4 +28,5 @@ public class UserController {
         return new ResponseEntity<Response>(new Response("User added Sucessfully",200, responseMessage),
                 HttpStatus.OK);
     }
+
 }
