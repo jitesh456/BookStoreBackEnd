@@ -8,7 +8,7 @@ public class UserRegistrationDto {
 
 
     @NotEmpty(message="User name should not be empty")
-    @Pattern(regexp = "^[A-Z]{1}[a-zA-Z]{2,}$",message="Only letters are allowed")
+    @Pattern(regexp = "^[A-Z]{1}[a-zA-Z]{2,}$",message="User name should start with upper case and minimum 3 character")
     public String name;
 
 

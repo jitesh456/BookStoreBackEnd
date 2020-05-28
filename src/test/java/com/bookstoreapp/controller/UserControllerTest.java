@@ -55,6 +55,8 @@ public class UserControllerTest {
         Assert.assertEquals(200,mvcResult.getResponse().getStatus());
     }
 
+
+
     @Test
     public void givenUserDetails_WhenUserNameNull_ShouldReturn_properErrorMessage() throws Exception {
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto(null,"akhil234@gmail.com",
@@ -67,6 +69,20 @@ public class UserControllerTest {
         Assert.assertEquals("User name should not be empty", gson.fromJson(mvcResult.getResponse()
                 .getContentAsString(), Response.class).message);
     }
+
+    @Test
+    public void givenUserDetails_WhenUserNameNotProper_ShouldReturn_properErrorMessage() throws Exception {
+        UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("ab","akhil234@gmail.com",
+                "Ak@1234Sh","8943725498");
+        String user=new Gson().toJson(userRegistrationDto1);
+        Mockito.when(userService.addUser(any())).thenReturn(true);
+        MvcResult mvcResult=this.mockMvc.perform(post("/user")
+                .content(user)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+        Assert.assertEquals("User name should start with upper case and minimum 3 character", gson.fromJson(mvcResult.getResponse()
+                .getContentAsString(), Response.class).message);
+    }
+
     @Test
     public void givenUserDetails_WhenEmailNull_ShouldReturn_properErrorMessage() throws Exception {
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("AkhilSharma",null,
