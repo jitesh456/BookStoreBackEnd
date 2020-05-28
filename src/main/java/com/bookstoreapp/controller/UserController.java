@@ -1,5 +1,6 @@
 package com.bookstoreapp.controller;
 
+import com.bookstoreapp.dto.UserLoginDto;
 import com.bookstoreapp.dto.UserRegistrationDto;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.Implementation.UserService;
@@ -26,6 +27,17 @@ public class UserController {
         }
         boolean responseMessage= userService.addUser(userRegistrationDto);
         return new ResponseEntity<Response>(new Response("User added Sucessfully",200, responseMessage),
+                HttpStatus.OK);
+    }
+
+    @PostMapping(value ="/login")
+    public ResponseEntity<Response> loginUser(@Valid @RequestBody UserLoginDto userLoginDto, BindingResult bindingResult){
+        if(bindingResult.hasErrors()) {
+            return new ResponseEntity<Response>(new Response(bindingResult.getAllErrors().get(0).getDefaultMessage(),
+                    101,"Empty Field"), HttpStatus.BAD_REQUEST);
+        }
+        boolean responseMessage= userService.loginUser(userLoginDto);
+        return new ResponseEntity<Response>(new Response("Login Successfully",200, responseMessage),
                 HttpStatus.OK);
     }
 

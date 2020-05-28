@@ -1,5 +1,6 @@
 package com.bookstoreapp.service.Implementation;
 
+import com.bookstoreapp.dto.UserLoginDto;
 import com.bookstoreapp.dto.UserRegistrationDto;
 import com.bookstoreapp.model.User;
 import com.bookstoreapp.repository.IUserRepository;
@@ -22,5 +23,10 @@ public class UserService implements IUserService {
         User user=new User(userRegistrationDto);
         userRepository.save(user);
         return true;
+    }
+
+    @Override
+    public boolean loginUser(UserLoginDto userLoginDto) {
+        return false;
     }
 }

@@ -1,5 +1,6 @@
 package com.bookstoreapp.controller;
 
+import com.bookstoreapp.dto.UserLoginDto;
 import com.bookstoreapp.dto.UserRegistrationDto;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.Implementation.UserService;
@@ -16,8 +17,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+
 import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @AutoConfigureMockMvc
@@ -30,7 +32,6 @@ public class UserControllerTest {
 
     @Autowired
     MockMvc mockMvc;
-
 
     HttpHeaders headers;
 
@@ -159,5 +160,62 @@ public class UserControllerTest {
         Assert.assertEquals("Only numbers are allowed", gson.fromJson(mvcResult.getResponse()
                 .getContentAsString(), Response.class).message);
     }
+
+    @Test
+    void givenUserLoginDetails_WhenProper_returnTrue() throws Exception {
+        UserLoginDto userLoginDto=new UserLoginDto("Luffy@gmail.com","Luffy@123");
+        String userLoginDtoString = new Gson().toJson(userLoginDto);
+        Mockito.when(userService.loginUser(any())).thenReturn(true);
+        MvcResult result = this.mockMvc.perform(post("/login").
+                content(userLoginDtoString).
+                contentType(MediaType.APPLICATION_JSON)).andReturn();
+        Assert.assertEquals(200,result.getResponse().getStatus());
+    }
+
+    @Test
+    void givenUserLoginDetails_WhenEmailNull_returnTrue() throws Exception {
+        UserLoginDto userLoginDto=new UserLoginDto(null,"Luffy@123");
+        String userLoginDtoString = new Gson().toJson(userLoginDto);
+        Mockito.when(userService.loginUser(any())).thenReturn(true);
+        MvcResult result = this.mockMvc.perform(post("/login").
+                content(userLoginDtoString).
+                contentType(MediaType.APPLICATION_JSON)).andReturn();
+        Assert.assertEquals("Email should not be null", gson.fromJson(result.getResponse().getContentAsString(),Response.class).message);
+    }
+
+    @Test
+    void givenUserLoginDetails_WhenEmailWrong_returnTrue() throws Exception {
+        UserLoginDto userLoginDto=new UserLoginDto("abc123","Jitesh@123");
+        String userLoginDtoString = new Gson().toJson(userLoginDto);
+        Mockito.when(userService.loginUser(any())).thenReturn(true);
+        MvcResult result = this.mockMvc.perform(post("/login").
+                content(userLoginDtoString).
+                contentType(MediaType.APPLICATION_JSON)).andReturn();
+        Assert.assertEquals("Please enter valid email (example or example123  @gmail.com)", gson.fromJson(result.getResponse().getContentAsString(),Response.class).message);
+    }
+
+    @Test
+    void givenUserLoginDetails_WhenPasswordWrong_returnTrue() throws Exception {
+        UserLoginDto userLoginDto=new UserLoginDto("Luffy@gmail.com","luffy@123");
+        String userLoginDtoString = new Gson().toJson(userLoginDto);
+        Mockito.when(userService.loginUser(any())).thenReturn(true);
+        MvcResult result = this.mockMvc.perform(post("/login").
+                content(userLoginDtoString).
+                contentType(MediaType.APPLICATION_JSON)).andReturn();
+        Assert.assertEquals("Atleast one uppercase,lowercase,number and atmost one special character", gson.fromJson(result.getResponse().getContentAsString(),Response.class).message);
+    }
+
+    @Test
+    void givenUserLoginDetails_WhenPasswordNull_returnTrue() throws Exception {
+        UserLoginDto userLoginDto=new UserLoginDto("Luffy@gmail.com",null);
+        String userLoginDtoString = new Gson().toJson(userLoginDto);
+        Mockito.when(userService.loginUser(any())).thenReturn(true);
+        MvcResult result = this.mockMvc.perform(post("/login").
+                content(userLoginDtoString).
+                contentType(MediaType.APPLICATION_JSON)).andReturn();
+        Assert.assertEquals("password should not be null", gson.fromJson(result.getResponse().getContentAsString(),Response.class).message);
+    }
+
+
 
 }
