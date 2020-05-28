@@ -48,7 +48,7 @@ public class CartControllerTest {
 
     @Test
     void givenBookQuantity_WhenUpdated_ShouldReturnProperMessage() throws Exception {
-        UpdateCartDto updateCartDto = new UpdateCartDto("1234567895", 14);
+        UpdateCartDto updateCartDto = new UpdateCartDto("12345678951", 14);
         String cartDtoString = gson.toJson(updateCartDto);
         Mockito.when(bookService.updateQuantity(any())).thenReturn("Book Quantity Updated");
         MvcResult result = this.mockMvc.perform(put("/book")
@@ -59,6 +59,48 @@ public class CartControllerTest {
         Assert.assertEquals("Book Quantity Updated",
                 new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
+
+    @Test
+    void givenBookQuantity_WhenISBNNull_ShouldReturnProperMessage() throws Exception {
+        UpdateCartDto updateCartDto = new UpdateCartDto(null, 14);
+        String cartDtoString = gson.toJson(updateCartDto);
+        Mockito.when(bookService.updateQuantity(any())).thenReturn("Book Quantity Updated");
+        MvcResult result = this.mockMvc.perform(put("/book")
+                .content(cartDtoString)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        Assert.assertEquals(400, result.getResponse().getStatus());
+        Assert.assertEquals("ISBN  should not be null",
+                new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
+    }
+
+    @Test
+    void givenBookQuantity_WhenISBNNullLessThenElevenDigit_ShouldReturnProperMessage() throws Exception {
+        UpdateCartDto updateCartDto = new UpdateCartDto("123456789", 14);
+        String cartDtoString = gson.toJson(updateCartDto);
+        Mockito.when(bookService.updateQuantity(any())).thenReturn("Book Quantity Updated");
+        MvcResult result = this.mockMvc.perform(put("/book")
+                .content(cartDtoString)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        Assert.assertEquals(400, result.getResponse().getStatus());
+        Assert.assertEquals("ISBN must have 11 Digit",
+                new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
+    }
+    @Test
+    void givenBookQuantity_WhenQuantityIsNegative_ShouldReturnProperMessage() throws Exception {
+        UpdateCartDto updateCartDto = new UpdateCartDto("12345678912", -1);
+        String cartDtoString = gson.toJson(updateCartDto);
+        Mockito.when(bookService.updateQuantity(any())).thenReturn("Book Quantity Updated");
+        MvcResult result = this.mockMvc.perform(put("/book")
+                .content(cartDtoString)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        Assert.assertEquals(400, result.getResponse().getStatus());
+        Assert.assertEquals("Quantity cant be less then 0",
+                new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
+    }
+
 
     @Test
     void givenEmailAddress_WhenMailSent_ReturnProperMessage() throws Exception {

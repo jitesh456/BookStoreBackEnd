@@ -23,7 +23,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.mail.*;
 import javax.mail.internet.MimeMessage;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -35,8 +34,8 @@ import java.util.Optional;
 
 @Service
 public class BookService implements IBookService {
-@Value("${image.file.path}")
-private String imagePath;
+    @Value("${image.file.path}")
+    private String imagePath;
 
     @Autowired
     IBookRepository iBookRepository;

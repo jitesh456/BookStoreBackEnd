@@ -77,41 +77,10 @@ public class BookControllerTest {
                 getContentAsString(), Response.class).message);
     }
 
-    @Test
-    void givenPrice_WhenProper_ShouldReturnAllBookHavingPriceLessThenGivenPrice() throws Exception {
-        BookDto bookDto1 = new BookDto("Naruto", 200.0,
-                20, "makashi kissimoto", "Manga",
-                "12345678", "", "story about ninja boy ");
-        Book book = new Book(bookDto);
-        Book book1 = new Book(bookDto1);
-        List<Book> bookList = new ArrayList<>();
-        bookList.add(book1);
-        Mockito.when(bookService.getSortedBook(any())).thenReturn(bookList);
-        String expectedList = gson.toJson(bookList);
-        MvcResult result = this.mockMvc.perform(get("/books/field?field=price")).andReturn();
-        Assert.assertEquals(200, result.getResponse().getStatus());
-        Assert.assertEquals("Book List is Sorted On basic of given field", gson.fromJson(result.getResponse()
-                .getContentAsString(), Response.class).message);
-    }
 
 
-    @Test
-    void givenPrice_WhenNull_ShouldReturnErrorMessage() throws Exception {
-        BookDto bookDto1 = new BookDto("Naruto", 200.0,
-                20, "makashi kissimoto", "Manga",
-                "12345678", "", "story about ninja boy ");
-        Book book = new Book(bookDto);
-        Book book1 = new Book(bookDto1);
-        List<Book> bookList = new ArrayList<>();
-        bookList.add(book1);
-        Mockito.when(bookService.getSortedBook(any())).thenReturn(bookList);
-        String expectedList = gson.toJson(bookList);
-        MvcResult result = this.mockMvc.perform(get("/books/field?field=")).andReturn();
-        Assert.assertEquals(400, gson.fromJson(result.getResponse()
-                .getContentAsString(), Response.class).statusCode);
-        Assert.assertEquals("Field cant be null for sorting", gson.fromJson(result.getResponse()
-                .getContentAsString(), Response.class).message);
-    }
+
+
 
     @Test
     void givenASortField_WhenNull_ShouldThrowException() throws Exception {

@@ -20,12 +20,8 @@ public class BookController {
         return response;
     }
 
-    @GetMapping("/books/field")
+    @GetMapping("/books/sort")
     public Response getSortedBook(@RequestParam ("field")String field){
-        if(field.isEmpty())
-        {
-            return  new Response("Field cant be null for sorting",400,null);
-        }
         Iterable<Book> sortedBook = bookService.getSortedBook(field);
         Response response=new Response("Book List is Sorted On basic of given field",200,sortedBook);
         return response;
