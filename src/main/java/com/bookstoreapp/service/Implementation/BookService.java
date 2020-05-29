@@ -23,6 +23,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.mail.*;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -30,6 +31,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Optional;
+import java.util.prefs.BackingStoreException;
 
 
 @Service
@@ -119,6 +121,7 @@ public class BookService implements IBookService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/downloadFile/")
                 .path(fileName)
@@ -128,11 +131,21 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public Resource loadFile(String fileName) {
+    public Resource loadFile(String fileName, HttpServletRequest request) {
         try {
             String fileBasePath = System.getProperty("user.dir")+imagePath;
             Path path = Paths.get(fileBasePath + fileName);
             Resource resource = new UrlResource(path.toUri());
+            String contentType = null;
+
+            try {
+                contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            if(contentType == null) {
+               throw new BookException("File Not Found",BookException.ExceptionType.NOT_VALID_CONTENT_TYPE);
+            }
             if(resource.exists()) {
                 return resource;
             } else {

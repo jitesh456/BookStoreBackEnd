@@ -1,7 +1,5 @@
 package com.bookstoreapp.dto;
 
-import javax.validation.constraints.NotNull;
-
 public class NotificationDto {
 
 

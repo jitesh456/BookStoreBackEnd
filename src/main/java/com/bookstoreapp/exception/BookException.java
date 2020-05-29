@@ -2,7 +2,7 @@ package com.bookstoreapp.exception;
 
 public class BookException extends RuntimeException {
     public enum ExceptionType{
-        BOOK_DOES_NOT_EXIST, BOOK_ALREADY_EXIST,SORT_FIELD_CAN_NOT_NULL,FILE_NOT_FOUND,INVALID_FILE_TYPE;
+        BOOK_DOES_NOT_EXIST, BOOK_ALREADY_EXIST,SORT_FIELD_CAN_NOT_NULL,FILE_NOT_FOUND,INVALID_FILE_TYPE,NOT_VALID_CONTENT_TYPE;
     }
     public ExceptionType exceptionType;
     public String message;

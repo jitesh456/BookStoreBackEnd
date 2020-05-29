@@ -2,6 +2,7 @@ package com.bookstoreapp.controller;
 
 import com.bookstoreapp.dto.BookDto;
 import com.bookstoreapp.dto.UpdateBookDto;
+import com.bookstoreapp.exception.BookException;
 import com.bookstoreapp.response.FileResponse;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.Implementation.BookService;
@@ -58,17 +59,11 @@ public class AdminController {
     }
 
     @GetMapping("/downloadFile/{fileName}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
-        Resource resource = bookService.loadFile(fileName);
-        String contentType = null;
-        try {
-            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        if(contentType == null) {
-            contentType = "application/octet-stream";
-        }
+    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) throws IOException {
+
+        Resource resource = bookService.loadFile(fileName,request);
+        String contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")

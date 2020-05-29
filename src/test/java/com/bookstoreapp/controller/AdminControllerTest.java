@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -298,7 +297,8 @@ public class AdminControllerTest {
         String fileBasePath = System.getProperty("user.dir")+imagePath;
         Path path = Paths.get(fileBasePath + fileName);
         Resource resource = new UrlResource(path.toUri());
-        Mockito.when(bookService.loadFile(any())).thenReturn(resource);
+        Mockito.when(bookService.loadFile(any(), any())).thenReturn(resource);
+
         MvcResult result = this.mockMvc.perform(get("/admin/downloadFile/fileName?fileName=imageName"))
                 .andReturn();
         Assert.assertEquals(200,result.getResponse().getStatus());

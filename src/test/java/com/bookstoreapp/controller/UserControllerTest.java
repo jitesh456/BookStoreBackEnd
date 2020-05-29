@@ -213,7 +213,9 @@ public class UserControllerTest {
         MvcResult result = this.mockMvc.perform(post("/login").
                 content(userLoginDtoString).
                 contentType(MediaType.APPLICATION_JSON)).andReturn();
-        Assert.assertEquals("password should not be null", gson.fromJson(result.getResponse().getContentAsString(),Response.class).message);
+        Assert.assertEquals("password should not be null",
+                gson.fromJson(result.getResponse().getContentAsString(),Response.class)
+                        .message);
     }
 
 

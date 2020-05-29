@@ -9,8 +9,11 @@ import org.springframework.core.env.Environment;
 
 @SpringBootApplication
 
-
+@PropertySource(value="application.properties",ignoreResourceNotFound = true)
 public class BookstoreappApplication {
+
+    @Autowired
+    Environment environment;
 
 
 

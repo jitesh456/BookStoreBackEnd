@@ -9,6 +9,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 
 public interface IBookService {
 
@@ -26,5 +27,5 @@ public interface IBookService {
 
     FileResponse uploadBookCover(MultipartFile file);
 
-    Resource loadFile(String fileName);
+    Resource loadFile(String fileName, HttpServletRequest request);
 }
