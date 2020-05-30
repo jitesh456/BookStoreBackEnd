@@ -4,8 +4,10 @@ package com.bookstoreapp.service;
 
 import com.bookstoreapp.dto.UserLoginDto;
 import com.bookstoreapp.dto.UserRegistrationDto;
+import com.bookstoreapp.enums.LoginResponseMessage;
 import com.bookstoreapp.model.User;
 import com.bookstoreapp.repository.IUserRepository;
+import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.Implementation.UserService;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -29,10 +30,13 @@ public class UserServiceTest {
 
     UserRegistrationDto userRegistrationDto;
 
+    Response loginResponse;
+
     @BeforeEach
     void setUp() {
         userRegistrationDto=new UserRegistrationDto("AkhilSharma","akhil234@gmail.com",
                 "Luffy456@","8943725498");
+        loginResponse= new Response(LoginResponseMessage.RESPONSE_MESSAGE.responseMessage(true), 200, true);
     }
 
 
@@ -49,6 +53,7 @@ public class UserServiceTest {
         Assert.assertEquals(true,expectedResult);
     }
 
+
     @Test
     void givenLoginDetails_WhenProper_ShouldReturnTrue() {
         UserLoginDto userLoginDto =new UserLoginDto("luffy@gmail.com","Luffy456@");
@@ -58,7 +63,7 @@ public class UserServiceTest {
         userRegistrationDto.password=bCryptPasswordEncoder.encode(userLoginDto.password);
         User user=new User(userRegistrationDto);
         Mockito.when(userRepository.findUserByEmail(any())).thenReturn(java.util.Optional.of(user));
-        boolean expectedResult = userService.loginUser(userLoginDto);
+        Response expectedResult = userService.loginUser(userLoginDto);
         Assert.assertEquals(true,expectedResult);
     }
 

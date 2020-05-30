@@ -51,7 +51,7 @@ public class BookServiceTest {
     }
 
     @Test
-    void getAllBook(){
+    void whenBookDetailsFound_ShouldReturnAllBookDetails(){
         BookDto bookDto1 =new BookDto("Naruto",200.0,
                 20,"makashi kissimoto","Manga",
                 "12345678","","story about ninja boy ");

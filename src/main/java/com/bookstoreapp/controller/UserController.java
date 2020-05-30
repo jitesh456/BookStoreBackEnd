@@ -36,9 +36,8 @@ public class UserController {
             return new ResponseEntity<Response>(new Response(bindingResult.getAllErrors().get(0).getDefaultMessage(),
                     101,"Empty Field"), HttpStatus.BAD_REQUEST);
         }
-        boolean responseMessage= userService.loginUser(userLoginDto);
-        return new ResponseEntity<Response>(new Response("Login Successfully",200, responseMessage),
-                HttpStatus.OK);
+        Response response = userService.loginUser(userLoginDto);
+        return new ResponseEntity<Response>(response, HttpStatus.OK);
     }
 
 }
