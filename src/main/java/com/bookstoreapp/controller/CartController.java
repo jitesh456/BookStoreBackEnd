@@ -21,7 +21,7 @@ public class CartController {
     BookService bookService;
 
     @PutMapping("/book")
-    public ResponseEntity<Response> editBook(@Valid @RequestBody UpdateCartDto updateCartDto, BindingResult bindingResult) {
+    public ResponseEntity<Response> editBook(@Valid @RequestBody UpdateCartDto updateCartDto, BindingResult bindingResult,@RequestHeader String token) {
         if(bindingResult.hasErrors()) {
             return new ResponseEntity<Response>(new Response(bindingResult.getAllErrors().get(0).getDefaultMessage(),
                     101,"Empty Field"), HttpStatus.BAD_REQUEST);

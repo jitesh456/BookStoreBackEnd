@@ -3,14 +3,17 @@ package com.bookstoreapp.model;
 import com.bookstoreapp.dto.BookDto;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "bookdetails")
+@Table(name="bookdetails")
 public class Book {
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+
     public Integer id;
 
     public String name;
@@ -34,6 +37,7 @@ public class Book {
 
     public String isbn;
 
+
     public Book() {
     }
 
@@ -48,4 +52,7 @@ public class Book {
         this.isbn= bookDto.isbn;
         this.id=null;
     }
+
+    @OneToMany(cascade =CascadeType.ALL,orphanRemoval = true)
+    List<User> userList=new ArrayList<>();
 }

@@ -3,9 +3,12 @@ package com.bookstoreapp.model;
 import com.bookstoreapp.dto.UserRegistrationDto;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name="user")
+
+@Table
 public class User {
 
     @Id
@@ -20,15 +23,19 @@ public class User {
 
     public String number;
 
+    @OneToMany( cascade = CascadeType.ALL,orphanRemoval = true)
+    List<Book> bookList=new ArrayList<>();
+
+
     public User() { }
 
     public User(UserRegistrationDto userRegistrationDto) {
-        this.id=this.id;
         this.name = userRegistrationDto.name;
         this.email = userRegistrationDto.email;
         this.password = userRegistrationDto.password;
         this.number = userRegistrationDto.number;
 }
+
 }
 
 

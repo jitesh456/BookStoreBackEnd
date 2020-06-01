@@ -14,6 +14,7 @@ import javax.validation.Valid;
 
 @CrossOrigin
 @RestController
+
 public class UserController {
 
     @Autowired

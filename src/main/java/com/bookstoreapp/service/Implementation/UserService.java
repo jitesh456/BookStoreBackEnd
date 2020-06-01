@@ -2,8 +2,8 @@ package com.bookstoreapp.service.Implementation;
 
 import com.bookstoreapp.dto.UserLoginDto;
 import com.bookstoreapp.dto.UserRegistrationDto;
-import com.bookstoreapp.enums.LoginResponseMessage;
 import com.bookstoreapp.exception.UserException;
+import com.bookstoreapp.jwt.authentication.JwtAuthentication;
 import com.bookstoreapp.model.User;
 import com.bookstoreapp.repository.IUserRepository;
 import com.bookstoreapp.response.Response;
@@ -19,12 +19,15 @@ public class UserService implements IUserService {
     @Autowired
     IUserRepository userRepository;
 
+    @Autowired
+    JwtAuthentication jwtAuthentication;
+    BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
+
     @Override
     public boolean addUser(UserRegistrationDto userRegistrationDto) {
         Optional<User> userdata=userRepository.findUserByEmail(userRegistrationDto.email);
         if(!userdata.isPresent()) {
             String password = userRegistrationDto.password;
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassowrd = passwordEncoder.encode(password);
             userRegistrationDto.password = encodedPassowrd;
             User user = new User(userRegistrationDto);
@@ -36,14 +39,18 @@ public class UserService implements IUserService {
 
     @Override
     public Response loginUser(UserLoginDto userLoginDto) {
-   Optional<User> userdata=userRepository.findUserByEmail(userLoginDto.email);
-        if(userdata.isPresent()){
-            BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
-            boolean booleanResult = passwordEncoder.matches(userLoginDto.password, userdata.get().password);
-            LoginResponseMessage.RESPONSE_MESSAGE.responseMessage(booleanResult);
+        Optional<User> userData = userRepository.findUserByEmail(userLoginDto.email);
+        if(userData.isPresent()){
 
-            return new Response(LoginResponseMessage.RESPONSE_MESSAGE.responseMessage(booleanResult), 200,booleanResult);
+            boolean booleanResult = passwordEncoder.matches(userLoginDto.password, userData.get().password);
+            if(booleanResult)
+            {
+                return new Response("Login Successful",
+                    200,jwtAuthentication.generateToken(userData.get()));
+            }
+            return new Response("Login failed", 200,"");
         }
         throw new UserException("Invalid User Id or password",UserException.ExceptionType.INVALID_EMAIL_ID);
     }
+
 }

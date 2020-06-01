@@ -4,7 +4,6 @@ package com.bookstoreapp.service;
 
 import com.bookstoreapp.dto.UserLoginDto;
 import com.bookstoreapp.dto.UserRegistrationDto;
-import com.bookstoreapp.enums.LoginResponseMessage;
 import com.bookstoreapp.model.User;
 import com.bookstoreapp.repository.IUserRepository;
 import com.bookstoreapp.response.Response;
@@ -36,7 +35,7 @@ public class UserServiceTest {
     void setUp() {
         userRegistrationDto=new UserRegistrationDto("AkhilSharma","akhil234@gmail.com",
                 "Luffy456@","8943725498");
-        loginResponse= new Response(LoginResponseMessage.RESPONSE_MESSAGE.responseMessage(true), 200, true);
+        loginResponse= new Response("Login Successful", 200, true);
     }
 
 
@@ -64,7 +63,7 @@ public class UserServiceTest {
         User user=new User(userRegistrationDto);
         Mockito.when(userRepository.findUserByEmail(any())).thenReturn(java.util.Optional.of(user));
         Response expectedResult = userService.loginUser(userLoginDto);
-        Assert.assertEquals(true,expectedResult);
+        Assert.assertEquals(true,expectedResult.body);
     }
 
 }
