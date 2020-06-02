@@ -8,7 +8,7 @@ import com.bookstoreapp.response.Response;
 public interface IUserService {
     boolean addUser(UserRegistrationDto userRegistrationDto);
 
-    Response loginUser(UserLoginDto userLoginDto);
+    String loginUser(UserLoginDto userLoginDto);
 
 
 }

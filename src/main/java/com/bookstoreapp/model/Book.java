@@ -10,7 +10,6 @@ import java.util.List;
 @Table(name="bookdetails")
 public class Book {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
 
@@ -37,7 +36,6 @@ public class Book {
 
     public String isbn;
 
-
     public Book() {
     }
 
@@ -53,6 +51,5 @@ public class Book {
         this.id=null;
     }
 
-    @OneToMany(cascade =CascadeType.ALL,orphanRemoval = true)
-    List<User> userList=new ArrayList<>();
+
 }

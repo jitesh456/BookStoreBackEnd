@@ -3,7 +3,8 @@ package com.bookstoreapp.service.Implementation;
 import com.bookstoreapp.dto.UserLoginDto;
 import com.bookstoreapp.dto.UserRegistrationDto;
 import com.bookstoreapp.exception.UserException;
-import com.bookstoreapp.jwt.authentication.JwtAuthentication;
+import com.bookstoreapp.util.IJwtToken;
+import com.bookstoreapp.util.implementation.JwtToken;
 import com.bookstoreapp.model.User;
 import com.bookstoreapp.repository.IUserRepository;
 import com.bookstoreapp.response.Response;
@@ -20,7 +21,7 @@ public class UserService implements IUserService {
     IUserRepository userRepository;
 
     @Autowired
-    JwtAuthentication jwtAuthentication;
+    IJwtToken iJwtToken;
     BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
 
     @Override
@@ -38,19 +39,18 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Response loginUser(UserLoginDto userLoginDto) {
+    public String loginUser(UserLoginDto userLoginDto) {
         Optional<User> userData = userRepository.findUserByEmail(userLoginDto.email);
         if(userData.isPresent()){
 
             boolean booleanResult = passwordEncoder.matches(userLoginDto.password, userData.get().password);
             if(booleanResult)
             {
-                return new Response("Login Successful",
-                    200,jwtAuthentication.generateToken(userData.get()));
+                return iJwtToken.doGenerateToken(userData.get().id);
             }
-            return new Response("Login failed", 200,"");
+            throw new UserException("Incorrect password",UserException.ExceptionType.INVALID_PASSWORD);
         }
-        throw new UserException("Invalid User Id or password",UserException.ExceptionType.INVALID_EMAIL_ID);
+        throw new UserException("Invalid Email id",UserException.ExceptionType.INVALID_EMAIL_ID);
     }
 
 }

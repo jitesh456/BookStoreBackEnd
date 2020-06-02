@@ -23,8 +23,10 @@ public class User {
 
     public String number;
 
-    @OneToMany( cascade = CascadeType.ALL,orphanRemoval = true)
-    List<Book> bookList=new ArrayList<>();
+
+    @OneToMany()
+    List<Cart> carts=new ArrayList<>();
+
 
 
     public User() { }
