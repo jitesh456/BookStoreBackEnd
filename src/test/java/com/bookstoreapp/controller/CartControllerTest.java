@@ -1,30 +1,42 @@
 package com.bookstoreapp.controller;
 
+import com.bookstoreapp.dto.AddToCartDto;
 import com.bookstoreapp.dto.NotificationDto;
 import com.bookstoreapp.dto.UpdateCartDto;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.Implementation.BookService;
+import com.bookstoreapp.service.Implementation.CartService;
 import com.google.gson.Gson;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@AutoConfigureMockMvc
+
+@WebMvcTest(controllers = CartController.class)
+@RunWith(MockitoJUnitRunner.class)
 public class CartControllerTest {
     @MockBean
     BookService bookService;
@@ -32,17 +44,19 @@ public class CartControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    @Autowired
-    TestRestTemplate testRestTemplate;
-
-    HttpHeaders headers;
-
     Gson gson;
+
+    @Autowired
+    CartController cartController;
+
+    @MockBean
+    CartService cartService;
+
+    HttpHeaders httpHeaders=new HttpHeaders();
 
     @BeforeEach
     void setUp() {
-        headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.set("Token","abcdef1234");
         gson = new Gson();
     }
 
@@ -53,7 +67,9 @@ public class CartControllerTest {
         Mockito.when(bookService.updateQuantity(any())).thenReturn("Book Quantity Updated");
         MvcResult result = this.mockMvc.perform(put("/book")
                 .content(cartDtoString)
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("utf-8")
+                .headers(httpHeaders))
                 .andReturn();
         Assert.assertEquals(200, result.getResponse().getStatus());
         Assert.assertEquals("Book Quantity Updated",
@@ -67,7 +83,9 @@ public class CartControllerTest {
         Mockito.when(bookService.updateQuantity(any())).thenReturn("Book Quantity Updated");
         MvcResult result = this.mockMvc.perform(put("/book")
                 .content(cartDtoString)
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType("application/json")
+                .characterEncoding("utf-8")
+                .headers(httpHeaders))
                 .andReturn();
         Assert.assertEquals(400, result.getResponse().getStatus());
         Assert.assertEquals("ISBN  should not be null",
@@ -81,7 +99,9 @@ public class CartControllerTest {
         Mockito.when(bookService.updateQuantity(any())).thenReturn("Book Quantity Updated");
         MvcResult result = this.mockMvc.perform(put("/book")
                 .content(cartDtoString)
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType("application/json")
+                .characterEncoding("utf-8")
+                .headers(httpHeaders))
                 .andReturn();
         Assert.assertEquals(400, result.getResponse().getStatus());
         Assert.assertEquals("ISBN must have 11 Digit",
@@ -94,7 +114,9 @@ public class CartControllerTest {
         Mockito.when(bookService.updateQuantity(any())).thenReturn("Book Quantity Updated");
         MvcResult result = this.mockMvc.perform(put("/book")
                 .content(cartDtoString)
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType("application/json")
+                .characterEncoding("utf-8")
+                .headers(httpHeaders))
                 .andReturn();
         Assert.assertEquals(400, result.getResponse().getStatus());
         Assert.assertEquals("Quantity cant be less then 0",
@@ -107,12 +129,33 @@ public class CartControllerTest {
         NotificationDto notificationDto=new NotificationDto("rajnish.kahar1996@gmail.com","Test","Hello User");
         String notificationString=gson.toJson(notificationDto);
         Mockito.when(bookService.sendMail(any())).thenReturn("Mail Sent Successfully");
+
         MvcResult result=this.mockMvc.perform(post("/mail")
                 .content(notificationString)
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType("application/json")
+                .characterEncoding("utf-8")
+                .headers(httpHeaders))
+
                 .andReturn();
         Assert.assertEquals(200,result.getResponse().getStatus());
         Assert.assertEquals("Mail Sent Successfully",
                 new Gson().fromJson(result.getResponse().getContentAsString(),Response.class).message);
+    }
+
+    @Test
+    void givenCartDetails_WhenProper_ShouldReturnProperMessage() throws Exception {
+        Response response=new Response("Book is Added To Cart",200,"");
+        List bookIdList=new ArrayList();
+        bookIdList.add(10);
+        bookIdList.add(20);
+        AddToCartDto addToCartDto=new AddToCartDto(bookIdList,2000,10);
+        String addToCartJsonString = gson.toJson(addToCartDto);
+        Mockito.when(cartService.addToCart(any(),any())).thenReturn(response);
+        MvcResult result = this.mockMvc.perform(post("/book")
+                .content(addToCartJsonString)
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("utf-8")
+                .headers(httpHeaders)).andReturn();
+        Assert.assertEquals(201,result.getResponse().getStatus());
     }
 }

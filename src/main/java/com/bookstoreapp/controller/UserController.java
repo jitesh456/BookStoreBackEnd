@@ -5,18 +5,19 @@ import com.bookstoreapp.dto.UserRegistrationDto;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.Implementation.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-@CrossOrigin
+@CrossOrigin(origins = "*", exposedHeaders = "Token")
 @RestController
-
 public class UserController {
 
     @Autowired
@@ -34,15 +35,15 @@ public class UserController {
     }
 
     @PostMapping(value ="/login")
-    public ResponseEntity<Response> loginUser(@Valid @RequestBody UserLoginDto userLoginDto, BindingResult bindingResult){
+    public ResponseEntity<Response> loginUser(@Valid @RequestBody UserLoginDto userLoginDto, BindingResult bindingResult,HttpServletResponse httpHeaders){
         if(bindingResult.hasErrors()) {
             return new ResponseEntity<Response>(new Response(bindingResult.getAllErrors().get(0).getDefaultMessage(),
                     101,"Empty Field"), HttpStatus.BAD_REQUEST);
         }
         String token = userService.loginUser(userLoginDto);
-        HttpHeaders httpHeaders=new HttpHeaders();
-        httpHeaders.set("token",token);
-        return new ResponseEntity<Response>(new Response("User Login Successfully",200, ""), httpHeaders,HttpStatus.OK);
+
+        httpHeaders.setHeader("Token",token);
+        return new ResponseEntity<Response>(new Response("User Login Successfully",200, ""),HttpStatus.OK);
     }
 
 }

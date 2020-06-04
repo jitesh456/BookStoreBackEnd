@@ -8,12 +8,14 @@ import com.bookstoreapp.model.User;
 import com.bookstoreapp.repository.IUserRepository;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.Implementation.UserService;
+import com.bookstoreapp.util.IJwtToken;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -31,11 +33,16 @@ public class UserServiceTest {
 
     Response loginResponse;
 
+    @Autowired
+    IJwtToken iJwtToken;
+
+    String token;
+
     @BeforeEach
     void setUp() {
         userRegistrationDto=new UserRegistrationDto("AkhilSharma","akhil234@gmail.com",
                 "Luffy456@","8943725498");
-        loginResponse= new Response("Login Successful", 200, true);
+        token=iJwtToken.doGenerateToken(10);
     }
 
 
@@ -62,8 +69,8 @@ public class UserServiceTest {
         userRegistrationDto.password=bCryptPasswordEncoder.encode(userLoginDto.password);
         User user=new User(userRegistrationDto);
         Mockito.when(userRepository.findUserByEmail(any())).thenReturn(java.util.Optional.of(user));
-        Response expectedResult = userService.loginUser(userLoginDto);
-        Assert.assertEquals(true,expectedResult.body);
+        String expectedResult = userService.loginUser(userLoginDto);
+        Assert.assertEquals(token,expectedResult);
     }
 
 }

@@ -36,7 +36,7 @@ public class User {
         this.email = userRegistrationDto.email;
         this.password = userRegistrationDto.password;
         this.number = userRegistrationDto.number;
-}
+    }
 
 }
 

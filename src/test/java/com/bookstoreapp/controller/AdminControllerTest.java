@@ -8,9 +8,12 @@ import com.google.gson.Gson;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -29,8 +32,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@AutoConfigureMockMvc
+@WebMvcTest(controllers = AdminController.class)
+@RunWith(MockitoJUnitRunner.class)
 public class AdminControllerTest {
 
 //    @Value("${image.file.path}")
@@ -39,19 +42,19 @@ public class AdminControllerTest {
     @MockBean
     BookService bookService;
     BookDto bookDto;
+
     @Autowired
     MockMvc mockMvc;
-    @Autowired
-    TestRestTemplate testRestTemplate;
 
-    HttpHeaders headers;
+
+
+
 
     Gson gson;
 
     @BeforeEach
     void setUp() {
-        headers=new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+
         bookDto =new BookDto("Secret of nagas",2000.0,
                 12,"Amish Tiwari","comic",
                 "987564236578","Adventure","Adaptation of the first of J.K. Rowling's popular " +

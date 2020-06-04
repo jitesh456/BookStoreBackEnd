@@ -12,12 +12,23 @@ public class Cart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public int id;
+
+    public Integer id;
 
     public LocalDateTime createdTimeStamp=LocalDateTime.now();
 
-    @ManyToMany
+    public LocalDateTime orderPlacedDate;
+
+    public int totalPrice;
+
+    boolean placedOrder;
+
+    @OneToMany
     List<Book> bookList=new ArrayList<>();
+
+
+
+    public int quantity;
 
     public Cart() {
     }
@@ -25,6 +36,7 @@ public class Cart {
 
     public Cart(List<Book> bookList){
         this.bookList=bookList;
+
   }
 
 }
