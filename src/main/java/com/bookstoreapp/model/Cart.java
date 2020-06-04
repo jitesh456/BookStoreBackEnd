@@ -12,7 +12,6 @@ public class Cart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-
     public Integer id;
 
     public LocalDateTime createdTimeStamp=LocalDateTime.now();
@@ -23,10 +22,11 @@ public class Cart {
 
     boolean placedOrder;
 
+    @Embedded
+    List<BookCart> bookCarts;
+
     @OneToMany
     List<Book> bookList=new ArrayList<>();
-
-
 
     public int quantity;
 
