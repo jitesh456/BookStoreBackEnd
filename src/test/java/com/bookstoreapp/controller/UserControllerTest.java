@@ -5,6 +5,7 @@ import com.bookstoreapp.dto.UserRegistrationDto;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.Implementation.UserService;
 import com.bookstoreapp.util.IJwtToken;
+import com.bookstoreapp.util.implementation.JwtToken;
 import com.google.gson.Gson;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +42,7 @@ public class UserControllerTest {
     Response loginResponse;
 
     @MockBean
-    IJwtToken iJwtToken;
+    JwtToken jwtToken;
 
     String token;
 

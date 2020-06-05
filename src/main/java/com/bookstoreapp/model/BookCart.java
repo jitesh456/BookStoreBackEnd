@@ -1,19 +1,69 @@
 package com.bookstoreapp.model;
 
-import javax.persistence.Embeddable;
 
-@Embeddable
-public class BookCart {
+import javax.persistence.*;
 
-    public int bookid;
+@Entity
+@Table(name="bookCart")
+public class BookCart  {
 
-    public int bookquantity;
 
-    public int bookprice;
+    @EmbeddedId
+    public BookCartID bookCartID;
 
-    public BookCart(int bookid, int bookquantity, int bookprice) {
-        this.bookid = bookid;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(insertable = false,updatable =false)
+    private Book book;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(insertable = false,updatable =false)
+    private Cart cart;
+    private int bookquantity;
+
+
+
+    public BookCart() {
+    }
+
+    public BookCart( Book book,Cart cart,int bookquantity) {
+        this.book=book;
+        this.cart=cart;
         this.bookquantity = bookquantity;
-        this.bookprice = bookprice;
+        bookCartID=new BookCartID(book.id,cart.id);
+
+    }
+
+    public BookCartID getBookCartID() {
+        return bookCartID;
+    }
+
+    public void setBookCartID(BookCartID bookCartID) {
+        this.bookCartID = bookCartID;
+    }
+
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
+
+    public int getBookquantity() {
+        return bookquantity;
+    }
+
+    public void setBookquantity(int bookquantity) {
+        this.bookquantity = bookquantity;
     }
 }
+

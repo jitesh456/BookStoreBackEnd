@@ -24,6 +24,14 @@ public class User {
     public String number;
 
 
+    public List<Cart> getCarts() {
+        return carts;
+    }
+
+    public void setCarts(Cart cart) {
+        carts.add(cart);
+    }
+
     @OneToMany()
     List<Cart> carts=new ArrayList<>();
 

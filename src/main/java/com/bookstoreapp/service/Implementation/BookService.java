@@ -6,6 +6,7 @@ import com.bookstoreapp.dto.UpdateBookDto;
 import com.bookstoreapp.dto.UpdateCartDto;
 import com.bookstoreapp.exception.BookException;
 import com.bookstoreapp.model.Book;
+import com.bookstoreapp.properties.ApplicationProperties;
 import com.bookstoreapp.repository.IBookRepository;
 import com.bookstoreapp.response.FileResponse;
 import com.bookstoreapp.service.IBookService;
@@ -36,8 +37,12 @@ import java.util.prefs.BackingStoreException;
 
 @Service
 public class BookService implements IBookService {
-    @Value("${image.file.path}")
-    private String imagePath;
+
+
+    @Autowired
+    ApplicationProperties applicationProperties;
+
+   //private String imagePath=applicationProperties.getFilePath();
 
     @Autowired
     IBookRepository iBookRepository;
@@ -111,7 +116,7 @@ public class BookService implements IBookService {
     @Override
     public FileResponse uploadBookCover(MultipartFile file) {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        String fileBasePath = System.getProperty("user.dir") + imagePath;
+        String fileBasePath = System.getProperty("user.dir") +applicationProperties.getFilePath();
         if (!(fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".png"))) {
             throw new BookException("Only Image Files Can Be Uploaded",BookException.ExceptionType.INVALID_FILE_TYPE);
         }
@@ -133,7 +138,7 @@ public class BookService implements IBookService {
     @Override
     public Resource loadFile(String fileName, HttpServletRequest request) {
         try {
-            String fileBasePath = System.getProperty("user.dir")+imagePath;
+            String fileBasePath = System.getProperty("user.dir")+applicationProperties.getFilePath();
             Path path = Paths.get(fileBasePath + fileName);
             Resource resource = new UrlResource(path.toUri());
             String contentType = null;

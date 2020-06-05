@@ -3,7 +3,9 @@ package com.bookstoreapp.service.Implementation;
 import com.bookstoreapp.dto.UserLoginDto;
 import com.bookstoreapp.dto.UserRegistrationDto;
 import com.bookstoreapp.exception.UserException;
+import com.bookstoreapp.model.Cart;
 import com.bookstoreapp.model.User;
+import com.bookstoreapp.repository.ICartRepository;
 import com.bookstoreapp.repository.IUserRepository;
 import com.bookstoreapp.service.IUserService;
 import com.bookstoreapp.util.IJwtToken;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -19,7 +22,11 @@ public class UserService implements IUserService {
     IUserRepository userRepository;
 
     @Autowired
-    IJwtToken iJwtToken;
+    IJwtToken jwtToken;
+
+    @Autowired
+    ICartRepository iCartRepository;
+
     BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
 
     @Override
@@ -31,6 +38,7 @@ public class UserService implements IUserService {
             userRegistrationDto.password = encodedPassowrd;
             User user = new User(userRegistrationDto);
             userRepository.save(user);
+
             return true;
         }
         throw new UserException("User Exists",UserException.ExceptionType.USER_ALREADY_EXIST);
@@ -44,7 +52,7 @@ public class UserService implements IUserService {
             boolean booleanResult = passwordEncoder.matches(userLoginDto.password, userData.get().password);
             if(booleanResult)
             {
-                return iJwtToken.doGenerateToken(userData.get().id);
+                return jwtToken.doGenerateToken(userData.get().id);
             }
             throw new UserException("Incorrect password",UserException.ExceptionType.INVALID_PASSWORD);
         }

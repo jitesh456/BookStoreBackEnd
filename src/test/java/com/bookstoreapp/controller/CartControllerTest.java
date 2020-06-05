@@ -145,10 +145,7 @@ public class CartControllerTest {
     @Test
     void givenCartDetails_WhenProper_ShouldReturnProperMessage() throws Exception {
         Response response=new Response("Book is Added To Cart",200,"");
-        List bookIdList=new ArrayList();
-        bookIdList.add(10);
-        bookIdList.add(20);
-        AddToCartDto addToCartDto=new AddToCartDto(bookIdList,2000,10);
+        AddToCartDto addToCartDto=new AddToCartDto(20,2000);
         String addToCartJsonString = gson.toJson(addToCartDto);
         Mockito.when(cartService.addToCart(any(),any())).thenReturn(response);
         MvcResult result = this.mockMvc.perform(post("/book")
