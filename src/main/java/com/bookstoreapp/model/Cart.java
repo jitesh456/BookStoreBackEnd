@@ -3,7 +3,7 @@ package com.bookstoreapp.model;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 
 @Entity
@@ -20,18 +20,19 @@ public class Cart {
 
     public int totalPrice;
 
-    public String placedOrder;
+    public Boolean placedOrder;
 
     public int quantity;
 
-    @OneToMany(mappedBy = "cart",cascade = CascadeType.ALL,targetEntity = BookCart.class)
-    Set<BookCart> bookCartSet;
+
+    @OneToMany(mappedBy = "cart",targetEntity = BookCart.class)
+    public List<BookCart> bookCartList;
 
     public Cart() {
-        bookCartSet=new HashSet<>();
+
     }
 
-    public Cart( LocalDateTime orderPlacedDate, int totalPrice, String placedOrder, int quantity) {
+    public Cart( LocalDateTime orderPlacedDate, int totalPrice, boolean placedOrder, int quantity) {
         this.orderPlacedDate = orderPlacedDate;
         this.totalPrice = totalPrice;
         this.placedOrder = placedOrder;
@@ -39,12 +40,12 @@ public class Cart {
 
     }
 
-    public void setBookCartSet(Set<BookCart> bookCartSet) {
-        this.bookCartSet = bookCartSet;
+    public void setBookCartList(List<BookCart> bookCartList) {
+        this.bookCartList = bookCartList;
     }
 
-    public Set<BookCart> getBookCartSet() {
-        return bookCartSet;
+    public List<BookCart> getBookCartList() {
+        return bookCartList;
     }
 
 }

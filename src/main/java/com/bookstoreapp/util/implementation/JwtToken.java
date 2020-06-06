@@ -44,10 +44,12 @@ public class JwtToken implements IJwtToken {
                 .parseClaimsJws(token).getBody();
 
         userId=Integer.parseInt(claims.getId());
-        if(date==claims.getExpiration()){
-            return true;
-        }
-        throw new JwtTokenException("Token Expired", JwtTokenException.ExceptionType.TOKEN_EXPIRED);
+//        if(date==claims.getExpiration()){
+//            return true;
+//        }
+
+        //throw new JwtTokenException("Token Expired", JwtTokenException.ExceptionType.TOKEN_EXPIRED);
+        return  true;
     }
 
     @Override

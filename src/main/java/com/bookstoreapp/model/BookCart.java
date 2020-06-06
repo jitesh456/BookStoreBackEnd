@@ -9,16 +9,18 @@ public class BookCart  {
 
 
     @EmbeddedId
+    @Column
     public BookCartID bookCartID;
 
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(insertable = false,updatable =false)
+    @MapsId("book_Id")
     private Book book;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(insertable = false,updatable =false)
+    @MapsId("cart_Id")
     private Cart cart;
+
     private int bookquantity;
 
 
@@ -31,16 +33,8 @@ public class BookCart  {
         this.cart=cart;
         this.bookquantity = bookquantity;
         bookCartID=new BookCartID(book.id,cart.id);
-
     }
 
-    public BookCartID getBookCartID() {
-        return bookCartID;
-    }
-
-    public void setBookCartID(BookCartID bookCartID) {
-        this.bookCartID = bookCartID;
-    }
 
     public Book getBook() {
         return book;

@@ -3,8 +3,7 @@ package com.bookstoreapp.model;
 import com.bookstoreapp.dto.BookDto;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name="bookdetails")
@@ -35,11 +34,10 @@ public class Book {
 
     public String isbn;
 
-    @OneToMany(mappedBy = "book",cascade = CascadeType.ALL,targetEntity=BookCart.class)
-    Set<BookCart> bookCartSet;
+    @OneToMany(mappedBy = "book",targetEntity=BookCart.class)
+    List<BookCart> bookCartList;
 
-    public Book() {
-        bookCartSet=new HashSet<>();
+    public Book(){
     }
 
 
@@ -55,11 +53,11 @@ public class Book {
 
     }
 
-    public void setBookCartSet(Set<BookCart> bookCartSet) {
-        this.bookCartSet = bookCartSet;
+    public void setBookCartList(List<BookCart> bookCartList) {
+        this.bookCartList = bookCartList;
     }
 
-    public Set<BookCart> getBookCartSet() {
-        return bookCartSet;
+    public List<BookCart> getBookCartList() {
+        return bookCartList;
     }
 }

@@ -74,7 +74,7 @@ public class CartServiceTest {
         Book book =new Book(bookDto1);
         User user=new User(userRegistrationDto);
         book.id=13;
-        Cart cart=new Cart(LocalDateTime.now(),200,"No",12);
+        Cart cart=new Cart(LocalDateTime.now(),200,false,12);
         cart.id=12;
         BookCart bookCart=new BookCart(book,cart,12);
         Mockito.when(jwtToken.validateToken(anyString())).thenReturn(true);

@@ -1,5 +1,6 @@
 package com.bookstoreapp.model;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
@@ -7,8 +8,11 @@ import java.util.Objects;
 @Embeddable
 public class BookCartID implements Serializable {
 
+
+    @Column(name="bookId")
     public int book_Id;
 
+    @Column(name="cartId")
     public int cart_Id;
 
     public BookCartID(int bookId, int cartId) {
