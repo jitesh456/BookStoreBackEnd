@@ -52,6 +52,7 @@ public class UserService implements IUserService {
             boolean booleanResult = passwordEncoder.matches(userLoginDto.password, userData.get().password);
             if(booleanResult)
             {
+                System.out.println("USER ID"+userData.get().id);
                 return jwtToken.doGenerateToken(userData.get().id);
             }
             throw new UserException("Incorrect password",UserException.ExceptionType.INVALID_PASSWORD);

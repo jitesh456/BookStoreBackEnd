@@ -3,10 +3,10 @@ package com.bookstoreapp.dto;
 public class AddToCartDto {
 
     public int bookId;
-    public int Quantity;
+    public int quantity;
 
     public AddToCartDto(int bookId,  int quantity) {
         this.bookId = bookId;
-        Quantity = quantity;
+        this.quantity = quantity;
     }
 }
