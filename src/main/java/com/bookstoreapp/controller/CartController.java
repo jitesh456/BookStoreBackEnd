@@ -60,4 +60,11 @@ public class CartController {
         Response response = cartService.getCartBook(token);
         return new  ResponseEntity<>(response,HttpStatus.FOUND);
     }
+
+    @PutMapping("/cart")
+    public  ResponseEntity<Response> updateCart(@RequestHeader String token)
+    {
+        Response response=cartService.updateCart(token);
+        return new ResponseEntity<Response> (response,HttpStatus.OK);
+    }
 }

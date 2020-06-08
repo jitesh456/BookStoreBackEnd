@@ -56,11 +56,13 @@ public class CartService  implements ICartService {
         if(cart.isPresent()) {
             userCart=cart.get();
             BookCart bookCart=new BookCart(book,userCart,quantity);
+            userCart.quantity=userCart.quantity+quantity;
+            userCart.totalPrice=userCart.totalPrice+totalPrice;
             bookCartRepository.save(bookCart);
             userCart.bookCartList.add(bookCart);
             cartRepository.save(userCart);
         }
-        else
+        if(!cart.isPresent())
         {
             userCart=new Cart(LocalDateTime.now(),totalPrice,false,quantity);
             cartRepository.save(userCart);
@@ -90,6 +92,11 @@ public class CartService  implements ICartService {
         });
         return new Response("BookList",200,bookList);
 
+    }
+
+    @Override
+    public Response updateCart(String token) {
+        return null;
     }
 
 

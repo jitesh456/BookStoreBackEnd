@@ -177,4 +177,16 @@ public class CartControllerTest {
         Assert.assertEquals(response.message,new Gson().fromJson(result.getResponse().getContentAsString(),Response.class).message);
 
     }
+
+    @Test
+    void whenUserToken_ShouldPlacedOrderAndReturn() throws Exception {
+        Response response=new Response("Order Is Placed",200,"");
+        Mockito.when(cartService.updateCart(any())).thenReturn(response);
+        MvcResult result = this.mockMvc.perform(put("/cart")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("utf-8")
+                .headers(httpHeaders)).andReturn();
+        Assert.assertEquals(response.message,new Gson().fromJson(result.getResponse().getContentAsString(),Response.class).message);
+
+    }
 }
