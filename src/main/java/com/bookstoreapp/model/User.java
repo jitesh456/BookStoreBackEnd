@@ -1,13 +1,13 @@
 package com.bookstoreapp.model;
 
 import com.bookstoreapp.dto.UserRegistrationDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-
 @Table
 public class User {
 
@@ -23,7 +23,6 @@ public class User {
 
     public String number;
 
-
     public List<Cart> getCarts() {
         return carts;
     }
@@ -35,7 +34,9 @@ public class User {
     @OneToMany()
     List<Cart> carts=new ArrayList<>();
 
-
+    @ManyToMany(mappedBy="user",targetEntity = UserDetail.class)
+    @JsonIgnore
+    List<UserDetail> userDetail;
 
     public User() { }
 
@@ -45,7 +46,6 @@ public class User {
         this.password = userRegistrationDto.password;
         this.number = userRegistrationDto.number;
     }
-
 }
 
 
