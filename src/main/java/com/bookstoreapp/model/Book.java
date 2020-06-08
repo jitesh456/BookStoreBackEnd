@@ -1,6 +1,7 @@
 package com.bookstoreapp.model;
 
 import com.bookstoreapp.dto.BookDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.List;
@@ -35,6 +36,7 @@ public class Book {
     public String isbn;
 
     @OneToMany(mappedBy = "book",targetEntity=BookCart.class)
+    @JsonIgnore
     List<BookCart> bookCartList;
 
     public Book(){

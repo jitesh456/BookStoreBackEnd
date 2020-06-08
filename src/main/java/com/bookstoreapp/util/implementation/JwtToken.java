@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import javax.xml.bind.DatatypeConverter;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -44,12 +46,13 @@ public class JwtToken implements IJwtToken {
                 .parseClaimsJws(token).getBody();
 
         userId=Integer.parseInt(claims.getId());
-//        if(date==claims.getExpiration()){
-//            return true;
-//        }
 
-        //throw new JwtTokenException("Token Expired", JwtTokenException.ExceptionType.TOKEN_EXPIRED);
-        return  true;
+        System.out.println("Expiry Time"+claims.getExpiration());
+        if(claims.getExpiration().after(new Date(System.currentTimeMillis()))){
+            return true;
+        }
+        throw new JwtTokenException("Token Expired", JwtTokenException.ExceptionType.TOKEN_EXPIRED);
+
     }
 
     @Override

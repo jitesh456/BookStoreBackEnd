@@ -11,6 +11,7 @@ public class UserExceptionHandler {
 
     @ExceptionHandler(UserException.class)
     public ResponseEntity<Response> bookHandler(UserException userException){
-        return new ResponseEntity(userException.message, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<Response>(new Response(userException.message,
+                101, userException.exceptionType),HttpStatus.OK);
     }
 }

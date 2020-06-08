@@ -13,11 +13,11 @@ public class BookCart  {
     public BookCartID bookCartID;
 
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne()
     @MapsId("book_Id")
     private Book book;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne()
     @MapsId("cart_Id")
     private Cart cart;
 

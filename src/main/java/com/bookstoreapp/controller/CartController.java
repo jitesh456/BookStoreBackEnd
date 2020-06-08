@@ -44,8 +44,20 @@ public class CartController {
     }
 
     @PostMapping("/book")
-    public ResponseEntity<Response> addToCart(@RequestBody AddToCartDto addToCartDto,@RequestHeader String token){
+    public ResponseEntity<Response> addToCart(@Valid @RequestBody AddToCartDto addToCartDto,
+                                              BindingResult result,@RequestHeader String token){
+        if(result.hasErrors())
+        {
+            return new  ResponseEntity<>(new Response(result.getAllErrors().get(0).getDefaultMessage(),400,""),HttpStatus.BAD_REQUEST);
+        }
+
         Response response = cartService.addToCart(addToCartDto, token);
         return new  ResponseEntity<>(response,HttpStatus.CREATED);
+    }
+
+    @GetMapping("/book")
+    public ResponseEntity<Response> getCartBooks(@RequestHeader String token){
+        Response response = cartService.getCartBook(token);
+        return new  ResponseEntity<>(response,HttpStatus.FOUND);
     }
 }

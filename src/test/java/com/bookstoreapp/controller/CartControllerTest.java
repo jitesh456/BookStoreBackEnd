@@ -1,8 +1,10 @@
 package com.bookstoreapp.controller;
 
 import com.bookstoreapp.dto.AddToCartDto;
+import com.bookstoreapp.dto.BookDto;
 import com.bookstoreapp.dto.NotificationDto;
 import com.bookstoreapp.dto.UpdateCartDto;
+import com.bookstoreapp.model.Book;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.Implementation.BookService;
 import com.bookstoreapp.service.Implementation.CartService;
@@ -29,10 +31,10 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 
 @WebMvcTest(controllers = CartController.class)
@@ -53,11 +55,16 @@ public class CartControllerTest {
     CartService cartService;
 
     HttpHeaders httpHeaders=new HttpHeaders();
+    BookDto bookDto;
 
     @BeforeEach
     void setUp() {
         httpHeaders.set("Token","abcdef1234");
         gson = new Gson();
+        bookDto =new BookDto("Secret of nagas", 2000.0,
+                12, "Amish Tiwari", "comic",
+                "987564236578", "sdfsfd", "Adaptation of the first of J.K. Rowling's popular " +
+                "children's novels about Harry Potter, a boy who learns on his eleventh birthday that he is the orphaned son ");
     }
 
     @Test
@@ -154,5 +161,20 @@ public class CartControllerTest {
                 .characterEncoding("utf-8")
                 .headers(httpHeaders)).andReturn();
         Assert.assertEquals(201,result.getResponse().getStatus());
+    }
+
+    @Test
+    void whenUseTokenIsValid_ShouldReturnAllCartBook() throws Exception {
+        List<Book> bookList=new ArrayList<>();
+        Book book=new Book(bookDto);
+        bookList.add(book);
+        Response response=new Response("Book List",200,bookList);
+        Mockito.when(cartService.getCartBook(any())).thenReturn(response);
+        MvcResult result = this.mockMvc.perform(get("/book")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("utf-8")
+                .headers(httpHeaders)).andReturn();
+        Assert.assertEquals(response.message,new Gson().fromJson(result.getResponse().getContentAsString(),Response.class).message);
+
     }
 }

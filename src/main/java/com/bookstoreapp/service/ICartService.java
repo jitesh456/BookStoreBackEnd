@@ -5,6 +5,7 @@ import com.bookstoreapp.response.Response;
 
 public interface ICartService {
 
-     Response addToCart(AddToCartDto addToCartDto, String token);
+    Response addToCart(AddToCartDto addToCartDto, String token);
 
+    Response getCartBook(String token);
 }

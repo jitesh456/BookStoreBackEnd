@@ -3,17 +3,16 @@ package com.bookstoreapp.service.Implementation;
 import com.bookstoreapp.dto.UserLoginDto;
 import com.bookstoreapp.dto.UserRegistrationDto;
 import com.bookstoreapp.exception.UserException;
-import com.bookstoreapp.model.Cart;
 import com.bookstoreapp.model.User;
 import com.bookstoreapp.repository.ICartRepository;
 import com.bookstoreapp.repository.IUserRepository;
+import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.IUserService;
 import com.bookstoreapp.util.IJwtToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -30,7 +29,7 @@ public class UserService implements IUserService {
     BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
 
     @Override
-    public boolean addUser(UserRegistrationDto userRegistrationDto) {
+    public Response addUser(UserRegistrationDto userRegistrationDto) {
         Optional<User> userdata=userRepository.findUserByEmail(userRegistrationDto.email);
         if(!userdata.isPresent()) {
             String password = userRegistrationDto.password;
@@ -38,10 +37,9 @@ public class UserService implements IUserService {
             userRegistrationDto.password = encodedPassowrd;
             User user = new User(userRegistrationDto);
             userRepository.save(user);
-
-            return true;
+            return new Response("User Registered Successfully",200,"User Registered Successfully");
         }
-        throw new UserException("User Exists",UserException.ExceptionType.USER_ALREADY_EXIST);
+       throw new UserException("User Exists",UserException.ExceptionType.USER_ALREADY_EXIST);
     }
 
     @Override

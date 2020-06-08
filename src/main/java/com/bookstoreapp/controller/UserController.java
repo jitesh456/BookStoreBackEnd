@@ -29,8 +29,8 @@ public class UserController {
             return new ResponseEntity<Response>(new Response(bindingResult.getAllErrors().get(0).getDefaultMessage(),
                     101,"Empty Field"), HttpStatus.BAD_REQUEST);
         }
-        boolean responseMessage= userService.addUser(userRegistrationDto);
-        return new ResponseEntity<Response>(new Response("User added Sucessfully",200, responseMessage),
+        Response responseMessage= userService.addUser(userRegistrationDto);
+        return new ResponseEntity<Response>(responseMessage      ,
                 HttpStatus.OK);
     }
 

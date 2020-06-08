@@ -1,8 +1,10 @@
 package com.bookstoreapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -26,7 +28,8 @@ public class Cart {
 
 
     @OneToMany(mappedBy = "cart",targetEntity = BookCart.class)
-    public List<BookCart> bookCartList;
+    @JsonIgnore
+    public List<BookCart> bookCartList=new ArrayList<>();
 
     public Cart() {
 
@@ -40,8 +43,8 @@ public class Cart {
 
     }
 
-    public void setBookCartList(List<BookCart> bookCartList) {
-        this.bookCartList = bookCartList;
+    public void setBookCartList(BookCart bookCart) {
+        this.bookCartList.add(bookCart);
     }
 
     public List<BookCart> getBookCartList() {

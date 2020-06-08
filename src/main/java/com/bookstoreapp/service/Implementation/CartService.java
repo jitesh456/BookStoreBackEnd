@@ -17,10 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class CartService  implements ICartService {
@@ -45,10 +44,9 @@ public class CartService  implements ICartService {
         int userId=0;
         jwtToken.validateToken(token);
         userId = jwtToken.getUserId();
-        System.out.println("USER ID"+userId);
         Cart userCart=null;
         User user = userRepository.findUserById(userId).get();
-        Optional<Cart>  cart = user.getCarts().stream().filter(cart1 -> cart1.placedOrder == false).findFirst();
+        Optional<Cart>  cart = user.getCarts().stream().filter(cart1 -> !cart1.placedOrder).findFirst();
         int bookId= addToCartDto.bookId;
         Optional<Book >book1=bookRepository.findById(bookId);
         Book book = book1.get();
@@ -66,15 +64,33 @@ public class CartService  implements ICartService {
         {
             userCart=new Cart(LocalDateTime.now(),totalPrice,false,quantity);
             cartRepository.save(userCart);
-            BookCart bookCart=new BookCart(book,userCart,quantity);
-            userCart.bookCartList.add(bookCart);
             user.setCarts(userCart);
             userRepository.save(user);
+            BookCart bookCart=new BookCart(book,userCart,quantity);
             bookCartRepository.save(bookCart);
-
+            userCart.bookCartList.add(bookCart);
+            cartRepository.save(userCart);
         }
-
         return new Response("Added to Cart",200,"Book Is Added To Cart");
     }
+
+    @Override
+    public Response getCartBook(String token) {
+        jwtToken.validateToken(token);
+        int userId = jwtToken.getUserId();
+        Optional<User> user = userRepository.findUserById(userId);
+        List<Cart> userCart = user.map(User::getCarts).orElse(null);
+        Optional<Cart> cart= userCart.stream().filter(cart1 -> !cart1.placedOrder).findAny();
+        List<BookCart> bookCartList = cart.map(value -> value.bookCartList).orElse(Collections.emptyList());
+        List<Book> bookList=new ArrayList<>();
+        bookCartList.forEach(bookCart -> {
+
+            bookList.add( bookRepository.
+                    findById(bookCart.bookCartID.book_Id).get());
+        });
+        return new Response("BookList",200,bookList);
+
+    }
+
 
 }

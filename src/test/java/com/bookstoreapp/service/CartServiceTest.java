@@ -24,6 +24,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.*;
@@ -56,25 +57,33 @@ public class CartServiceTest {
 
     UserRegistrationDto userRegistrationDto;
     Set<BookCart> bookCartSet;
+    User user;
+    BookDto bookDto1;
+    Book book ;
+    Cart cart;
+
+    @InjectMocks
+   public Optional<Cart> cart1;
 
     @BeforeEach
+
     void setUp() {
         addToCartDto=new AddToCartDto(12,2);
         token ="asbfj45";
         userRegistrationDto = new UserRegistrationDto("AkhilSharma", "akhil234@gmail.com",
                 "Luffy456@", "8943725498");
         bookCartSet=new HashSet<>();
+        user=new User(userRegistrationDto);
+        bookDto1 =new BookDto("Naruto",200.0,
+                20,"makashi kissimoto","Manga",
+                "12345678","Advanture","story about ninja boy ");
+        book =new Book(bookDto1);
+        cart=new Cart(LocalDateTime.now(),200,false,12);
     }
 
     @Test
     void givenCartDetails_WhenProper_ReturnProperMessage() {
-        BookDto bookDto1 =new BookDto("Naruto",200.0,
-                20,"makashi kissimoto","Manga",
-                "12345678","Advanture","story about ninja boy ");
-        Book book =new Book(bookDto1);
-        User user=new User(userRegistrationDto);
         book.id=13;
-        Cart cart=new Cart(LocalDateTime.now(),200,false,12);
         cart.id=12;
         BookCart bookCart=new BookCart(book,cart,12);
         Mockito.when(jwtToken.validateToken(anyString())).thenReturn(true);
@@ -83,10 +92,17 @@ public class CartServiceTest {
         Mockito.when(bookRepository.findById(anyInt())).thenReturn(java.util.Optional.of(book));
         Mockito.when(cartRepository.save(any())).thenReturn(cart);
         Mockito.when(bookCartRepository.save(any())).thenReturn(bookCart);
-
-
         Response response = cartService.addToCart(addToCartDto, token);
         Assert.assertEquals("Added to Cart",response.message);
+    }
 
+    @Test
+    void whenUserCartBookFound_ThenReturnProperMessage() {
+        Mockito.when(jwtToken.validateToken(anyString())).thenReturn(true);
+        Mockito.when(jwtToken.getUserId()).thenReturn(12);
+        Mockito.when(userRepository.findUserById(anyInt())).thenReturn(java.util.Optional.of(user));
+        Mockito.when(bookRepository.findById(anyInt())).thenReturn(java.util.Optional.of(book));
+        Response response = cartService.getCartBook(token);
+        Assert.assertEquals("BookList",response.message);
     }
 }

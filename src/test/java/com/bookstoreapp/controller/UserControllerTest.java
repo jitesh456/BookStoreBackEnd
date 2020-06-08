@@ -4,7 +4,6 @@ import com.bookstoreapp.dto.UserLoginDto;
 import com.bookstoreapp.dto.UserRegistrationDto;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.Implementation.UserService;
-import com.bookstoreapp.util.IJwtToken;
 import com.bookstoreapp.util.implementation.JwtToken;
 import com.google.gson.Gson;
 import org.junit.Assert;
@@ -46,6 +45,7 @@ public class UserControllerTest {
 
     String token;
 
+    Response userRegistrationResponse;
     @BeforeEach
     public void setUp() throws Exception {
 
@@ -53,12 +53,14 @@ public class UserControllerTest {
         userRegistrationDto=new UserRegistrationDto("AkhilSharma","akhil234@gmail.com",
                 "Ak@1234Sh","8943725498");
         token="asdgj@123";
+        userRegistrationResponse = new Response("User Registered Successfully",
+                200, "User Registered Successfully");
     }
 
     @Test
-    public void givenUserDetails_WhenProper_ShouldReturn_True() throws Exception {
+    public void givenUserDetails_WhenProper_ShouldReturn_properMessage() throws Exception {
         String user=new Gson().toJson(userRegistrationDto);
-        Mockito.when(userService.addUser(any())).thenReturn(true);
+        Mockito.when(userService.addUser(any())).thenReturn(userRegistrationResponse);
         MvcResult mvcResult=this.mockMvc.perform(post("/user")
                 .content(user)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
@@ -72,7 +74,7 @@ public class UserControllerTest {
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto(null,"akhil234@gmail.com",
                 "Ak@1234Sh","8943725498");
         String user=new Gson().toJson(userRegistrationDto1);
-        Mockito.when(userService.addUser(any())).thenReturn(true);
+        Mockito.when(userService.addUser(any())).thenReturn(userRegistrationResponse);
         MvcResult mvcResult=this.mockMvc.perform(post("/user")
                 .content(user)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
@@ -85,7 +87,7 @@ public class UserControllerTest {
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("","akhil234@gmail.com",
                 "Ak@1234Sh","8943725498");
         String user=new Gson().toJson(userRegistrationDto1);
-        Mockito.when(userService.addUser(any())).thenReturn(true);
+        Mockito.when(userService.addUser(any())).thenReturn(userRegistrationResponse);
         MvcResult mvcResult=this.mockMvc.perform(post("/user")
                 .content(user)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
@@ -98,7 +100,7 @@ public class UserControllerTest {
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("ab","akhil234@gmail.com",
                 "Ak@1234Sh","8943725498");
         String user=new Gson().toJson(userRegistrationDto1);
-        Mockito.when(userService.addUser(any())).thenReturn(true);
+        Mockito.when(userService.addUser(any())).thenReturn(userRegistrationResponse);
         MvcResult mvcResult=this.mockMvc.perform(post("/user")
                 .content(user)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
@@ -111,7 +113,7 @@ public class UserControllerTest {
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("AkhilSharma",null,
                 "Ak@1234Sh","8943725498");
         String user=new Gson().toJson(userRegistrationDto1);
-        Mockito.when(userService.addUser(any())).thenReturn(true);
+        Mockito.when(userService.addUser(any())).thenReturn(userRegistrationResponse);
         MvcResult mvcResult=this.mockMvc.perform(post("/user")
                 .content(user)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
@@ -125,7 +127,7 @@ public class UserControllerTest {
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("AkhilSharma",null,
                 "Ak@1234Sh","8943725498");
         String user=new Gson().toJson(userRegistrationDto1);
-        Mockito.when(userService.addUser(any())).thenReturn(true);
+        Mockito.when(userService.addUser(any())).thenReturn(userRegistrationResponse);
         MvcResult mvcResult=this.mockMvc.perform(post("/user")
                 .content(user)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
@@ -140,7 +142,7 @@ public class UserControllerTest {
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("AkhilSharma","@abcd.com",
                 "Ak@1234Sh","8943725498");
         String user=new Gson().toJson(userRegistrationDto1);
-        Mockito.when(userService.addUser(any())).thenReturn(true);
+        Mockito.when(userService.addUser(any())).thenReturn(userRegistrationResponse);
         MvcResult mvcResult=this.mockMvc.perform(post("/user")
                 .content(user)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
@@ -154,7 +156,7 @@ public class UserControllerTest {
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("AkhilSharma","akhil234@gmail.com",
                 null,"8943725498");
         String user=new Gson().toJson(userRegistrationDto1);
-        Mockito.when(userService.addUser(any())).thenReturn(true);
+        Mockito.when(userService.addUser(any())).thenReturn(userRegistrationResponse);
         MvcResult mvcResult=this.mockMvc.perform(post("/user")
                 .content(user)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
@@ -167,7 +169,7 @@ public class UserControllerTest {
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("AkhilSharma","akhil234@gmail.com",
                 null,"8943725498");
         String user=new Gson().toJson(userRegistrationDto1);
-        Mockito.when(userService.addUser(any())).thenReturn(true);
+        Mockito.when(userService.addUser(any())).thenReturn(userRegistrationResponse);
         MvcResult mvcResult=this.mockMvc.perform(post("/user")
                 .content(user)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
@@ -180,7 +182,7 @@ public class UserControllerTest {
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("AkhilSharma","akhil234@gmail.com",
                 "abcd","8943725498");
         String user=new Gson().toJson(userRegistrationDto1);
-        Mockito.when(userService.addUser(any())).thenReturn(true);
+        Mockito.when(userService.addUser(any())).thenReturn(userRegistrationResponse);
         MvcResult mvcResult=this.mockMvc.perform(post("/user")
                 .content(user)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
@@ -193,7 +195,7 @@ public class UserControllerTest {
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("AkhilSharma","akhil234@gmail.com",
                 "Ak@1234Sh",null);
         String user=new Gson().toJson(userRegistrationDto1);
-        Mockito.when(userService.addUser(any())).thenReturn(true);
+        Mockito.when(userService.addUser(any())).thenReturn(userRegistrationResponse);
         MvcResult mvcResult=this.mockMvc.perform(post("/user")
                 .content(user)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
@@ -206,7 +208,7 @@ public class UserControllerTest {
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("AkhilSharma","akhil234@gmail.com",
                 "Ak@1234Sh","");
         String user=new Gson().toJson(userRegistrationDto1);
-        Mockito.when(userService.addUser(any())).thenReturn(true);
+        Mockito.when(userService.addUser(any())).thenReturn(userRegistrationResponse);
         MvcResult mvcResult=this.mockMvc.perform(post("/user")
                 .content(user)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
@@ -219,7 +221,8 @@ public class UserControllerTest {
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("AkhilSharma","akhil234@gmail.com",
                 "Ak@1234Sh","985642356");
         String user=new Gson().toJson(userRegistrationDto1);
-        Mockito.when(userService.addUser(any())).thenReturn(true);
+       
+        Mockito.when(userService.addUser(any())).thenReturn(userRegistrationResponse);
         MvcResult mvcResult=this.mockMvc.perform(post("/user")
                 .content(user)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
@@ -228,7 +231,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void givenUserLoginDetails_WhenProper_returnTrue() throws Exception {
+    void givenUserLoginDetails_WhenProper_ShouldReturnProperMessage() throws Exception {
         UserLoginDto userLoginDto=new UserLoginDto("Luffy@gmail.com","Luffy@123");
         String userLoginDtoString = new Gson().toJson(userLoginDto);
         Mockito.when(userService.loginUser(any())).thenReturn(token);
@@ -239,7 +242,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void givenUserLoginDetails_WhenEmailNull_returnTrue() throws Exception {
+    void givenUserLoginDetails_WhenEmailNull_ShouldReturnProperMessage() throws Exception {
         UserLoginDto userLoginDto=new UserLoginDto(null,"Luffy@123");
         String userLoginDtoString = new Gson().toJson(userLoginDto);
         Mockito.when(userService.loginUser(any())).thenReturn(token);
@@ -251,7 +254,7 @@ public class UserControllerTest {
 
 
     @Test
-    void givenUserLoginDetails_WhenEmailEmpty_returnTrue() throws Exception {
+    void givenUserLoginDetails_WhenEmailEmpty_ShouldReturnProperMessage() throws Exception {
         UserLoginDto userLoginDto=new UserLoginDto("","Luffy@123");
         String userLoginDtoString = new Gson().toJson(userLoginDto);
         Mockito.when(userService.loginUser(any())).thenReturn(token);
@@ -262,7 +265,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void givenUserLoginDetails_WhenEmailWrong_returnTrue() throws Exception {
+    void givenUserLoginDetails_WhenEmailWrong_ShouldReturnProperMessage() throws Exception {
         UserLoginDto userLoginDto=new UserLoginDto("abc123","Jitesh@123");
         String userLoginDtoString = new Gson().toJson(userLoginDto);
         Mockito.when(userService.loginUser(any())).thenReturn(token);
@@ -273,7 +276,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void givenUserLoginDetails_WhenPasswordWrong_returnTrue() throws Exception {
+    void givenUserLoginDetails_WhenPasswordWrong_ShouldReturnProperMessage() throws Exception {
         UserLoginDto userLoginDto=new UserLoginDto("Luffy@gmail.com","luffy@123");
         String userLoginDtoString = new Gson().toJson(userLoginDto);
         Mockito.when(userService.loginUser(any())).thenReturn(token);
@@ -285,7 +288,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void givenUserLoginDetails_WhenPasswordNull_returnTrue() throws Exception {
+    void givenUserLoginDetails_WhenPasswordNull_ShouldReturnProperMessage() throws Exception {
         UserLoginDto userLoginDto=new UserLoginDto("Luffy@gmail.com",null);
         String userLoginDtoString = new Gson().toJson(userLoginDto);
         Mockito.when(userService.loginUser(any())).thenReturn(token);
@@ -300,7 +303,7 @@ public class UserControllerTest {
 
 
     @Test
-    void givenUserLoginDetails_WhenPasswordEmpty_returnTrue() throws Exception {
+    void givenUserLoginDetails_WhenPasswordEmpty_ShouldReturnProperMessage() throws Exception {
         UserLoginDto userLoginDto=new UserLoginDto("Luffy@gmail.com","");
         String userLoginDtoString = new Gson().toJson(userLoginDto);
         Mockito.when(userService.loginUser(any())).thenReturn(token);

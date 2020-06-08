@@ -9,8 +9,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class BookExceptionHandler extends ResponseEntityExceptionHandler {
-    @ExceptionHandler(BookException.class)
+    @ExceptionHandler
     public ResponseEntity<Response> bookHandler(BookException bookException){
-        return new ResponseEntity(bookException.message, HttpStatus.NOT_FOUND);
+        return new ResponseEntity(new Response(bookException.message,
+                101,bookException.exceptionType),
+                HttpStatus.NOT_FOUND);
     }
 }

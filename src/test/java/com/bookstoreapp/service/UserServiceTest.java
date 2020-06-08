@@ -55,8 +55,8 @@ public class UserServiceTest {
                 "Ak@1234Sh","8943725498");
         User user=new User(userRegistrationDto);
         Mockito.when(userRepository.save(any())).thenReturn(user);
-        boolean expectedResult = userService.addUser(userRegistrationDto);
-        Assert.assertEquals(true,expectedResult);
+        Response expectedResult = userService.addUser(userRegistrationDto);
+        Assert.assertEquals("User Registered Successfully",expectedResult.body);
     }
 
 
