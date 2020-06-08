@@ -1,5 +1,6 @@
 package com.bookstoreapp.controller;
 
+import com.bookstoreapp.dto.UserDetailDto;
 import com.bookstoreapp.dto.UserLoginDto;
 import com.bookstoreapp.dto.UserRegistrationDto;
 import com.bookstoreapp.response.Response;
@@ -44,6 +45,16 @@ public class UserController {
 
         httpHeaders.setHeader("Token",token);
         return new ResponseEntity<Response>(new Response("User Login Successfully",200, ""),HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/userdetail")
+    public ResponseEntity<Response> userDetails(@Valid @RequestBody UserDetailDto userDetailDto, BindingResult bindingResult, HttpServletResponse httpHeaders){
+        if(bindingResult.hasErrors()) {
+            return new ResponseEntity<Response>(new Response(bindingResult.getAllErrors().get(0).getDefaultMessage(),
+                    101,"Empty Field"), HttpStatus.BAD_REQUEST);
+        }
+        userService.userDetail(userDetailDto);
+        return new ResponseEntity<Response>(new Response("User Details Saved Successfully",200, ""),HttpStatus.OK);
     }
 
 }

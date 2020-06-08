@@ -1,9 +1,11 @@
 package com.bookstoreapp.service.Implementation;
 
+import com.bookstoreapp.dto.UserDetailDto;
 import com.bookstoreapp.dto.UserLoginDto;
 import com.bookstoreapp.dto.UserRegistrationDto;
 import com.bookstoreapp.exception.UserException;
 import com.bookstoreapp.model.User;
+import com.bookstoreapp.model.UserDetail;
 import com.bookstoreapp.repository.ICartRepository;
 import com.bookstoreapp.repository.IUserRepository;
 import com.bookstoreapp.response.Response;
@@ -56,6 +58,11 @@ public class UserService implements IUserService {
             throw new UserException("Incorrect password",UserException.ExceptionType.INVALID_PASSWORD);
         }
         throw new UserException("Invalid Email id",UserException.ExceptionType.INVALID_EMAIL_ID);
+    }
+
+    @Override
+    public String userDetail(UserDetailDto userDetailsDto) {
+        return null;
     }
 
 }
