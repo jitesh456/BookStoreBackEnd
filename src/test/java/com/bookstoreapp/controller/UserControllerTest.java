@@ -404,5 +404,21 @@ public class UserControllerTest {
                         .message);
     }
 
+    @Test
+    void givenUserDetail_WhenCountryNotProper_ShouldReturnProperMessage() throws Exception {
+        userDetailDto=new UserDetailDto("Home","432572","101 B Street",
+                "101 B Street UP ","Lucknow","");
+        String userDetailString = new Gson().toJson(userDetailDto);
+        Mockito.when(userService.userDetail(any(),anyString())).thenReturn(new Response("User Detail Added",200,""));
+        MvcResult result = this.mockMvc.perform(post("/userdetail").
+                content(userDetailString)
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(httpHeaders))
+                .andReturn();
+        Assert.assertEquals("Country type must not be null",
+                gson.fromJson(result.getResponse().getContentAsString(),Response.class)
+                        .message);
+    }
+
 
 }
