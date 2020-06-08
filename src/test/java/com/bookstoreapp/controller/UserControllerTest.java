@@ -372,5 +372,23 @@ public class UserControllerTest {
                         .message);
     }
 
+    @Test
+    void givenUserDetail_WhenAddressNotProper_ShouldReturnProperMessage() throws Exception {
+        userDetailDto=new UserDetailDto("Home","432572","101 B Street",
+                "101 B ","Lucknow","India");
+        String userDetailString = new Gson().toJson(userDetailDto);
+        Mockito.when(userService.userDetail(any(),anyString())).thenReturn(new Response("User Detail Added",200,""));
+        MvcResult result = this.mockMvc.perform(post("/userdetail").
+                content(userDetailString)
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(httpHeaders))
+                .andReturn();
+        Assert.assertEquals("Maximum length is 200 characters",
+                gson.fromJson(result.getResponse().getContentAsString(),Response.class)
+                        .message);
+    }
+
+
+
 
 }

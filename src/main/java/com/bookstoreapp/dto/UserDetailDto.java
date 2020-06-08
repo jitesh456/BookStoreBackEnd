@@ -17,7 +17,7 @@ public class UserDetailDto {
     public String locality;
 
     @NotEmpty(message="Address type must not be null")
-    @Size(max = 200,message = "Maximum length is 200 characters")
+    @Size(min=10,max = 200,message = "Maximum length is 200 characters")
     public String address;
 
     @NotEmpty(message="City type must not be null")
