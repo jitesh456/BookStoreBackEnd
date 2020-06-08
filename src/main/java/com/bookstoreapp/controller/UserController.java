@@ -53,5 +53,4 @@ public class UserController {
         Response response=userService.userDetail(userDetailDto,token);
         return new ResponseEntity<Response>(response,HttpStatus.OK);
     }
-
 }

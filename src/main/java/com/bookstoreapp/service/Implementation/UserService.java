@@ -78,7 +78,7 @@ public class UserService implements IUserService {
                 userDetailRepository.save(userDetail);
                 user.get().userDetail.add(userDetail);
                 userRepository.save(user.get());
-                return new Response("Added user detail successfully",200,"");
+                return new Response("Added User Detail Successfully",200,"");
             }
             throw new UserException("User Not Found", UserException.ExceptionType.USER_NOT_FOUND);
     }
