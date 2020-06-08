@@ -340,4 +340,20 @@ public class UserControllerTest {
                         .message);
     }
 
+    @Test
+    void givenUserDetail_WhenAddressTypeNotProper_ShouldReturnProperMessage() throws Exception {
+        userDetailDto=new UserDetailDto("home","435672","101 B Street",
+                "101 B Street Lucknow U.P","Lucknow","India");
+        String userDetailString = new Gson().toJson(userDetailDto);
+        Mockito.when(userService.userDetail(any(),anyString())).thenReturn(new Response("User Detail Added",200,""));
+        MvcResult result = this.mockMvc.perform(post("/userdetail").
+                content(userDetailString)
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(httpHeaders))
+                .andReturn();
+        Assert.assertEquals("Address type should start with upper case",
+                gson.fromJson(result.getResponse().getContentAsString(),Response.class)
+                        .message);
+    }
+
 }

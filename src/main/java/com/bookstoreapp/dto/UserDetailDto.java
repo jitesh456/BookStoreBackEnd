@@ -7,7 +7,7 @@ import javax.validation.constraints.Size;
 public class UserDetailDto {
 
     @NotEmpty(message="Address type must not be null")
-    @Pattern(regexp = "^[A-Z]{1}[a-zA-Z]{2,}$",message="Country name should start with upper case")
+    @Pattern(regexp = "^[A-Z]{1}[a-zA-Z]{2,}$",message="Address type should start with upper case")
     public String addressType;
 
     @NotEmpty(message="Pincode must not be null")
