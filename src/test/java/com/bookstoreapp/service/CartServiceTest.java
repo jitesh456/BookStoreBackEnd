@@ -74,11 +74,13 @@ public class CartServiceTest {
                 "Luffy456@", "8943725498");
         bookCartSet=new HashSet<>();
         user=new User(userRegistrationDto);
+
         bookDto1 =new BookDto("Naruto",200.0,
                 20,"makashi kissimoto","Manga",
                 "12345678","Advanture","story about ninja boy ");
         book =new Book(bookDto1);
         cart=new Cart(LocalDateTime.now(),200,false,12);
+        user.setCarts(cart);
     }
 
     @Test
@@ -104,5 +106,15 @@ public class CartServiceTest {
         Mockito.when(bookRepository.findById(anyInt())).thenReturn(java.util.Optional.of(book));
         Response response = cartService.getCartBook(token);
         Assert.assertEquals("BookList",response.message);
+    }
+
+    @Test
+    void whenCartFoundUpdateOrderStatus_ThenReturnProperMessage() {
+        Mockito.when(jwtToken.validateToken(anyString())).thenReturn(true);
+        Mockito.when(jwtToken.getUserId()).thenReturn(34);
+        Mockito.when(userRepository.findUserById(anyInt())).thenReturn(java.util.Optional.of(user));
+        Mockito.when(cartRepository.save(any())).thenReturn(cart);
+        Response response = cartService.updateCart(token);
+        Assert.assertEquals("Order Placed Successfully",response.message);
     }
 }

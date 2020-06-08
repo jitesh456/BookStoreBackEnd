@@ -96,7 +96,16 @@ public class CartService  implements ICartService {
 
     @Override
     public Response updateCart(String token) {
-        return null;
+        jwtToken.validateToken(token);
+        int userId = jwtToken.getUserId();
+        Optional<User> user = userRepository.findUserById(userId);
+        List<Cart> userCart = user.map(User::getCarts).orElse(null);
+        Cart cart= userCart.stream().filter(cart1 -> !cart1.placedOrder).findAny().get();
+        cart.placedOrder=true;
+        cart.orderPlacedDate=LocalDateTime.now();
+        cartRepository.save(cart);
+        return new Response("Order Placed Successfully",200,"");
+
     }
 
 
