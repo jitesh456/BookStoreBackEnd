@@ -68,15 +68,18 @@ public class UserService implements IUserService {
     @Override
     public Response userDetail(UserDetailDto userDetailsDto, String token) {
             jwtToken.validateToken(token);
-            int userId = jwtToken.getUserId();
-            UserDetail userDetail=new UserDetail(userDetailsDto);
-            userDetailRepository.save(userDetail);
-            Optional<User> user=userRepository.findUserById(userId);
-            userDetail.user=user.get();
-            userDetailRepository.save(userDetail);
-            user.get().userDetail.add(userDetail);
-            userRepository.save(user.get());
-            return new Response("Added user detail successfully",200,"");
+            int userId=-1;
+            userId= jwtToken.getUserId();
+            if(userId!=-1){
+                UserDetail userDetail=new UserDetail(userDetailsDto);
+                userDetailRepository.save(userDetail);
+                Optional<User> user=userRepository.findUserById(userId);
+                userDetail.user=user.get();
+                userDetailRepository.save(userDetail);
+                user.get().userDetail.add(userDetail);
+                userRepository.save(user.get());
+                return new Response("Added user detail successfully",200,"");
+            }
+            throw new UserException("User Not Found", UserException.ExceptionType.USER_NOT_FOUND);
     }
-
 }
