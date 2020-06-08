@@ -12,6 +12,8 @@ public class UserDetail {
     @Id
     public int id;
 
+    public String addressType;
+
     public String pincode;
 
     public String locality;
@@ -22,10 +24,11 @@ public class UserDetail {
 
     public String country;
 
-    @ManyToMany
+    @ManyToOne
     public List<User> user;
 
     public UserDetail(UserDetailDto userDetailDto) {
+        this.addressType=userDetailDto.addressType;
         this.pincode = userDetailDto.pincode;
         this.locality = userDetailDto.locality;
         this.address = userDetailDto.address;

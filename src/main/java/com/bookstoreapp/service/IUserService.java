@@ -11,5 +11,5 @@ public interface IUserService {
     String loginUser(UserLoginDto userLoginDto);
 
 
-    String userDetail(UserDetailDto userDetailsDto);
+    Response userDetail(UserDetailDto userDetailsDto, String token);
 }

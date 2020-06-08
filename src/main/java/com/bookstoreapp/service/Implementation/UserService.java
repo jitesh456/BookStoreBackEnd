@@ -5,7 +5,6 @@ import com.bookstoreapp.dto.UserLoginDto;
 import com.bookstoreapp.dto.UserRegistrationDto;
 import com.bookstoreapp.exception.UserException;
 import com.bookstoreapp.model.User;
-import com.bookstoreapp.model.UserDetail;
 import com.bookstoreapp.repository.ICartRepository;
 import com.bookstoreapp.repository.IUserRepository;
 import com.bookstoreapp.response.Response;
@@ -61,7 +60,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public String userDetail(UserDetailDto userDetailsDto) {
+    public Response userDetail(UserDetailDto userDetailsDto, String token) {
         return null;
     }
 

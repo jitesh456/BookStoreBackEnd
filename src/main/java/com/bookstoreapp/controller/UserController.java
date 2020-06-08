@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -48,13 +45,13 @@ public class UserController {
     }
 
     @PostMapping(value = "/userdetail")
-    public ResponseEntity<Response> userDetails(@Valid @RequestBody UserDetailDto userDetailDto, BindingResult bindingResult, HttpServletResponse httpHeaders){
+    public ResponseEntity<Response> userDetails(@Valid @RequestBody UserDetailDto userDetailDto, BindingResult bindingResult, @RequestHeader String token){
         if(bindingResult.hasErrors()) {
             return new ResponseEntity<Response>(new Response(bindingResult.getAllErrors().get(0).getDefaultMessage(),
                     101,"Empty Field"), HttpStatus.BAD_REQUEST);
         }
-        userService.userDetail(userDetailDto);
-        return new ResponseEntity<Response>(new Response("User Details Saved Successfully",200, ""),HttpStatus.OK);
+        Response response=userService.userDetail(userDetailDto,token);
+        return new ResponseEntity<Response>(response,HttpStatus.OK);
     }
 
 }
