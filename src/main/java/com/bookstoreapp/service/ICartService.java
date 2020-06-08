@@ -10,4 +10,6 @@ public interface ICartService {
     Response getCartBook(String token);
 
     Response updateCart(String token);
+
+    Response deleteBook(int id, String token);
 }

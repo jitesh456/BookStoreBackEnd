@@ -108,5 +108,10 @@ public class CartService  implements ICartService {
 
     }
 
+    @Override
+    public Response deleteBook(int id, String token) {
+        return null;
+    }
+
 
 }

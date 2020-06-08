@@ -67,4 +67,10 @@ public class CartController {
         Response response=cartService.updateCart(token);
         return new ResponseEntity<Response> (response,HttpStatus.OK);
     }
+
+    @DeleteMapping(value="/book{id}")
+    public ResponseEntity<Response> deleteBook(@PathVariable int id,@RequestHeader String token){
+        Response response = cartService.deleteBook(id, token);
+        return new  ResponseEntity<>(response,HttpStatus.OK);
+    }
 }
