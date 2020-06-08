@@ -11,7 +11,7 @@ public class UserDetailDto {
     public String addressType;
 
     @NotEmpty(message="Pincode must not be null")
-    @Size(max = 6,message = "Pincode must be of 6 digits")
+    @Size(min=6,max = 6,message = "Pincode must be of 6 digits")
     public String pincode;
 
     public String locality;
