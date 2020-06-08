@@ -5,7 +5,9 @@ import com.bookstoreapp.dto.UserLoginDto;
 import com.bookstoreapp.dto.UserRegistrationDto;
 import com.bookstoreapp.exception.UserException;
 import com.bookstoreapp.model.User;
+import com.bookstoreapp.model.UserDetail;
 import com.bookstoreapp.repository.ICartRepository;
+import com.bookstoreapp.repository.IUserDetailRepository;
 import com.bookstoreapp.repository.IUserRepository;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.IUserService;
@@ -25,7 +27,11 @@ public class UserService implements IUserService {
     IJwtToken jwtToken;
 
     @Autowired
-    ICartRepository iCartRepository;
+    ICartRepository cartRepository;
+
+    @Autowired
+    IUserDetailRepository userDetailRepository;
+
 
     BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
 
@@ -61,7 +67,16 @@ public class UserService implements IUserService {
 
     @Override
     public Response userDetail(UserDetailDto userDetailsDto, String token) {
-        return null;
+            jwtToken.validateToken(token);
+            int userId = jwtToken.getUserId();
+            UserDetail userDetail=new UserDetail(userDetailsDto);
+            userDetailRepository.save(userDetail);
+            Optional<User> user=userRepository.findUserById(userId);
+            userDetail.user=user.get();
+            userDetailRepository.save(userDetail);
+            user.get().userDetail.add(userDetail);
+            userRepository.save(user.get());
+            return new Response("Added user detail successfully",200,"");
     }
 
 }

@@ -25,7 +25,7 @@ public class UserDetail {
     public String country;
 
     @ManyToOne
-    public List<User> user;
+    public User user;
 
     public UserDetail(UserDetailDto userDetailDto) {
         this.addressType=userDetailDto.addressType;
