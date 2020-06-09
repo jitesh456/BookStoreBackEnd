@@ -53,4 +53,10 @@ public class UserController {
         Response response=userService.userDetail(userDetailDto,token);
         return new ResponseEntity<Response>(response,HttpStatus.OK);
     }
+
+    @PostMapping(value = "/fetchdetail")
+    public ResponseEntity<Response> getUserDetails(@RequestHeader String token){
+        Response response=userService.getUserDetail(token);
+        return new ResponseEntity<Response>(response,HttpStatus.OK);
+    }
 }

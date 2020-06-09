@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -81,5 +83,10 @@ public class UserService implements IUserService {
                 return new Response("Added User Detail Successfully",200,"");
             }
             throw new UserException("User Not Found", UserException.ExceptionType.USER_NOT_FOUND);
+    }
+
+    @Override
+    public Response getUserDetail(String token) {
+        return null;
     }
 }

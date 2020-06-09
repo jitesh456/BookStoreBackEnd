@@ -407,7 +407,7 @@ public class UserControllerTest {
     @Test
     void givenUserDetail_WhenCountryNotProper_ShouldReturnProperMessage() throws Exception {
         userDetailDto=new UserDetailDto("Home","432572","101 B Street",
-                "101 B Street UP ","Lucknow","");
+                "101 B Street UP ","Lucknow","ind");
         String userDetailString = new Gson().toJson(userDetailDto);
         Mockito.when(userService.userDetail(any(),anyString())).thenReturn(new Response("User Detail Added",200,""));
         MvcResult result = this.mockMvc.perform(post("/userdetail").
@@ -415,9 +415,24 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .headers(httpHeaders))
                 .andReturn();
-        Assert.assertEquals("Country type must not be null",
+        Assert.assertEquals("Country name should start with upper case and minimum 3 character",
                 gson.fromJson(result.getResponse().getContentAsString(),Response.class)
                         .message);
     }
 
+    @Test
+    void givenUserToken_WhenProper_ShouldReturnProperMessage() throws Exception {
+        userDetailDto=new UserDetailDto("Home","432572","101 B Street",
+                "101 B Street UP ","Lucknow","");
+        String userDetailString = new Gson().toJson(userDetailDto);
+        Mockito.when(userService.getUserDetail(anyString())).thenReturn(new Response("User Found",200,""));
+        MvcResult result = this.mockMvc.perform(post("/fetchdetail")
+                .content("")
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(httpHeaders))
+                .andReturn();
+        Assert.assertEquals("User Found",
+                gson.fromJson(result.getResponse().getContentAsString(),Response.class)
+                        .message);
+    }
 }
