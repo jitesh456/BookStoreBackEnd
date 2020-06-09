@@ -7,6 +7,7 @@ import com.bookstoreapp.exception.UserException;
 import com.bookstoreapp.model.User;
 import com.bookstoreapp.model.UserDetail;
 import com.bookstoreapp.repository.ICartRepository;
+import com.bookstoreapp.repository.IUserDetailRepository;
 import com.bookstoreapp.repository.IUserRepository;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.IUserService;
@@ -26,7 +27,11 @@ public class UserService implements IUserService {
     IJwtToken jwtToken;
 
     @Autowired
-    ICartRepository iCartRepository;
+    ICartRepository cartRepository;
+
+    @Autowired
+    IUserDetailRepository userDetailRepository;
+
 
     BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
 
@@ -61,8 +66,20 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public String userDetail(UserDetailDto userDetailsDto) {
-        return null;
+    public Response userDetail(UserDetailDto userDetailsDto, String token) {
+            jwtToken.validateToken(token);
+            int userId=-1;
+            userId= jwtToken.getUserId();
+            if(userId!=-1){
+                UserDetail userDetail=new UserDetail(userDetailsDto);
+                userDetailRepository.save(userDetail);
+                Optional<User> user=userRepository.findUserById(userId);
+                userDetail.user=user.get();
+                userDetailRepository.save(userDetail);
+                user.get().userDetail.add(userDetail);
+                userRepository.save(user.get());
+                return new Response("Added User Detail Successfully",200,"");
+            }
+            throw new UserException("User Not Found", UserException.ExceptionType.USER_NOT_FOUND);
     }
-
 }

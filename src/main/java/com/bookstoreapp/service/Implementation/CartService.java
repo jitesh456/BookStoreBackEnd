@@ -110,19 +110,18 @@ public class CartService  implements ICartService {
 
     @Override
     public Response deleteBook(int id, String token) {
-
-            jwtToken.validateToken(token);
-            int userId = jwtToken.getUserId();
-            Optional<User> user=userRepository.findUserById(userId);
-            Cart cart=user.isPresent()?user.get().getCarts().stream().filter(cart1 -> !cart1.placedOrder).findAny().get():null;
-            List<BookCart> bookCart=new ArrayList<>();
-            int quantity = cart.quantity - bookCartRepository.getBookCartQuantity(id, cart.id);
-            bookCartRepository.updateBookCart(id,cart.id);
-            cart.quantity=quantity;
-            cartRepository.save(cart);
-            return new Response("Book Is Removed For Cart",200,"");
-
+        jwtToken.validateToken(token);
+        int userId = jwtToken.getUserId();
+        Optional<User> user=userRepository.findUserById(userId);
+        Cart cart=user.isPresent()?user.get().getCarts().stream().filter(cart1 -> !cart1.placedOrder).findAny().get():null;
+        List<BookCart> bookCart=new ArrayList<>();
+        int quantity = cart.quantity - bookCartRepository.getBookCartQuantity(id, cart.id);
+        bookCartRepository.updateBookCart(id,cart.id);
+        cart.quantity=quantity;
+        cartRepository.save(cart);
+        return new Response("BookList",200,"");
     }
+
 
 
 }

@@ -36,7 +36,7 @@ public class User {
 
     @ManyToMany(mappedBy="user",targetEntity = UserDetail.class)
     @JsonIgnore
-    List<UserDetail> userDetail;
+    public List<UserDetail> userDetail=new ArrayList<>();
 
     public User() { }
 

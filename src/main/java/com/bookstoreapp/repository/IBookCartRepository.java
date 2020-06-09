@@ -12,12 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface IBookCartRepository extends JpaRepository<BookCart,Integer> {
 
-
-    @Query(value="select bookquantity book_cart where book_id=:userid",nativeQuery=true)
-    int getBookCartQuantity(int id, int id1);
+    @Query(value="select bookquantity from book_cart where book_id=:bookId and cart_id=:cartId",nativeQuery=true)
+    int getBookCartQuantity(@Param("bookId") int id,@Param("cartId") int id1);
 
     @Transactional
     @Modifying
-    @Query(value="delete from book_cart where book_id=:bookid and cart_id:cartId",nativeQuery=true)
-    void updateBookCart(@Param("bookid") int bookid , @Param("cartId") int cartId);
+    @Query(value="delete from book_cart where book_id=:bookId and cart_id=:cartId",nativeQuery=true)
+    void updateBookCart(@Param("bookId") int bookid , @Param("cartId") int cartId);
 }

@@ -17,6 +17,9 @@ public class UserLoginDto {
             message ="Atleast one uppercase,lowercase,number and atmost one special character with minimum length 8")
     public String password;
 
+    public UserLoginDto() {
+    }
+
     public UserLoginDto(String email, String password) {
         this.email=email;
         this.password=password;

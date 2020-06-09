@@ -1,34 +1,38 @@
 package com.bookstoreapp.dto;
 
-import javax.validation.constraints.Max;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class UserDetailDto {
 
-    @Pattern(regexp = "^[A-Z]{1}[a-zA-Z]{2,}$",message="User name should start with upper case and minimum 3 character")
-    public String name;
+    @NotEmpty(message="Address type must not be null")
+    @Pattern(regexp = "^[A-Z]{1}[a-zA-Z]{2,}$",message="Address type should start with upper case")
+    public String addressType;
 
-    @Pattern(regexp = "^[0-9]{10}$",message="Mobile No Only have 10 Digit")
-    public String number;
-
-    @Max(value=6,message="Pincode must be of 6 digit")
+    @NotEmpty(message="Pincode must not be null")
+    @Size(min=6,max = 6,message = "Pincode must be of 6 digits")
     public String pincode;
 
     public String locality;
 
-    @Size(max = 200,message = "Maximum length is 200 characters")
+    @NotEmpty(message="Address type must not be null")
+    @Size(min=10,max = 200,message = "Maximum length is 200 characters")
     public String address;
 
-    @Pattern(regexp = "^[A-Z]{1}[a-zA-Z]{2,}$",message="User name should start with upper case and minimum 3 character")
+    @NotEmpty(message="City type must not be null")
+    @Pattern(regexp = "^[A-Z]{1}[a-zA-Z]{2,}$",message="City name should start with upper case and minimum 3 character")
     public String city;
 
-    @Pattern(regexp = "^[A-Z]{1}[a-zA-Z]{2,}$",message="User name should start with upper case and minimum 3 character")
+    @NotEmpty(message="Country type must not be null")
+    @Pattern(regexp = "^[A-Z]{1}[a-zA-Z]{2,}$",message="Country name should start with upper case and minimum 3 character")
     public String country;
 
-    public UserDetailDto(String name, String number, String pincode, String locality, String address, String city, String country) {
-        this.name = name;
-        this.number = number;
+    public UserDetailDto() {
+    }
+
+    public UserDetailDto(String addressType, String pincode, String locality, String address, String city, String country) {
+        this.addressType = addressType;
         this.pincode = pincode;
         this.locality = locality;
         this.address = address;
