@@ -117,4 +117,16 @@ public class CartServiceTest {
         Response response = cartService.updateCart(token);
         Assert.assertEquals("Order Placed Successfully",response.message);
     }
+
+
+    @Test
+    void givenBookId_WhenProper_ShouldRemoveBookFromCart() {
+        Mockito.when(jwtToken.validateToken(anyString())).thenReturn(true);
+        Mockito.when(jwtToken.getUserId()).thenReturn(34);
+        Mockito.when(userRepository.findUserById(anyInt())).thenReturn(java.util.Optional.of(user));
+
+        Mockito.when(cartRepository.save(any())).thenReturn(cart);
+        Response response = cartService.updateCart(token);
+        Assert.assertEquals("Order Placed Successfully",response.message);
+    }
 }
