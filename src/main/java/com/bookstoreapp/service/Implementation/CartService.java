@@ -16,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class CartService  implements ICartService {
@@ -41,87 +38,102 @@ public class CartService  implements ICartService {
 
     @Override
     public Response addToCart(AddToCartDto addToCartDto, String token) {
-        int userId=0;
-        jwtToken.validateToken(token);
-        userId = jwtToken.getUserId();
-        Cart userCart=null;
-        User user = userRepository.findUserById(userId).get();
-        Optional<Cart>  cart = user.getCarts().stream().filter(cart1 -> !cart1.placedOrder).findFirst();
-        int bookId= addToCartDto.bookId;
-        Optional<Book >book1=bookRepository.findById(bookId);
-        Book book = book1.get();
-        int quantity= (int) addToCartDto.quantity;
 
-        int totalPrice= (int) (book.price*quantity);
-        if(cart.isPresent()) {
-            userCart=cart.get();
-            BookCart bookCart=new BookCart(book,userCart,quantity);
-            userCart.quantity=userCart.quantity+quantity;
-            userCart.totalPrice=userCart.totalPrice+totalPrice;
+        Cart userCart = null;
+        User user = validate(token).get();
+        Optional<Cart> cart = user.carts.stream().filter(cart1 -> !cart1.placedOrder).findFirst();
+        int bookId = addToCartDto.bookId;
+        Optional<Book> book1 = bookRepository.findById(bookId);
+        Book book = book1.get();
+        int quantity = (int) addToCartDto.quantity;
+
+        int totalPrice = (int) (book.price * quantity);
+        if (cart.isPresent()) {
+            userCart = cart.get();
+            BookCart bookCart = new BookCart(book, userCart, quantity);
+            userCart.quantity = userCart.quantity + quantity;
+            userCart.totalPrice = userCart.totalPrice + totalPrice;
             bookCartRepository.save(bookCart);
             userCart.bookCartList.add(bookCart);
             cartRepository.save(userCart);
         }
-        if(!cart.isPresent())
-        {
-            userCart=new Cart(LocalDateTime.now(),totalPrice,false,quantity);
+        if (!cart.isPresent()) {
+            userCart = new Cart(LocalDateTime.now(), totalPrice, false, quantity);
             cartRepository.save(userCart);
-            user.setCarts(userCart);
+            user.carts.add(userCart);
             userRepository.save(user);
-            BookCart bookCart=new BookCart(book,userCart,quantity);
+            BookCart bookCart = new BookCart(book, userCart, quantity);
             bookCartRepository.save(bookCart);
             userCart.bookCartList.add(bookCart);
             cartRepository.save(userCart);
         }
-        return new Response("Added to Cart",200,"Book Is Added To Cart");
+        return new Response("Added to Cart", 200, "Book Is Added To Cart");
     }
 
     @Override
     public Response getCartBook(String token) {
-        jwtToken.validateToken(token);
-        int userId = jwtToken.getUserId();
-        Optional<User> user = userRepository.findUserById(userId);
-        List<Cart> userCart = user.map(User::getCarts).orElse(null);
-        Optional<Cart> cart= userCart.stream().filter(cart1 -> !cart1.placedOrder).findAny();
+
+        Optional<User> user =validate(token);
+        List<Cart> userCart = user.map(user1 -> user1.carts).orElse(null);
+        Optional<Cart> cart = userCart.stream().filter(cart1 -> !cart1.placedOrder).findAny();
         List<BookCart> bookCartList = cart.map(value -> value.bookCartList).orElse(Collections.emptyList());
-        List<Book> bookList=new ArrayList<>();
+        List<Book> bookList = new ArrayList<>();
         bookCartList.forEach(bookCart -> {
 
-            bookList.add( bookRepository.
+            bookList.add(bookRepository.
                     findById(bookCart.bookCartID.book_Id).get());
         });
-        return new Response("BookList",200,bookList);
+        return new Response("BookList", 200, bookList);
 
     }
 
     @Override
     public Response updateCart(String token) {
-        jwtToken.validateToken(token);
-        int userId = jwtToken.getUserId();
-        Optional<User> user = userRepository.findUserById(userId);
-        List<Cart> userCart = user.map(User::getCarts).orElse(null);
-        Cart cart= userCart.stream().filter(cart1 -> !cart1.placedOrder).findAny().get();
-        cart.placedOrder=true;
-        cart.orderPlacedDate=LocalDateTime.now();
+
+        Optional<User> user = validate(token);
+        List<Cart> userCart = user.map(user1 -> user.get().carts).orElse(null);
+        Cart cart = userCart.stream().filter(cart1 -> !cart1.placedOrder).findAny().get();
+        cart.placedOrder = true;
+        cart.orderPlacedDate = LocalDateTime.now();
         cartRepository.save(cart);
-        return new Response("Order Placed Successfully",200,"");
+        return new Response("Order Placed Successfully", 200, "");
 
     }
 
     @Override
     public Response deleteBook(int id, String token) {
-        jwtToken.validateToken(token);
-        int userId = jwtToken.getUserId();
-        Optional<User> user=userRepository.findUserById(userId);
-        Cart cart=user.isPresent()?user.get().getCarts().stream().filter(cart1 -> !cart1.placedOrder).findAny().get():null;
-        List<BookCart> bookCart=new ArrayList<>();
+
+        Optional<User> user = validate(token);
+        Cart cart = user.isPresent() ? user.get().carts.stream().filter(cart1 -> !cart1.placedOrder).findAny().get() : null;
+        List<BookCart> bookCart = new ArrayList<>();
         int quantity = cart.quantity - bookCartRepository.getBookCartQuantity(id, cart.id);
-        bookCartRepository.updateBookCart(id,cart.id);
-        cart.quantity=quantity;
+        bookCartRepository.updateBookCart(id, cart.id);
+        cart.quantity = quantity;
         cartRepository.save(cart);
-        return new Response("BookList",200,"");
+        return new Response("BookList", 200, "");
     }
 
+    @Override
+    public Response orderDetails(String token) {
+        Optional<User> user = validate(token);
+        List<Cart> userCart = user.map(user1 -> user.get().carts).orElse(null);
+        Iterator<Cart> cartIterator = userCart.stream().filter(cart1 -> cart1.placedOrder).iterator();
 
+        List<OrderPlacedResponse> bookCartList = new ArrayList<>();
+        while (cartIterator.hasNext()) {
+            Cart cart = cartIterator.next();
+            List<Book> bookList = new ArrayList<>();
+            cart.bookCartList.stream().forEach(x -> bookList.add(bookRepository.findById(x.bookCartID.book_Id).get()));
+            bookCartList.add(new OrderPlacedResponse(bookList, cart));
+        }
+        return new Response("Book Cart List", 200, bookCartList);
+
+    }
+
+    private Optional<User> validate(String token){
+        jwtToken.validateToken(token);
+        int userId = jwtToken.getUserId();
+        return userRepository.findUserById(userId);
+    }
 
 }

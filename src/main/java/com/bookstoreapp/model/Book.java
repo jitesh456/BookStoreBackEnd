@@ -55,11 +55,5 @@ public class Book {
 
     }
 
-    public void setBookCartList(List<BookCart> bookCartList) {
-        this.bookCartList = bookCartList;
-    }
 
-    public List<BookCart> getBookCartList() {
-        return bookCartList;
-    }
 }

@@ -15,13 +15,13 @@ public class BookCart  {
 
     @ManyToOne()
     @MapsId("book_Id")
-    private Book book;
+    public Book book;
 
     @ManyToOne()
     @MapsId("cart_Id")
-    private Cart cart;
+    public Cart cart;
 
-    private int bookquantity;
+    public int bookquantity;
 
 
 
@@ -36,28 +36,5 @@ public class BookCart  {
     }
 
 
-    public Book getBook() {
-        return book;
-    }
-
-    public void setBook(Book book) {
-        this.book = book;
-    }
-
-    public Cart getCart() {
-        return cart;
-    }
-
-    public void setCart(Cart cart) {
-        this.cart = cart;
-    }
-
-    public int getBookquantity() {
-        return bookquantity;
-    }
-
-    public void setBookquantity(int bookquantity) {
-        this.bookquantity = bookquantity;
-    }
 }
 

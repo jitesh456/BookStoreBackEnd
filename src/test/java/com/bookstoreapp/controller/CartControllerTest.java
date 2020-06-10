@@ -8,6 +8,7 @@ import com.bookstoreapp.model.Book;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.Implementation.BookService;
 import com.bookstoreapp.service.Implementation.CartService;
+import com.bookstoreapp.service.Implementation.OrderPlacedResponse;
 import com.google.gson.Gson;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -179,7 +180,7 @@ public class CartControllerTest {
     }
 
     @Test
-    void whenUserToken_ShouldPlacedOrderAndReturn() throws Exception {
+    void whenUserTokenProper_ShouldPlacedOrderAndReturn() throws Exception {
         Response response=new Response("Order Is Placed",200,"");
         Mockito.when(cartService.updateCart(any())).thenReturn(response);
         MvcResult result = this.mockMvc.perform(put("/cart")
@@ -189,6 +190,7 @@ public class CartControllerTest {
         Assert.assertEquals(response.message,new Gson().fromJson(result.getResponse().getContentAsString(),Response.class).message);
 
     }
+
     @Test
     void givenBookId_WhenProper_ShouldDeleteBook() throws Exception {
         Response response=new Response("Book Is Removed From Cart",200,"");
@@ -200,4 +202,17 @@ public class CartControllerTest {
         Assert.assertEquals(response.message,new Gson().fromJson(result.getResponse().getContentAsString(),Response.class).message);
 
     }
+
+    @Test
+    void whenUserTokenProper_ShouldReturnAllCart() throws Exception {
+        List<OrderPlacedResponse> bookCartList=new ArrayList<>();
+        Response response=new Response("BooK And Cart List",200,bookCartList);
+        Mockito.when(cartService.orderDetails(any())).thenReturn(response);
+        MvcResult result = this.mockMvc.perform(get("/order/details",3)
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("utf-8")
+                .headers(httpHeaders)).andReturn();
+        Assert.assertEquals(response.message,new Gson().fromJson(result.getResponse().getContentAsString(),Response.class).message);
+    }
+
 }

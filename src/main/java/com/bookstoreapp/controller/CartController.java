@@ -73,4 +73,11 @@ public class CartController {
         Response response = cartService.deleteBook(id, token);
         return new  ResponseEntity<>(response,HttpStatus.OK);
     }
+
+    @GetMapping(value="/order/details")
+    public ResponseEntity<Response> deleteBook(@RequestHeader String token){
+        Response response = cartService.orderDetails(token);
+        return new  ResponseEntity<>(response,HttpStatus.OK);
+    }
+
 }

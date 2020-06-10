@@ -43,12 +43,5 @@ public class Cart {
 
     }
 
-    public void setBookCartList(BookCart bookCart) {
-        this.bookCartList.add(bookCart);
-    }
-
-    public List<BookCart> getBookCartList() {
-        return bookCartList;
-    }
 
 }

@@ -81,6 +81,12 @@ public class CartServiceTest {
         book =new Book(bookDto1);
         cart=new Cart(LocalDateTime.now(),200,false,12);
         user.setCarts(cart);
+
+        Mockito.when(jwtToken.validateToken(anyString())).thenReturn(true);
+        Mockito.when(jwtToken.getUserId()).thenReturn(34);
+        Mockito.when(userRepository.findUserById(anyInt())).thenReturn(java.util.Optional.of(user));
+        Mockito.when(bookRepository.findById(any())).thenReturn(java.util.Optional.of(book));
+        Mockito.when(cartRepository.save(any())).thenReturn(cart);
     }
 
     @Test
@@ -100,20 +106,14 @@ public class CartServiceTest {
 
     @Test
     void whenUserCartBookFound_ThenReturnProperMessage() {
-        Mockito.when(jwtToken.validateToken(anyString())).thenReturn(true);
-        Mockito.when(jwtToken.getUserId()).thenReturn(12);
-        Mockito.when(userRepository.findUserById(anyInt())).thenReturn(java.util.Optional.of(user));
-        Mockito.when(bookRepository.findById(anyInt())).thenReturn(java.util.Optional.of(book));
+
         Response response = cartService.getCartBook(token);
         Assert.assertEquals("BookList",response.message);
     }
 
     @Test
     void whenCartFoundUpdateOrderStatus_ThenReturnProperMessage() {
-        Mockito.when(jwtToken.validateToken(anyString())).thenReturn(true);
-        Mockito.when(jwtToken.getUserId()).thenReturn(34);
-        Mockito.when(userRepository.findUserById(anyInt())).thenReturn(java.util.Optional.of(user));
-        Mockito.when(cartRepository.save(any())).thenReturn(cart);
+
         Response response = cartService.updateCart(token);
         Assert.assertEquals("Order Placed Successfully",response.message);
     }
@@ -121,12 +121,18 @@ public class CartServiceTest {
 
     @Test
     void givenBookId_WhenProper_ShouldRemoveBookFromCart() {
-        Mockito.when(jwtToken.validateToken(anyString())).thenReturn(true);
-        Mockito.when(jwtToken.getUserId()).thenReturn(34);
-        Mockito.when(userRepository.findUserById(anyInt())).thenReturn(java.util.Optional.of(user));
 
-        Mockito.when(cartRepository.save(any())).thenReturn(cart);
         Response response = cartService.updateCart(token);
         Assert.assertEquals("Order Placed Successfully",response.message);
     }
+
+    @Test
+    void whenTokenProper_ShouldOrderDetails(){
+
+        Mockito.when(bookRepository.findById(any())).thenReturn(java.util.Optional.of(book));
+        Response response = cartService.orderDetails(token);
+        Assert.assertEquals("Book Cart List",response.message);
+    }
+
+
 }
