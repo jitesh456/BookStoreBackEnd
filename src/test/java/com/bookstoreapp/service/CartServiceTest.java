@@ -80,7 +80,7 @@ public class CartServiceTest {
                 "12345678","Advanture","story about ninja boy ");
         book =new Book(bookDto1);
         cart=new Cart(LocalDateTime.now(),200,false,12);
-        user.setCarts(cart);
+        user.carts.add(cart);
 
         Mockito.when(jwtToken.validateToken(anyString())).thenReturn(true);
         Mockito.when(jwtToken.getUserId()).thenReturn(34);

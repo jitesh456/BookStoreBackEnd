@@ -12,4 +12,6 @@ public interface IUserService {
 
 
     Response userDetail(UserDetailDto userDetailsDto, String token);
+
+    Response getUserDetail(String token);
 }

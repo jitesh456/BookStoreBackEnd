@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -82,4 +84,21 @@ public class UserService implements IUserService {
             }
             throw new UserException("User Not Found", UserException.ExceptionType.USER_NOT_FOUND);
     }
+
+    @Override
+    public Response getUserDetail(String token) {
+        jwtToken.validateToken(token);
+        int userId=-1;
+        if(userId!=-1){
+            userId = jwtToken.getUserId();
+            Optional<User> user=userRepository.findUserById(userId);
+            List<UserDetail> userDetail=new ArrayList<>();
+            for(int i=0;i<user.get().userDetail.size();i++){
+                userDetail.add(user.get().userDetail.get(i));
+            }
+            return new Response("User Found",200,userDetail);
+        }
+        throw new UserException("User Not Found", UserException.ExceptionType.USER_NOT_FOUND);
+    }
+
 }
