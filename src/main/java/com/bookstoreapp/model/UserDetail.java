@@ -6,10 +6,11 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name="userdetail")
+@Table(name="userdetails")
 public class UserDetail {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int id;
 
     public String addressType;
@@ -26,6 +27,9 @@ public class UserDetail {
 
     @ManyToOne
     public User user;
+
+    public UserDetail() {
+    }
 
     public UserDetail(UserDetailDto userDetailDto) {
         this.addressType=userDetailDto.addressType;

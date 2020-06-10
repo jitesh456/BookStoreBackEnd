@@ -5,13 +5,17 @@ import com.bookstoreapp.dto.UserLoginDto;
 import com.bookstoreapp.dto.UserRegistrationDto;
 import com.bookstoreapp.response.Response;
 
+
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+
 public interface IUserService {
-    Response addUser(UserRegistrationDto userRegistrationDto);
+    Response addUser(UserRegistrationDto userRegistrationDto,HttpServletRequest servletRequest) throws MessagingException;
 
     String loginUser(UserLoginDto userLoginDto);
 
 
-    Response userDetail(UserDetailDto userDetailsDto, String token);
 
-    Response getUserDetail(String token);
+
+    Response verifyEmail(String token);
 }

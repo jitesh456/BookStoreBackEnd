@@ -82,7 +82,7 @@ public class CartService  implements ICartService {
         bookCartList.forEach(bookCart -> {
 
             bookList.add(bookRepository.
-                    findById(bookCart.bookCartID.book_Id).get());
+                    findById(bookCart.bookCartID.bookId).get());
         });
         return new Response("BookList", 200, bookList);
 
@@ -124,7 +124,7 @@ public class CartService  implements ICartService {
         while (cartIterator.hasNext()) {
             Cart cart = cartIterator.next();
             List<Book> bookList = new ArrayList<>();
-            cart.bookCartList.stream().forEach(x -> bookList.add(bookRepository.findById(x.bookCartID.book_Id).get()));
+            cart.bookCartList.stream().forEach(x -> bookList.add(bookRepository.findById(x.bookCartID.bookId).get()));
             bookCartList.add(new OrderPlacedResponse(bookList, cart));
         }
         return new Response("Book Cart List", 200, bookCartList);

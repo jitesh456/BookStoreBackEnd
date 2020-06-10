@@ -5,14 +5,17 @@ import com.bookstoreapp.dto.BookDto;
 import com.bookstoreapp.dto.NotificationDto;
 import com.bookstoreapp.dto.UpdateCartDto;
 import com.bookstoreapp.model.Book;
+import com.bookstoreapp.response.OrderPlacedResponse;
 import com.bookstoreapp.response.Response;
-import com.bookstoreapp.service.Implementation.BookService;
+import com.bookstoreapp.service.Implementation.AdminService;
 import com.bookstoreapp.service.Implementation.CartService;
+import com.bookstoreapp.util.implementation.SendMail;
 import com.google.gson.Gson;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +37,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @RunWith(MockitoJUnitRunner.class)
 public class CartControllerTest {
     @MockBean
-    BookService bookService;
+    AdminService adminService;
 
     @Autowired
     MockMvc mockMvc;
@@ -50,6 +53,9 @@ public class CartControllerTest {
     HttpHeaders httpHeaders=new HttpHeaders();
     BookDto bookDto;
 
+    @Mock
+    SendMail mailSender;
+
     @BeforeEach
     void setUp() {
         httpHeaders.set("Token","abcdef1234");
@@ -64,7 +70,7 @@ public class CartControllerTest {
     void givenBookQuantity_WhenUpdated_ShouldReturnProperMessage() throws Exception {
         UpdateCartDto updateCartDto = new UpdateCartDto("12345678951", 14);
         String cartDtoString = gson.toJson(updateCartDto);
-        Mockito.when(bookService.updateQuantity(any())).thenReturn("Book Quantity Updated");
+        Mockito.when(adminService.updateQuantity(any())).thenReturn("Book Quantity Updated");
         MvcResult result = this.mockMvc.perform(put("/book")
                 .content(cartDtoString)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -80,7 +86,7 @@ public class CartControllerTest {
     void givenBookQuantity_WhenISBNNull_ShouldReturnProperMessage() throws Exception {
         UpdateCartDto updateCartDto = new UpdateCartDto(null, 14);
         String cartDtoString = gson.toJson(updateCartDto);
-        Mockito.when(bookService.updateQuantity(any())).thenReturn("Book Quantity Updated");
+        Mockito.when(adminService.updateQuantity(any())).thenReturn("Book Quantity Updated");
         MvcResult result = this.mockMvc.perform(put("/book")
                 .content(cartDtoString)
                 .contentType("application/json")
@@ -96,7 +102,7 @@ public class CartControllerTest {
     void givenBookQuantity_WhenISBNNullLessThenElevenDigit_ShouldReturnProperMessage() throws Exception {
         UpdateCartDto updateCartDto = new UpdateCartDto("123456789", 14);
         String cartDtoString = gson.toJson(updateCartDto);
-        Mockito.when(bookService.updateQuantity(any())).thenReturn("Book Quantity Updated");
+        Mockito.when(adminService.updateQuantity(any())).thenReturn("Book Quantity Updated");
         MvcResult result = this.mockMvc.perform(put("/book")
                 .content(cartDtoString)
                 .contentType("application/json")
@@ -111,7 +117,7 @@ public class CartControllerTest {
     void givenBookQuantity_WhenQuantityIsNegative_ShouldReturnProperMessage() throws Exception {
         UpdateCartDto updateCartDto = new UpdateCartDto("12345678912", -1);
         String cartDtoString = gson.toJson(updateCartDto);
-        Mockito.when(bookService.updateQuantity(any())).thenReturn("Book Quantity Updated");
+        Mockito.when(adminService.updateQuantity(any())).thenReturn("Book Quantity Updated");
         MvcResult result = this.mockMvc.perform(put("/book")
                 .content(cartDtoString)
                 .contentType("application/json")
@@ -128,7 +134,7 @@ public class CartControllerTest {
     void givenEmailAddress_WhenMailSent_ReturnProperMessage() throws Exception {
         NotificationDto notificationDto=new NotificationDto("rajnish.kahar1996@gmail.com","Test","Hello User");
         String notificationString=gson.toJson(notificationDto);
-        Mockito.when(bookService.sendMail(any())).thenReturn("Mail Sent Successfully");
+        Mockito.when(mailSender.sendMail(any())).thenReturn("Mail Sent Successfully");
 
         MvcResult result=this.mockMvc.perform(post("/mail")
                 .content(notificationString)

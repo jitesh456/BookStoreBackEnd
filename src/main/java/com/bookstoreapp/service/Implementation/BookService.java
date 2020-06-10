@@ -39,47 +39,19 @@ import java.util.prefs.BackingStoreException;
 public class BookService implements IBookService {
 
 
-    @Autowired
-    ApplicationProperties applicationProperties;
-
-   //private String imagePath=applicationProperties.getFilePath();
 
     @Autowired
     IBookRepository iBookRepository;
 
-    @Autowired
-    JavaMailSender javaMailSender;
+
 
     public BookService() {
     }
 
-    @Override
-    public String addBook(BookDto bookDto) {
-        Book book =new Book(bookDto);
-        Optional<Book> isbn = iBookRepository.findByIsbn(bookDto.isbn);
-        if (isbn.isPresent()){
-            throw new BookException("BOOK ALREADY EXISTS",BookException.ExceptionType.BOOK_ALREADY_EXIST);
-        }
-        iBookRepository.save(book);
-            return "Insertion Successful";
-    }
 
     @Override
     public Iterable<Book> getAllBook() {
         return iBookRepository.findAll();
-    }
-
-    @Override
-    public String updatePrice(UpdateBookDto bookDto) {
-        Optional<Book> book=iBookRepository.findByIsbn(bookDto.isbn);
-        if (book.isPresent()){
-            Book book1=book.get();
-            book1.price=bookDto.price;
-            book1.quantity=bookDto.quantity;
-            iBookRepository.save(book1);
-            return "Updated Successfully";
-        }
-        throw new BookException("BOOK DOES NOT EXISTS",BookException.ExceptionType.BOOK_DOES_NOT_EXIST);
     }
 
     @Override
@@ -90,74 +62,4 @@ public class BookService implements IBookService {
         throw new BookException("SORT FIELD CAN NOT NULL",BookException.ExceptionType.SORT_FIELD_CAN_NOT_NULL);
     }
 
-    @Override
-    public String updateQuantity(UpdateCartDto updateCartDto) {
-        Optional<Book> book=iBookRepository.findByIsbn(updateCartDto.isbn);
-        if (book.isPresent()){
-            Book book1=book.get();
-            book1.quantity=updateCartDto.quantity;
-            iBookRepository.save(book1);
-            return "Book Quantity Updated";
-        }
-        throw new BookException("BOOK DOES NOT EXISTS",BookException.ExceptionType.BOOK_DOES_NOT_EXIST);
-    }
-
-    @Override
-    public String sendMail(NotificationDto notificationDto) throws MessagingException {
-        MimeMessage message=javaMailSender.createMimeMessage();
-        MimeMessageHelper messageHelper=new MimeMessageHelper(message);
-        messageHelper.setTo(notificationDto.recipientAddress);
-        messageHelper.setSubject(notificationDto.subject);
-        messageHelper.setText(notificationDto.body);
-        javaMailSender.send(message);
-        return "Mail Sent Successfully";
-    }
-
-    @Override
-    public FileResponse uploadBookCover(MultipartFile file) {
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        String fileBasePath = System.getProperty("user.dir") +applicationProperties.getFilePath();
-        if (!(fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".png"))) {
-            throw new BookException("Only Image Files Can Be Uploaded",BookException.ExceptionType.INVALID_FILE_TYPE);
-        }
-        Path path = Paths.get(fileBasePath + fileName);
-        try {
-            Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/downloadFile/")
-                .path(fileName)
-                .toUriString();
-        return new FileResponse(fileName, fileDownloadUri,
-                file.getContentType(), file.getSize());
-    }
-
-    @Override
-    public Resource loadFile(String fileName, HttpServletRequest request) {
-        try {
-            String fileBasePath = System.getProperty("user.dir")+applicationProperties.getFilePath();
-            Path path = Paths.get(fileBasePath + fileName);
-            Resource resource = new UrlResource(path.toUri());
-            String contentType = null;
-
-            try {
-                contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-            if(contentType == null) {
-               throw new BookException("File Not Found",BookException.ExceptionType.NOT_VALID_CONTENT_TYPE);
-            }
-            if(resource.exists()) {
-                return resource;
-            } else {
-                throw new BookException("File not found " + fileName, BookException.ExceptionType.FILE_NOT_FOUND);
-            }
-        } catch (MalformedURLException ex) {
-            throw new BookException("File not found " + fileName, BookException.ExceptionType.FILE_NOT_FOUND);
-        }
-    }
 }

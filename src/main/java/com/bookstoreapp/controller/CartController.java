@@ -4,8 +4,9 @@ import com.bookstoreapp.dto.AddToCartDto;
 import com.bookstoreapp.dto.NotificationDto;
 import com.bookstoreapp.dto.UpdateCartDto;
 import com.bookstoreapp.response.Response;
-import com.bookstoreapp.service.Implementation.BookService;
+import com.bookstoreapp.service.Implementation.AdminService;
 import com.bookstoreapp.service.Implementation.CartService;
+import com.bookstoreapp.util.implementation.SendMail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +20,15 @@ import javax.validation.Valid;
 @RestController
 public class CartController {
 
+
     @Autowired
-    BookService bookService;
+    AdminService adminService;
 
     @Autowired
     CartService cartService;
+
+    @Autowired
+    SendMail mailSender;
 
     @PutMapping("/book")
     public ResponseEntity<Response> editBook(@Valid @RequestBody UpdateCartDto updateCartDto, BindingResult bindingResult,@RequestHeader String token) {
@@ -31,14 +36,14 @@ public class CartController {
             return new ResponseEntity<Response>(new Response(bindingResult.getAllErrors().get(0).getDefaultMessage(),
                     101,"Empty Field"), HttpStatus.BAD_REQUEST);
         }
-        String responseMessage= bookService.updateQuantity(updateCartDto);
+        String responseMessage= adminService.updateQuantity(updateCartDto);
         return new ResponseEntity<Response>(new Response("Book Quantity Updated",200, responseMessage),
                 HttpStatus.OK);
     }
     
     @PostMapping("/mail")
     public Response sendMail(@RequestBody NotificationDto notificationDto) throws MessagingException {
-        String mailConfirmation = bookService.sendMail(notificationDto);
+        String mailConfirmation = mailSender.sendMail(notificationDto);
         Response response=new Response("Mail Sent Successfully",200,mailConfirmation);
         return response;
     }
@@ -75,7 +80,7 @@ public class CartController {
     }
 
     @GetMapping(value="/order/details")
-    public ResponseEntity<Response> deleteBook(@RequestHeader String token){
+    public ResponseEntity<Response> orderDetails(@RequestHeader String token){
         Response response = cartService.orderDetails(token);
         return new  ResponseEntity<>(response,HttpStatus.OK);
     }

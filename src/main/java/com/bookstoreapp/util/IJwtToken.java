@@ -1,7 +1,7 @@
 package com.bookstoreapp.util;
 
 public interface IJwtToken {
-    String doGenerateToken( int id);
+    String generateToken(int id);
 
     Boolean validateToken(String token);
 

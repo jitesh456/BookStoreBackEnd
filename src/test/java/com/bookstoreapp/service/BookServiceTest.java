@@ -1,9 +1,6 @@
 package com.bookstoreapp.service;
 
-import com.bookstoreapp.controller.BookController;
 import com.bookstoreapp.dto.BookDto;
-import com.bookstoreapp.dto.UpdateBookDto;
-import com.bookstoreapp.dto.UpdateCartDto;
 import com.bookstoreapp.model.Book;
 import com.bookstoreapp.repository.IBookRepository;
 import com.bookstoreapp.service.Implementation.BookService;
@@ -15,13 +12,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Sort;
-import org.springframework.web.servlet.mvc.Controller;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class BookServiceTest {
@@ -43,14 +36,6 @@ public class BookServiceTest {
                 "998542365","sdfsfd","ABCD");
     }
 
-    @Test
-    void givenBookDetails_WhenAddedInStore_ShouldReturnAddedBook() {
-        Book givenBook=new Book(bookDto);
-        String expectedresponse="Insertion Successful";
-        when(iBookRepository.save(any())).thenReturn(givenBook);
-        String addedBook=bookService.addBook(bookDto);
-        Assert.assertEquals(expectedresponse,addedBook);
-    }
 
     @Test
     void whenBookDetailsFound_ShouldReturnAllBookDetails(){
@@ -70,17 +55,6 @@ public class BookServiceTest {
 
     }
 
-    @Test
-    void givenBookDataPrice_WhenUpdated_ReturnProperMessage() throws Exception {
-        Book givenBook=new Book(bookDto);
-
-        UpdateBookDto bookDto1 =new UpdateBookDto(2450.0, "1234567895",12);
-        String expectedresponse="Updated Successfully";
-        when(iBookRepository.findByIsbn(any())).thenReturn(java.util.Optional.of(givenBook));
-        when(iBookRepository.save(any())).thenReturn(givenBook);
-        String actualresponse=bookService.updatePrice(bookDto1);
-        Assert.assertEquals(expectedresponse,actualresponse);
-    }
 
     @Test
     void givenSortField_WhenProper_ShouldReturnSortedBooksBasedOnPrice(){
@@ -98,15 +72,5 @@ public class BookServiceTest {
         Assert.assertEquals(sortedBooks,bookIterable);
     }
 
-    @Test
-    void givenQuantity_WhenProper_ShouldUpdateBookQuantity() {
-        Book givenBook = new Book(bookDto);
 
-        UpdateCartDto updateCartDto = new UpdateCartDto("1234567895", 5);
-        String expectedresponse = "Book Quantity Updated";
-        when(iBookRepository.findByIsbn(any())).thenReturn(java.util.Optional.of(givenBook));
-        when(iBookRepository.save(any())).thenReturn(givenBook);
-        String actualresponse = bookService.updateQuantity(updateCartDto);
-        Assert.assertEquals(expectedresponse, actualresponse);
-    }
 }

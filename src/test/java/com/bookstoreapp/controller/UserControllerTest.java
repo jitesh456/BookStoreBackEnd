@@ -22,7 +22,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @WebMvcTest(controllers =UserController.class)
@@ -42,7 +41,7 @@ public class UserControllerTest {
     HttpHeaders httpHeaders=new HttpHeaders();
 
     Gson gson;
-    Response loginResponse;
+
 
     @MockBean
     JwtToken jwtToken;
@@ -68,7 +67,7 @@ public class UserControllerTest {
     @Test
     public void givenUserDetails_WhenProper_ShouldReturn_properMessage() throws Exception {
         String user=new Gson().toJson(userRegistrationDto);
-        Mockito.when(userService.addUser(any())).thenReturn(userRegistrationResponse);
+        Mockito.when(userService.addUser(any(),any())).thenReturn(userRegistrationResponse);
         MvcResult mvcResult=this.mockMvc.perform(post("/user")
                 .content(user)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
@@ -79,13 +78,15 @@ public class UserControllerTest {
 
     @Test
     public void givenUserDetails_WhenUserNameNull_ShouldReturn_properErrorMessage() throws Exception {
-        UserRegistrationDto userRegistrationDto1=new UserRegistrationDto(null,"akhil234@gmail.com",
+        UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("","akhil234@gmail.com",
                 "Ak@1234Sh","8943725498");
         String user=new Gson().toJson(userRegistrationDto1);
-        Mockito.when(userService.addUser(any())).thenReturn(userRegistrationResponse);
+        Mockito.when(userService.addUser(any(),any())).thenReturn(userRegistrationResponse);
         MvcResult mvcResult=this.mockMvc.perform(post("/user")
                 .content(user)
+                .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+
         Assert.assertEquals("User name should start with upper case and minimum 3 character", gson.fromJson(mvcResult.getResponse()
                 .getContentAsString(), Response.class).message);
     }
@@ -95,9 +96,10 @@ public class UserControllerTest {
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("","akhil234@gmail.com",
                 "Ak@1234Sh","8943725498");
         String user=new Gson().toJson(userRegistrationDto1);
-        Mockito.when(userService.addUser(any())).thenReturn(userRegistrationResponse);
+        Mockito.when(userService.addUser(any(),any())).thenReturn(userRegistrationResponse);
         MvcResult mvcResult=this.mockMvc.perform(post("/user")
                 .content(user)
+                .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
         Assert.assertEquals("User name should start with upper case and minimum 3 character", gson.fromJson(mvcResult.getResponse()
                 .getContentAsString(), Response.class).message);
@@ -108,9 +110,10 @@ public class UserControllerTest {
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("ab","akhil234@gmail.com",
                 "Ak@1234Sh","8943725498");
         String user=new Gson().toJson(userRegistrationDto1);
-        Mockito.when(userService.addUser(any())).thenReturn(userRegistrationResponse);
+        Mockito.when(userService.addUser(any(),any())).thenReturn(userRegistrationResponse);
         MvcResult mvcResult=this.mockMvc.perform(post("/user")
                 .content(user)
+                .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
         Assert.assertEquals("User name should start with upper case and minimum 3 character", gson.fromJson(mvcResult.getResponse()
                 .getContentAsString(), Response.class).message);
@@ -121,9 +124,10 @@ public class UserControllerTest {
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("AkhilSharma",null,
                 "Ak@1234Sh","8943725498");
         String user=new Gson().toJson(userRegistrationDto1);
-        Mockito.when(userService.addUser(any())).thenReturn(userRegistrationResponse);
+        Mockito.when(userService.addUser(any(),any())).thenReturn(userRegistrationResponse);
         MvcResult mvcResult=this.mockMvc.perform(post("/user")
                 .content(user)
+                .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
         Assert.assertEquals("Email should not be Empty", gson.fromJson(mvcResult.getResponse()
                 .getContentAsString(), Response.class).message);
@@ -135,9 +139,10 @@ public class UserControllerTest {
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("AkhilSharma",null,
                 "Ak@1234Sh","8943725498");
         String user=new Gson().toJson(userRegistrationDto1);
-        Mockito.when(userService.addUser(any())).thenReturn(userRegistrationResponse);
+        Mockito.when(userService.addUser(any(),any())).thenReturn(userRegistrationResponse);
         MvcResult mvcResult=this.mockMvc.perform(post("/user")
                 .content(user)
+                .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
         Assert.assertEquals("Email should not be Empty", gson.fromJson(mvcResult.getResponse()
                 .getContentAsString(), Response.class).message);
@@ -150,9 +155,10 @@ public class UserControllerTest {
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("AkhilSharma","@abcd.com",
                 "Ak@1234Sh","8943725498");
         String user=new Gson().toJson(userRegistrationDto1);
-        Mockito.when(userService.addUser(any())).thenReturn(userRegistrationResponse);
+        Mockito.when(userService.addUser(any(),any())).thenReturn(userRegistrationResponse);
         MvcResult mvcResult=this.mockMvc.perform(post("/user")
                 .content(user)
+                .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
         Assert.assertEquals("Please enter valid email", gson.fromJson(mvcResult.getResponse()
                 .getContentAsString(), Response.class).message);
@@ -164,9 +170,10 @@ public class UserControllerTest {
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("AkhilSharma","akhil234@gmail.com",
                 null,"8943725498");
         String user=new Gson().toJson(userRegistrationDto1);
-        Mockito.when(userService.addUser(any())).thenReturn(userRegistrationResponse);
+        Mockito.when(userService.addUser(any(),any())).thenReturn(userRegistrationResponse);
         MvcResult mvcResult=this.mockMvc.perform(post("/user")
                 .content(user)
+                .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
         Assert.assertEquals("Atleast one uppercase,lowercase,number and atmost one special character with minimum length 8", gson.fromJson(mvcResult.getResponse()
                 .getContentAsString(), Response.class).message);
@@ -177,9 +184,10 @@ public class UserControllerTest {
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("AkhilSharma","akhil234@gmail.com",
                 null,"8943725498");
         String user=new Gson().toJson(userRegistrationDto1);
-        Mockito.when(userService.addUser(any())).thenReturn(userRegistrationResponse);
+        Mockito.when(userService.addUser(any(),any())).thenReturn(userRegistrationResponse);
         MvcResult mvcResult=this.mockMvc.perform(post("/user")
                 .content(user)
+                .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
         Assert.assertEquals("Atleast one uppercase,lowercase,number and atmost one special character with minimum length 8", gson.fromJson(mvcResult.getResponse()
                 .getContentAsString(), Response.class).message);
@@ -190,9 +198,10 @@ public class UserControllerTest {
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("AkhilSharma","akhil234@gmail.com",
                 "abcd","8943725498");
         String user=new Gson().toJson(userRegistrationDto1);
-        Mockito.when(userService.addUser(any())).thenReturn(userRegistrationResponse);
+        Mockito.when(userService.addUser(any(),any())).thenReturn(userRegistrationResponse);
         MvcResult mvcResult=this.mockMvc.perform(post("/user")
                 .content(user)
+                .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
         Assert.assertEquals("Atleast one uppercase,lowercase,number and atmost one special character with minimum length 8", gson.fromJson(mvcResult.getResponse()
                 .getContentAsString(), Response.class).message);
@@ -203,8 +212,9 @@ public class UserControllerTest {
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("AkhilSharma","akhil234@gmail.com",
                 "Ak@1234Sh",null);
         String user=new Gson().toJson(userRegistrationDto1);
-        Mockito.when(userService.addUser(any())).thenReturn(userRegistrationResponse);
+        Mockito.when(userService.addUser(any(),any())).thenReturn(userRegistrationResponse);
         MvcResult mvcResult=this.mockMvc.perform(post("/user")
+                .characterEncoding("utf-8")
                 .content(user)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
         Assert.assertEquals("Mobile No Only have 10 Digit", gson.fromJson(mvcResult.getResponse()
@@ -216,7 +226,7 @@ public class UserControllerTest {
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("AkhilSharma","akhil234@gmail.com",
                 "Ak@1234Sh","");
         String user=new Gson().toJson(userRegistrationDto1);
-        Mockito.when(userService.addUser(any())).thenReturn(userRegistrationResponse);
+        Mockito.when(userService.addUser(any(),any())).thenReturn(userRegistrationResponse);
         MvcResult mvcResult=this.mockMvc.perform(post("/user")
                 .content(user)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
@@ -229,10 +239,11 @@ public class UserControllerTest {
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("AkhilSharma","akhil234@gmail.com",
                 "Ak@1234Sh","985642356");
         String user=new Gson().toJson(userRegistrationDto1);
-       
-        Mockito.when(userService.addUser(any())).thenReturn(userRegistrationResponse);
+
+        Mockito.when(userService.addUser(any(),any())).thenReturn(userRegistrationResponse);
         MvcResult mvcResult=this.mockMvc.perform(post("/user")
                 .content(user)
+                .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
         Assert.assertEquals("Mobile No Only have 10 Digit", gson.fromJson(mvcResult.getResponse()
                 .getContentAsString(), Response.class).message);
@@ -320,118 +331,6 @@ public class UserControllerTest {
                 contentType(MediaType.APPLICATION_JSON)).andReturn();
         Assert.assertEquals("Atleast one uppercase,lowercase,number and atmost " +
                         "one special character with minimum length 8",
-                gson.fromJson(result.getResponse().getContentAsString(),Response.class)
-                        .message);
-    }
-
-    @Test
-    void givenUserDetail_WhenProper_ShouldReturnProperMessage() throws Exception {
-        userDetailDto=new UserDetailDto("Home","435672","101 B Street",
-                "101 B Street Lucknow U.P","Lucknow","India");
-        String userDetailString = new Gson().toJson(userDetailDto);
-        Mockito.when(userService.userDetail(any(),anyString())).thenReturn(new Response("User Detail Added",200,""));
-        MvcResult result = this.mockMvc.perform(post("/userdetail").
-                content(userDetailString)
-                .contentType(MediaType.APPLICATION_JSON)
-                .headers(httpHeaders))
-                .andReturn();
-        Assert.assertEquals("User Detail Added",
-                gson.fromJson(result.getResponse().getContentAsString(),Response.class)
-                        .message);
-    }
-
-    @Test
-    void givenUserDetail_WhenAddressTypeNotProper_ShouldReturnProperMessage() throws Exception {
-        userDetailDto=new UserDetailDto("home","435672","101 B Street",
-                "101 B Street Lucknow U.P","Lucknow","India");
-        String userDetailString = new Gson().toJson(userDetailDto);
-        Mockito.when(userService.userDetail(any(),anyString())).thenReturn(new Response("User Detail Added",200,""));
-        MvcResult result = this.mockMvc.perform(post("/userdetail").
-                content(userDetailString)
-                .contentType(MediaType.APPLICATION_JSON)
-                .headers(httpHeaders))
-                .andReturn();
-        Assert.assertEquals("Address type should start with upper case",
-                gson.fromJson(result.getResponse().getContentAsString(),Response.class)
-                        .message);
-    }
-
-    @Test
-    void givenUserDetail_WhenPincodeNotProper_ShouldReturnProperMessage() throws Exception {
-        userDetailDto=new UserDetailDto("Home","43572","101 B Street",
-                "101 B Street Lucknow U.P","Lucknow","India");
-        String userDetailString = new Gson().toJson(userDetailDto);
-        Mockito.when(userService.userDetail(any(),anyString())).thenReturn(new Response("User Detail Added",200,""));
-        MvcResult result = this.mockMvc.perform(post("/userdetail").
-                content(userDetailString)
-                .contentType(MediaType.APPLICATION_JSON)
-                .headers(httpHeaders))
-                .andReturn();
-        Assert.assertEquals("Pincode must be of 6 digits",
-                gson.fromJson(result.getResponse().getContentAsString(),Response.class)
-                        .message);
-    }
-
-    @Test
-    void givenUserDetail_WhenAddressNotProper_ShouldReturnProperMessage() throws Exception {
-        userDetailDto=new UserDetailDto("Home","432572","101 B Street",
-                "101 B ","Lucknow","India");
-        String userDetailString = new Gson().toJson(userDetailDto);
-        Mockito.when(userService.userDetail(any(),anyString())).thenReturn(new Response("User Detail Added",200,""));
-        MvcResult result = this.mockMvc.perform(post("/userdetail").
-                content(userDetailString)
-                .contentType(MediaType.APPLICATION_JSON)
-                .headers(httpHeaders))
-                .andReturn();
-        Assert.assertEquals("Maximum length is 200 characters",
-                gson.fromJson(result.getResponse().getContentAsString(),Response.class)
-                        .message);
-    }
-
-    @Test
-    void givenUserDetail_WhenCityNotProper_ShouldReturnProperMessage() throws Exception {
-        userDetailDto=new UserDetailDto("Home","432572","101 B Street",
-                "101 B Street UP ","cdte","India");
-        String userDetailString = new Gson().toJson(userDetailDto);
-        Mockito.when(userService.userDetail(any(),anyString())).thenReturn(new Response("User Detail Added",200,""));
-        MvcResult result = this.mockMvc.perform(post("/userdetail").
-                content(userDetailString)
-                .contentType(MediaType.APPLICATION_JSON)
-                .headers(httpHeaders))
-                .andReturn();
-        Assert.assertEquals("City name should start with upper case and minimum 3 character",
-                gson.fromJson(result.getResponse().getContentAsString(),Response.class)
-                        .message);
-    }
-
-    @Test
-    void givenUserDetail_WhenCountryNotProper_ShouldReturnProperMessage() throws Exception {
-        userDetailDto=new UserDetailDto("Home","432572","101 B Street",
-                "101 B Street UP ","Lucknow","ind");
-        String userDetailString = new Gson().toJson(userDetailDto);
-        Mockito.when(userService.userDetail(any(),anyString())).thenReturn(new Response("User Detail Added",200,""));
-        MvcResult result = this.mockMvc.perform(post("/userdetail").
-                content(userDetailString)
-                .contentType(MediaType.APPLICATION_JSON)
-                .headers(httpHeaders))
-                .andReturn();
-        Assert.assertEquals("Country name should start with upper case and minimum 3 character",
-                gson.fromJson(result.getResponse().getContentAsString(),Response.class)
-                        .message);
-    }
-
-    @Test
-    void givenUserToken_WhenProper_ShouldReturnProperMessage() throws Exception {
-        userDetailDto=new UserDetailDto("Home","432572","101 B Street",
-                "101 B Street UP ","Lucknow","");
-        String userDetailString = new Gson().toJson(userDetailDto);
-        Mockito.when(userService.getUserDetail(anyString())).thenReturn(new Response("User Found",200,""));
-        MvcResult result = this.mockMvc.perform(post("/fetchdetail")
-                .content("")
-                .contentType(MediaType.APPLICATION_JSON)
-                .headers(httpHeaders))
-                .andReturn();
-        Assert.assertEquals("User Found",
                 gson.fromJson(result.getResponse().getContentAsString(),Response.class)
                         .message);
     }

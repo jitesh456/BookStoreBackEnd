@@ -21,16 +21,16 @@ public class Book {
 
     public int quantity;
 
-    public String bookcover;
+    public String bookCover;
 
 
     public String category;
 
 
-    public String authorname;
+    public String authorName;
 
 
-    public String bookdetails;
+    public String bookDetails;
 
 
     public String isbn;
@@ -47,10 +47,10 @@ public class Book {
         this.name= bookDto.name;
         this.price= bookDto.price;
         this.quantity= bookDto.quantity;
-        this.bookcover= bookDto.bookCover;
+        this.bookCover = bookDto.bookCover;
         this.category= bookDto.category;
-        this.authorname= bookDto.authorName;
-        this.bookdetails= bookDto.bookDetails;
+        this.authorName = bookDto.authorName;
+        this.bookDetails = bookDto.bookDetails;
         this.isbn= bookDto.isbn;
 
     }

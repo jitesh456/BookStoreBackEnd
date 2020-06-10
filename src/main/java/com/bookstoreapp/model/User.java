@@ -27,9 +27,10 @@ public class User {
     @OneToMany()
      public  List<Cart> carts=new ArrayList<>();
 
-    @ManyToMany(mappedBy="user",targetEntity = UserDetail.class)
+    @OneToMany(mappedBy="user",targetEntity = UserDetail.class)
     @JsonIgnore
     public List<UserDetail> userDetail=new ArrayList<>();
+    public boolean isActivate;
 
     public User() { }
 

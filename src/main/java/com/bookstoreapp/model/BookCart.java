@@ -10,29 +10,27 @@ public class BookCart  {
 
     @EmbeddedId
     @Column
-    public BookCartID bookCartID;
+    public BookCartId bookCartID;
 
 
     @ManyToOne()
-    @MapsId("book_Id")
+    @MapsId("bookId")
     public Book book;
 
     @ManyToOne()
-    @MapsId("cart_Id")
+    @MapsId("cartId")
     public Cart cart;
 
-    public int bookquantity;
-
-
+    public int bookQuantity;
 
     public BookCart() {
     }
 
-    public BookCart( Book book,Cart cart,int bookquantity) {
+    public BookCart( Book book,Cart cart,int bookQuantity) {
         this.book=book;
         this.cart=cart;
-        this.bookquantity = bookquantity;
-        bookCartID=new BookCartID(book.id,cart.id);
+        this.bookQuantity = bookQuantity;
+        bookCartID=new BookCartId(book.id,cart.id);
     }
 
 

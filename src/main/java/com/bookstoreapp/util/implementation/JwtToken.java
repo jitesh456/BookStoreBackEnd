@@ -30,7 +30,7 @@ public class JwtToken implements IJwtToken {
     int userId;
     Date date=new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000);
 
-    public String doGenerateToken(int id) {
+    public String generateToken(int id) {
         return Jwts.builder().setId(String.valueOf(id)).
                 setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(date)
@@ -47,7 +47,6 @@ public class JwtToken implements IJwtToken {
 
         userId=Integer.parseInt(claims.getId());
 
-        System.out.println("Expiry Time"+claims.getExpiration());
         if(claims.getExpiration().after(new Date(System.currentTimeMillis()))){
             return true;
         }

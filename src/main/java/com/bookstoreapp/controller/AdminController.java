@@ -5,6 +5,7 @@ import com.bookstoreapp.dto.UpdateBookDto;
 import com.bookstoreapp.exception.BookException;
 import com.bookstoreapp.response.FileResponse;
 import com.bookstoreapp.response.Response;
+import com.bookstoreapp.service.Implementation.AdminService;
 import com.bookstoreapp.service.Implementation.BookService;
 import com.google.common.net.HttpHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,9 @@ import java.io.IOException;
 public class AdminController {
 
     @Autowired
-    BookService bookService;
+    AdminService adminService;
+
+
 
     @PostMapping(value = "/book")
        public ResponseEntity<Response> addBook(@Valid @RequestBody BookDto bookDto,
@@ -34,7 +37,7 @@ public class AdminController {
         if(bindingResult.hasErrors()) {
             return new ResponseEntity<Response>(new Response(bindingResult.getAllErrors().get(0).getDefaultMessage(),101,"Empty Field"), HttpStatus.BAD_REQUEST);
         }
-        String responseMessage= bookService.addBook(bookDto);
+        String responseMessage= adminService.addBook(bookDto);
         return new ResponseEntity<Response>(new Response("Book Added Successfully",200, responseMessage),
                 HttpStatus.OK);
     }
@@ -46,7 +49,7 @@ public class AdminController {
             return new ResponseEntity<Response>(new Response(bindingResult.getAllErrors().get(0).getDefaultMessage(),
                     101,"Empty Field"), HttpStatus.BAD_REQUEST);
         }
-        String responseMessage= bookService.updatePrice(updateBookDto);
+        String responseMessage= adminService.updatePrice(updateBookDto);
         return new ResponseEntity<Response>(new Response("Book is Updated",200, responseMessage),
                 HttpStatus.OK);
     }
@@ -54,14 +57,14 @@ public class AdminController {
     @PostMapping(value = "/uploadImage")
     public FileResponse uploadFile(@RequestParam("file") MultipartFile file)
     {
-        FileResponse fileResponse = bookService.uploadBookCover(file);
+        FileResponse fileResponse = adminService.uploadBookCover(file);
         return fileResponse;
     }
 
     @GetMapping("/downloadFile/{fileName}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) throws IOException {
 
-        Resource resource = bookService.loadFile(fileName,request);
+        Resource resource = adminService.loadFile(fileName,request);
         String contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
 
         return ResponseEntity.ok()

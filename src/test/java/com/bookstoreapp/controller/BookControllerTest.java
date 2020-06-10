@@ -46,8 +46,6 @@ public class BookControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-
-
     Gson gson;
 
     @BeforeEach
@@ -78,10 +76,6 @@ public class BookControllerTest {
         Assert.assertEquals("Fetched Books", gson.fromJson(result.getResponse().
                 getContentAsString(), Response.class).message);
     }
-
-
-
-
 
 
     @Test

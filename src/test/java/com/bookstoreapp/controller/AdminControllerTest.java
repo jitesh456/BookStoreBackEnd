@@ -3,7 +3,7 @@ package com.bookstoreapp.controller;
 import com.bookstoreapp.dto.BookDto;
 import com.bookstoreapp.dto.UpdateBookDto;
 import com.bookstoreapp.response.Response;
-import com.bookstoreapp.service.Implementation.BookService;
+import com.bookstoreapp.service.Implementation.AdminService;
 import com.google.gson.Gson;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,14 +12,10 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
@@ -36,17 +32,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(MockitoJUnitRunner.class)
 public class AdminControllerTest {
 
-//    @Value("${image.file.path}")
-//    private String imagePath;
-
     @MockBean
-    BookService bookService;
+    AdminService adminService;
     BookDto bookDto;
 
     @Autowired
     MockMvc mockMvc;
-
-
 
 
 
@@ -65,7 +56,7 @@ public class AdminControllerTest {
     @Test
     void givenBookData_WhenInserted_ReturnProperMessage() throws Exception {
         String bookStoreDto=new Gson().toJson(this.bookDto);
-        Mockito.when(bookService.addBook(any())).thenReturn("Inserted Successful");
+        Mockito.when(adminService.addBook(any())).thenReturn("Inserted Successful");
         MvcResult result = this.mockMvc.perform(post("/admin/book")
                 .content(bookStoreDto)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -231,7 +222,7 @@ public class AdminControllerTest {
         UpdateBookDto bookDto1 =new UpdateBookDto(2000.0, "1234567895",5);
 
         String bookStoreDtoString = gson.toJson(bookDto1);
-        Mockito.when(bookService.addBook(any())).thenReturn("Updated Successful");
+        Mockito.when(adminService.addBook(any())).thenReturn("Updated Successful");
         MvcResult result = this.mockMvc.perform(put("/admin/book")
                 .content(bookStoreDtoString)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -300,10 +291,12 @@ public class AdminControllerTest {
         String fileBasePath = System.getProperty("user.dir")+imagePath;
         Path path = Paths.get(fileBasePath + fileName);
         Resource resource = new UrlResource(path.toUri());
-        Mockito.when(bookService.loadFile(any(), any())).thenReturn(resource);
+        Mockito.when(adminService.loadFile(any(), any())).thenReturn(resource);
 
         MvcResult result = this.mockMvc.perform(get("/admin/downloadFile/fileName?fileName=imageName"))
                 .andReturn();
         Assert.assertEquals(200,result.getResponse().getStatus());
     }
+
+
 }

@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import javax.mail.MessagingException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -22,13 +24,14 @@ public class UserController {
     UserService userService;
 
     @PostMapping(value ="/user")
-    public ResponseEntity<Response> addUser(@Valid @RequestBody UserRegistrationDto userRegistrationDto, BindingResult bindingResult){
+    public ResponseEntity<Response> addUser(@Valid @RequestBody UserRegistrationDto userRegistrationDto, BindingResult bindingResult,
+                                            HttpServletRequest servletRequest) throws MessagingException {
         if(bindingResult.hasErrors()) {
             return new ResponseEntity<Response>(new Response(bindingResult.getAllErrors().get(0).getDefaultMessage(),
                     101,"Empty Field"), HttpStatus.BAD_REQUEST);
         }
-        Response responseMessage= userService.addUser(userRegistrationDto);
-        return new ResponseEntity<Response>(responseMessage      ,
+        Response responseMessage= userService.addUser(userRegistrationDto,servletRequest);
+        return new ResponseEntity<>(responseMessage,
                 HttpStatus.OK);
     }
 
@@ -44,19 +47,11 @@ public class UserController {
         return new ResponseEntity<Response>(new Response("User Login Successfully",200, ""),HttpStatus.OK);
     }
 
-    @PostMapping(value = "/userdetail")
-    public ResponseEntity<Response> userDetails(@Valid @RequestBody UserDetailDto userDetailDto, BindingResult bindingResult, @RequestHeader String token){
-        if(bindingResult.hasErrors()) {
-            return new ResponseEntity<Response>(new Response(bindingResult.getAllErrors().get(0).getDefaultMessage(),
-                    101,"Empty Field"), HttpStatus.BAD_REQUEST);
-        }
-        Response response=userService.userDetail(userDetailDto,token);
-        return new ResponseEntity<Response>(response,HttpStatus.OK);
-    }
 
-    @PostMapping(value = "/fetchdetail")
-    public ResponseEntity<Response> getUserDetails(@RequestHeader String token){
-        Response response=userService.getUserDetail(token);
+
+    @GetMapping(value = "/verify")
+    public ResponseEntity<Response> verifyEmail(@RequestParam("token") String token){
+        Response response=userService.verifyEmail(token);
         return new ResponseEntity<Response>(response,HttpStatus.OK);
     }
 }

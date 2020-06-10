@@ -6,21 +6,21 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
-public class BookCartID implements Serializable {
+public class BookCartId implements Serializable {
 
 
     @Column(name="bookId")
-    public int book_Id;
+    public int bookId;
 
     @Column(name="cartId")
-    public int cart_Id;
+    public int cartId;
 
-    public BookCartID(int bookId, int cartId) {
-        this.book_Id=bookId;
-        this.cart_Id=cartId;
+    public BookCartId(int bookId, int cartId) {
+        this.bookId =bookId;
+        this.cartId =cartId;
     }
 
-    public BookCartID() {
+    public BookCartId() {
 
     }
 
@@ -28,13 +28,13 @@ public class BookCartID implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        BookCartID that = (BookCartID) o;
-        return book_Id == that.book_Id &&
-                cart_Id == that.cart_Id;
+        BookCartId that = (BookCartId) o;
+        return bookId == that.bookId &&
+                cartId == that.cartId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(book_Id, cart_Id);
+        return Objects.hash(bookId, cartId);
     }
 }
