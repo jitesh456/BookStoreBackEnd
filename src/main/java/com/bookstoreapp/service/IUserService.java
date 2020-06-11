@@ -14,8 +14,7 @@ public interface IUserService {
 
     String loginUser(UserLoginDto userLoginDto);
 
-
-
-
     Response verifyEmail(String token);
+
+    Response forgetPassword(String emailID,HttpServletRequest servletRequest) throws MessagingException;
 }

@@ -54,4 +54,10 @@ public class UserController {
         Response response=userService.verifyEmail(token);
         return new ResponseEntity<Response>(response,HttpStatus.OK);
     }
+
+    @GetMapping(value = "/forget")
+    public ResponseEntity<Response> forgetPassword(@RequestParam("email") String email,HttpServletRequest servletRequest) throws MessagingException {
+        Response response= userService.forgetPassword(email,servletRequest);
+        return new ResponseEntity<Response>(response,HttpStatus.OK);
+    }
 }

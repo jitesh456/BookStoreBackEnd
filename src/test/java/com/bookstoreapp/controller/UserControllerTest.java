@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @WebMvcTest(controllers =UserController.class)
@@ -333,6 +334,17 @@ public class UserControllerTest {
                         "one special character with minimum length 8",
                 gson.fromJson(result.getResponse().getContentAsString(),Response.class)
                         .message);
+    }
+
+    @Test
+    void givenEmailId_WhenFound_ShouldReturnProperMessage() throws Exception{
+        String emailId= "abcd@gmail.com";
+        String email= gson.toJson(emailId);
+        Mockito.when(userService.forgetPassword(any(),any())).thenReturn(new Response("Email Successfull",200,""));
+        MvcResult result = this.mockMvc.perform(get("/forget?email="))
+                .andReturn();
+        Assert.assertEquals(200, gson.fromJson(result.getResponse().getContentAsString(),Response.class)
+                .statusCode);
     }
 
 }

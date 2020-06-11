@@ -90,4 +90,20 @@ public class UserService implements IUserService {
 
     }
 
+    @Override
+    public Response forgetPassword(String emailID, HttpServletRequest servletRequest) throws MessagingException {
+        Optional<User> userdata=userRepository.findUserByEmail(emailID);
+        if(userdata.isPresent()){
+            User existingUser=userdata.get();
+            String appUrl =
+                    "http://" + servletRequest.getServerName() +
+                            ":" + servletRequest.getServerPort()+"/reset?token="+jwtToken.generateToken(existingUser.id);
+            NotificationDto notificationDto=new NotificationDto(existingUser.email,"Reset Password",
+                    appUrl);
+            mailSender.sendMail(notificationDto);
+            return new Response("Sent Email For Password Reset",200,"User Fetched Successfully");
+        }
+        throw new UserException("No Such User",UserException.ExceptionType.USER_NOT_FOUND);
+    }
+
 }
