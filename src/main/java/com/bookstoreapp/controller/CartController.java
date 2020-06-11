@@ -63,7 +63,7 @@ public class CartController {
     @GetMapping("/book")
     public ResponseEntity<Response> getCartBooks(@RequestHeader String token){
         Response response = cartService.getCartBook(token);
-        return new  ResponseEntity<>(response,HttpStatus.FOUND);
+        return new  ResponseEntity<>(response,HttpStatus.OK);
     }
 
     @PutMapping("/cart")

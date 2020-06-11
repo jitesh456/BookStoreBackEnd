@@ -49,12 +49,12 @@ public class UserService implements IUserService {
             String encodedPassowrd = passwordEncoder.encode(password);
             userRegistrationDto.password = encodedPassowrd;
             User user = new User(userRegistrationDto);
-
             User savedUser=userRepository.save(user);
-
+            StringBuffer url = servletRequest.getRequestURL();
+            String baseUrl= url.substring(0,url.length()-4);
             String appUrl =
-                    "http://" + servletRequest.getServerName() +
-                            ":" + servletRequest.getServerPort()+"/verify?token="+jwtToken.generateToken(savedUser.id);
+                    baseUrl+"verify?token="+jwtToken.generateToken(savedUser.id);
+            System.out.println("URL:"+appUrl);
             NotificationDto notificationDto=new NotificationDto(savedUser.email,"Activate account",
                     appUrl);
             mailSender.sendMail(notificationDto);

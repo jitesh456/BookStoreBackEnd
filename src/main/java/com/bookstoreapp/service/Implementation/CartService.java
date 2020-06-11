@@ -79,11 +79,14 @@ public class CartService  implements ICartService {
         Optional<Cart> cart = userCart.stream().filter(cart1 -> !cart1.placedOrder).findAny();
         List<BookCart> bookCartList = cart.map(value -> value.bookCartList).orElse(Collections.emptyList());
         List<Book> bookList = new ArrayList<>();
-        bookCartList.forEach(bookCart -> {
+        Book book;
+        for(int i=0;i<bookCartList.size();i++)
+        {
+            book=bookRepository.findById(bookCartList.get(i).bookCartID.bookId).get();
+            book.quantity=bookCartList.get(i).bookQuantity;
+            bookList.add(book);
+        }
 
-            bookList.add(bookRepository.
-                    findById(bookCart.bookCartID.bookId).get());
-        });
         return new Response("BookList", 200, bookList);
 
     }
@@ -124,7 +127,14 @@ public class CartService  implements ICartService {
         while (cartIterator.hasNext()) {
             Cart cart = cartIterator.next();
             List<Book> bookList = new ArrayList<>();
-            cart.bookCartList.stream().forEach(x -> bookList.add(bookRepository.findById(x.bookCartID.bookId).get()));
+//            cart.bookCartList.stream().forEach(x -> bookList.add(bookRepository.findById(x.bookCartID.bookId).get()));
+            Book book;
+            for(int i=0;i<cart.bookCartList.size();i++)
+            {
+                book=bookRepository.findById(cart.bookCartList.get(i).bookCartID.bookId).get();
+                book.quantity=cart.bookCartList.get(i).bookQuantity;
+                bookList.add(book);
+            }
             bookCartList.add(new OrderPlacedResponse(bookList, cart));
         }
         return new Response("Book Cart List", 200, bookCartList);

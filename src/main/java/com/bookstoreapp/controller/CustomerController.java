@@ -17,7 +17,7 @@ public class CustomerController {
     @Autowired
     CustomerService customerService;
 
-    @PostMapping(value = "/userdetail")
+    @PostMapping(value = "/customerdetail")
     public ResponseEntity<Response> userDetails(@Valid @RequestBody UserDetailDto userDetailDto, BindingResult bindingResult, @RequestHeader String token){
         if(bindingResult.hasErrors()) {
             return new ResponseEntity<Response>(new Response(bindingResult.getAllErrors().get(0).getDefaultMessage(),
@@ -27,7 +27,7 @@ public class CustomerController {
         return new ResponseEntity<Response>(response,HttpStatus.OK);
     }
 
-    @GetMapping(value = "/fetchdetail")
+    @GetMapping(value = "/customerdetail")
     public ResponseEntity<Response> getUserDetails(@RequestHeader String token){
         Response response=customerService.getUserDetail(token);
         return new ResponseEntity<Response>(response,HttpStatus.OK);
