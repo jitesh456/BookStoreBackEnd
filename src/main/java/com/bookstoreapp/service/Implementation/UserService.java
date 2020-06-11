@@ -106,4 +106,27 @@ public class UserService implements IUserService {
         throw new UserException("No Such User",UserException.ExceptionType.USER_NOT_FOUND);
     }
 
+
+    @Override
+    public Response resetPassword(String token, String password) {
+        jwtToken.validateToken(token);
+        int userId = jwtToken.getUserId();
+        Optional<User> user = userRepository.findUserById(userId);
+        if(user.isPresent()){
+            if(user.get().isActivate) {
+                User user1 = user.get();
+                String encodedPassowrd = passwordEncoder.encode(password);
+                user1.password = encodedPassowrd;
+                userRepository.save(user1);
+                return new Response("Password Reset Successfully", 200, "");
+            }
+            throw new UserException("User is not Activated Account",UserException.ExceptionType.User_Is_Not_Activated_Account);
+
+        }
+        throw new UserException("No Such User",UserException.ExceptionType.USER_NOT_FOUND);
+    }
+
+
+
+
 }

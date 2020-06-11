@@ -347,4 +347,19 @@ public class UserControllerTest {
                 .statusCode);
     }
 
+
+
+    @Test
+    void givenPassword_WhenProper_ShouldReturnProperMessage() throws Exception{
+        String password= "Abcd@1234";
+        Mockito.when(userService.resetPassword(any(),any())).thenReturn(new Response("Password Reset Successfull",200,""));
+        MvcResult result = this.mockMvc.perform(get("/reset/password?password=")
+                .characterEncoding("utf-8")
+                .headers(httpHeaders))
+                .andReturn();
+        Assert.assertEquals(200, gson.fromJson(result.getResponse().getContentAsString(),Response.class)
+                .statusCode);
+    }
+
+
 }

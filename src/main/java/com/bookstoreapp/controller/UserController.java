@@ -60,4 +60,12 @@ public class UserController {
         Response response= userService.forgetPassword(email,servletRequest);
         return new ResponseEntity<Response>(response,HttpStatus.OK);
     }
+
+    @GetMapping(value = "/reset/password")
+    public ResponseEntity<Response> resetPassword(@RequestHeader String token, @RequestParam("password") String password ) {
+        Response response = userService.resetPassword(token,password);
+        return new ResponseEntity<Response>(response,HttpStatus.OK);
+    }
+
+
 }

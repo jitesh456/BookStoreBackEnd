@@ -17,4 +17,6 @@ public interface IUserService {
     Response verifyEmail(String token);
 
     Response forgetPassword(String emailID,HttpServletRequest servletRequest) throws MessagingException;
+
+    public Response resetPassword(String token, String password);
 }
