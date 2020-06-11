@@ -39,6 +39,8 @@ public class UserService implements IUserService {
     ISendMail mailSender;
 
 
+    String  reactUrl = "http://localhost:3000/reset/password/?";
+
     BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
 
     @Override
@@ -96,8 +98,7 @@ public class UserService implements IUserService {
         if(userdata.isPresent()){
             User existingUser=userdata.get();
             String appUrl =
-                    "http://" + servletRequest.getServerName() +
-                            ":" + servletRequest.getServerPort()+"/reset?token="+jwtToken.generateToken(existingUser.id);
+                     reactUrl+jwtToken.generateToken(existingUser.id);
             NotificationDto notificationDto=new NotificationDto(existingUser.email,"Reset Password",
                     appUrl);
             mailSender.sendMail(notificationDto);
