@@ -1,6 +1,7 @@
 package com.bookstoreapp.service.Implementation;
 
 import com.bookstoreapp.dto.AddToCartDto;
+import com.bookstoreapp.dto.NotificationDto;
 import com.bookstoreapp.model.Book;
 import com.bookstoreapp.model.BookCart;
 import com.bookstoreapp.model.Cart;
@@ -13,11 +14,15 @@ import com.bookstoreapp.response.OrderPlacedResponse;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.ICartService;
 import com.bookstoreapp.util.IJwtToken;
+import com.bookstoreapp.util.ISendMail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class CartService  implements ICartService {
@@ -37,29 +42,46 @@ public class CartService  implements ICartService {
     @Autowired
     IJwtToken jwtToken;
 
+    @Autowired
+    ISendMail sendMail;
+
     @Override
     public Response addToCart(AddToCartDto addToCartDto, String token) {
 
-        Cart userCart = null;
+        Cart userCart=null;
         User user = validate(token).get();
         Optional<Cart> cart = user.carts.stream().filter(cart1 -> !cart1.placedOrder).findFirst();
         int bookId = addToCartDto.bookId;
         Optional<Book> book1 = bookRepository.findById(bookId);
         Book book = book1.get();
-        int quantity = (int) addToCartDto.quantity;
+        int quantity =addToCartDto.quantity;
 
-        int totalPrice = (int) (book.price * quantity);
+        int totalPrice = 0;
         if (cart.isPresent()) {
             userCart = cart.get();
-            BookCart bookCart = new BookCart(book, userCart, quantity);
-            userCart.quantity = userCart.quantity + quantity;
-            userCart.totalPrice = userCart.totalPrice + totalPrice;
+            List<BookCart> bookCarts = userCart.bookCartList.stream().filter(bookCart -> bookCart.book.id == bookId).collect(Collectors.toList());
+            BookCart bookCart=null;
+            if(bookCarts.size()<=0)
+            {
+                 bookCart = new BookCart(book, userCart, quantity);
+                 userCart.quantity =  quantity;
+                 userCart.totalPrice = (int) (userCart.totalPrice+ book.price*addToCartDto.quantity);
+
+            }
+            if(bookCarts.size()>0)
+            {
+                int bookCartQuantity = bookCartRepository.getBookCartQuantity(bookId, userCart.id);
+                userCart.quantity=(userCart.quantity+addToCartDto.quantity)-bookCartQuantity;
+                userCart.totalPrice = (int) ((userCart.totalPrice+addToCartDto.quantity*book.price)-bookCartQuantity*book.price);
+                bookCart = new BookCart(book, userCart, quantity);
+            }
+
             bookCartRepository.save(bookCart);
             userCart.bookCartList.add(bookCart);
             cartRepository.save(userCart);
         }
         if (!cart.isPresent()) {
-            userCart = new Cart(LocalDateTime.now(), totalPrice, false, quantity);
+            userCart = new Cart(null, totalPrice, false, quantity);
             cartRepository.save(userCart);
             user.carts.add(userCart);
             userRepository.save(user);
@@ -92,13 +114,26 @@ public class CartService  implements ICartService {
     }
 
     @Override
-    public Response updateCart(String token) {
+    public Response updateCart(String token) throws MessagingException {
 
         Optional<User> user = validate(token);
         List<Cart> userCart = user.map(user1 -> user.get().carts).orElse(null);
         Cart cart = userCart.stream().filter(cart1 -> !cart1.placedOrder).findAny().get();
+        Book book;
+
+        for(int i=0;i<cart.bookCartList.size();i++)
+        {
+            int bookQuantity = cart.bookCartList.get(i).bookQuantity;
+            book=bookRepository.findById(cart.bookCartList.get(i).bookCartID.bookId).get();
+            book.quantity=book.quantity-bookQuantity;
+            bookRepository.save(book);
+        }
         cart.placedOrder = true;
         cart.orderPlacedDate = LocalDateTime.now();
+        String body="Hello "+user.get().name + "\tyour order Is Placed Successfully."+
+                "\nOrder Details:\n"+cart.bookCartList.stream().map(bookCart ->bookCart.book.name )
+                .collect(Collectors.toList())+"\nYou Total Price:"+cart.totalPrice+"\nTotal Book No:"+cart.quantity;
+        sendMail.sendMail(new NotificationDto(user.get().email,"Order Confirmation",body));
         cartRepository.save(cart);
         return new Response("Order Placed Successfully", 200, "");
 
@@ -109,10 +144,14 @@ public class CartService  implements ICartService {
 
         Optional<User> user = validate(token);
         Cart cart = user.isPresent() ? user.get().carts.stream().filter(cart1 -> !cart1.placedOrder).findAny().get() : null;
-        List<BookCart> bookCart = new ArrayList<>();
-        int quantity = cart.quantity - bookCartRepository.getBookCartQuantity(id, cart.id);
+        Optional<Book> savedBook = bookRepository.findById(id);
+
+        int bookQuantity = bookCartRepository.getBookCartQuantity(id, cart.id);
+        int quantity = cart.quantity - bookQuantity;
+        int totalPrice= (int) (cart.totalPrice-bookQuantity-savedBook.get().price*bookQuantity);
         bookCartRepository.updateBookCart(id, cart.id);
         cart.quantity = quantity;
+        cart.totalPrice=totalPrice;
         cartRepository.save(cart);
         return new Response("BookList", 200, "");
     }
@@ -127,7 +166,6 @@ public class CartService  implements ICartService {
         while (cartIterator.hasNext()) {
             Cart cart = cartIterator.next();
             List<Book> bookList = new ArrayList<>();
-//            cart.bookCartList.stream().forEach(x -> bookList.add(bookRepository.findById(x.bookCartID.bookId).get()));
             Book book;
             for(int i=0;i<cart.bookCartList.size();i++)
             {
@@ -138,7 +176,6 @@ public class CartService  implements ICartService {
             bookCartList.add(new OrderPlacedResponse(bookList, cart));
         }
         return new Response("Book Cart List", 200, bookCartList);
-
     }
 
     private Optional<User> validate(String token){

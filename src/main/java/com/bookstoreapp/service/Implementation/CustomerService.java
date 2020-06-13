@@ -13,8 +13,6 @@ import com.bookstoreapp.util.IJwtToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,17 +30,12 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public Response userDetail(UserDetailDto userDetailsDto, String token) {
-        jwtToken.validateToken(token);
-        int userId=-1;
-        userId= jwtToken.getUserId();
-        if(userId!=-1){
+        Optional<User> savedUser = validate(token);
+        if(savedUser.isPresent()){
             UserDetail userDetail=new UserDetail(userDetailsDto);
             userDetailRepository.save(userDetail);
-            Optional<User> user=userRepository.findUserById(userId);
-            userDetail.user=user.get();
-            userDetailRepository.save(userDetail);
-            user.get().userDetail.add(userDetail);
-            userRepository.save(user.get());
+            savedUser.get().userDetail.add(userDetail);
+            userRepository.save(savedUser.get());
             return new Response("Added User Detail Successfully",200,"");
         }
         throw new UserException("User Not Found", UserException.ExceptionType.USER_NOT_FOUND);
@@ -50,19 +43,22 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public Response getUserDetail(String token) {
-        jwtToken.validateToken(token);
-        int userId=-1;
-        if(userId!=-1){
-            userId = jwtToken.getUserId();
-            Optional<User> user=userRepository.findUserById(userId);
-            List<UserDetail> userDetail=new ArrayList<>();
-            for(int i=0;i<user.get().userDetail.size();i++){
-                userDetail.add(user.get().userDetail.get(i));
-            }
-            return new Response("User Found",200,userDetail);
+
+        Optional<User> savedUser=validate(token);
+
+        if(savedUser.isPresent()){
+
+            return new Response("User Found",200,savedUser.get());
         }
         throw new UserException("User Not Found", UserException.ExceptionType.USER_NOT_FOUND);
     }
+
+    private Optional<User> validate(String token){
+        jwtToken.validateToken(token);
+        int userId = jwtToken.getUserId();
+        return userRepository.findUserById(userId);
+    }
+
 
 
 }
