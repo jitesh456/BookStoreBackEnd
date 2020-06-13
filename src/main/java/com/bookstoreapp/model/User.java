@@ -25,10 +25,10 @@ public class User {
 
 
     @OneToMany()
-     public  List<Cart> carts=new ArrayList<>();
+    public  List<Cart> carts=new ArrayList<>();
 
-    @OneToMany(mappedBy="user",targetEntity = UserDetail.class)
-    @JsonIgnore
+    @OneToMany(targetEntity = UserDetail.class)
+
     public List<UserDetail> userDetail=new ArrayList<>();
     public boolean isActivate;
 
@@ -41,7 +41,6 @@ public class User {
         this.number = userRegistrationDto.number;
     }
 }
-
 
 
 

@@ -30,23 +30,6 @@ public class CartController {
     @Autowired
     SendMail mailSender;
 
-    @PutMapping("/book")
-    public ResponseEntity<Response> editBook(@Valid @RequestBody UpdateCartDto updateCartDto, BindingResult bindingResult,@RequestHeader String token) {
-        if(bindingResult.hasErrors()) {
-            return new ResponseEntity<Response>(new Response(bindingResult.getAllErrors().get(0).getDefaultMessage(),
-                    101,"Empty Field"), HttpStatus.BAD_REQUEST);
-        }
-        String responseMessage= adminService.updateQuantity(updateCartDto);
-        return new ResponseEntity<Response>(new Response("Book Quantity Updated",200, responseMessage),
-                HttpStatus.OK);
-    }
-    
-    @PostMapping("/mail")
-    public Response sendMail(@RequestBody NotificationDto notificationDto) throws MessagingException {
-        String mailConfirmation = mailSender.sendMail(notificationDto);
-        Response response=new Response("Mail Sent Successfully",200,mailConfirmation);
-        return response;
-    }
 
     @PostMapping("/book")
     public ResponseEntity<Response> addToCart(@Valid @RequestBody AddToCartDto addToCartDto,
@@ -67,13 +50,12 @@ public class CartController {
     }
 
     @PutMapping("/cart")
-    public  ResponseEntity<Response> updateCart(@RequestHeader String token)
-    {
+    public  ResponseEntity<Response> updateCart(@RequestHeader String token) throws MessagingException {
         Response response=cartService.updateCart(token);
         return new ResponseEntity<Response> (response,HttpStatus.OK);
     }
 
-    @DeleteMapping(value="/book{id}")
+    @DeleteMapping(value="/book/{id}")
     public ResponseEntity<Response> deleteBook(@PathVariable int id,@RequestHeader String token){
         Response response = cartService.deleteBook(id, token);
         return new  ResponseEntity<>(response,HttpStatus.OK);

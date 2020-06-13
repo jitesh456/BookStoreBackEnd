@@ -3,11 +3,13 @@ package com.bookstoreapp.model;
 import com.bookstoreapp.dto.UserDetailDto;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
+
 @Table(name="userdetails")
-public class UserDetail {
+public class UserDetail  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,8 +27,7 @@ public class UserDetail {
 
     public String country;
 
-    @ManyToOne
-    public User user;
+
 
     public UserDetail() {
     }

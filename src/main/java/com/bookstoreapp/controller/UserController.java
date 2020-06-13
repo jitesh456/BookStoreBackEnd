@@ -61,7 +61,7 @@ public class UserController {
         return new ResponseEntity<Response>(response,HttpStatus.OK);
     }
 
-    @GetMapping(value = "/reset/password")
+    @PutMapping(value = "/reset/password")
     public ResponseEntity<Response> resetPassword(@RequestHeader String token, @RequestParam("password") String password ) {
         Response response = userService.resetPassword(token,password);
         return new ResponseEntity<Response>(response,HttpStatus.OK);

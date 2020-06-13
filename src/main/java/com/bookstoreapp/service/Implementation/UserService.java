@@ -38,9 +38,6 @@ public class UserService implements IUserService {
     @Autowired
     ISendMail mailSender;
 
-
-    String  reactUrl = "http://localhost:3000/reset/password/?";
-
     BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
 
     @Override
@@ -56,7 +53,7 @@ public class UserService implements IUserService {
             String baseUrl= url.substring(0,url.length()-4);
             String appUrl =
                     baseUrl+"verify?token="+jwtToken.generateToken(savedUser.id);
-            System.out.println("URL:"+appUrl);
+
             NotificationDto notificationDto=new NotificationDto(savedUser.email,"Activate account",
                     appUrl);
             mailSender.sendMail(notificationDto);
@@ -65,6 +62,7 @@ public class UserService implements IUserService {
 
         throw new UserException("User Exists",UserException.ExceptionType.USER_ALREADY_EXIST);
     }
+
 
     @Override
     public String loginUser(UserLoginDto userLoginDto) {
@@ -81,6 +79,7 @@ public class UserService implements IUserService {
         throw new UserException("Invalid Email id",UserException.ExceptionType.INVALID_EMAIL_ID);
     }
 
+
     @Override
     public Response verifyEmail(String token) {
         boolean result=jwtToken.validateToken(token);
@@ -92,16 +91,18 @@ public class UserService implements IUserService {
 
     }
 
+
     @Override
     public Response forgetPassword(String emailID, HttpServletRequest servletRequest) throws MessagingException {
         Optional<User> userdata=userRepository.findUserByEmail(emailID);
         if(userdata.isPresent()){
             User existingUser=userdata.get();
             String appUrl =
-                     reactUrl+jwtToken.generateToken(existingUser.id);
+                     servletRequest.getHeader("origin")+"/reset/password/?"+jwtToken.generateToken(existingUser.id);
             NotificationDto notificationDto=new NotificationDto(existingUser.email,"Reset Password",
                     appUrl);
             mailSender.sendMail(notificationDto);
+
             return new Response("Sent Email For Password Reset",200,"User Fetched Successfully");
         }
         throw new UserException("No Such User",UserException.ExceptionType.USER_NOT_FOUND);
@@ -126,7 +127,6 @@ public class UserService implements IUserService {
         }
         throw new UserException("No Such User",UserException.ExceptionType.USER_NOT_FOUND);
     }
-
 
 
 

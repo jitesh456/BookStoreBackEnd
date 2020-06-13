@@ -10,7 +10,7 @@ public class UpdateCartDto {
     public int quantity;
 
     @NotNull(message = "ISBN  should not be null")
-    @Size(min=11,max = 11,message = "ISBN must have 11 Digit")
+    @Size(max = 13,message = "ISBN must have 11 Digit")
     public String isbn;
 
     public UpdateCartDto(String isbn, int quantity) {

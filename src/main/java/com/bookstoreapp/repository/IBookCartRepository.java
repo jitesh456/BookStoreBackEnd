@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface IBookCartRepository extends JpaRepository<BookCart,Integer> {
 
-    @Query(value="select bookquantity from book_cart where book_id=:bookId and cart_id=:cartId",nativeQuery=true)
+    @Query(value="select book_quantity from book_cart where book_id=:bookId and cart_id=:cartId",nativeQuery=true)
     int getBookCartQuantity(@Param("bookId") int id,@Param("cartId") int id1);
 
     @Transactional
