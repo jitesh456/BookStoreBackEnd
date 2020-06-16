@@ -65,7 +65,4 @@ public class CustomerService implements ICustomerService {
         int userId = jwtToken.getUserId();
         return userRepository.findUserById(userId);
     }
-
-
-
 }

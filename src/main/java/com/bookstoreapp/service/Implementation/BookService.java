@@ -1,38 +1,15 @@
 package com.bookstoreapp.service.Implementation;
 
-import com.bookstoreapp.dto.BookDto;
-import com.bookstoreapp.dto.NotificationDto;
-import com.bookstoreapp.dto.UpdateBookDto;
-import com.bookstoreapp.dto.UpdateCartDto;
 import com.bookstoreapp.exception.BookException;
 import com.bookstoreapp.model.Book;
-import com.bookstoreapp.properties.ApplicationProperties;
 import com.bookstoreapp.repository.IBookRepository;
-import com.bookstoreapp.response.FileResponse;
+import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.IBookService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Sort;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.mail.*;
-import javax.mail.internet.MimeMessage;
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.Optional;
-import java.util.prefs.BackingStoreException;
+import java.util.List;
 
 
 @Service
@@ -62,4 +39,13 @@ public class BookService implements IBookService {
         throw new BookException("SORT FIELD CAN NOT NULL",BookException.ExceptionType.SORT_FIELD_CAN_NOT_NULL);
     }
 
+    @Override
+    public Response getSearchedBook(String search) {
+        Response response = null;
+        List<Book> searchedBook= (List<Book>) iBookRepository.SearchBook(search);
+        if(searchedBook.size()>0)
+            return new Response("Book List is Searched On basic of given search",200,searchedBook);
+
+        return new Response("Books Not Found",200,searchedBook);
+    }
 }
