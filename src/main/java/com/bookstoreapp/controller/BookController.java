@@ -26,4 +26,10 @@ public class BookController {
         Response response=new Response("Book List is Sorted On basic of given field",200,sortedBook);
         return response;
     }
+
+    @GetMapping("/books/search")
+    public Response getSearchedBook(@RequestParam ("search")String search){
+        return bookService.getSearchedBook(search);
+    }
+
 }

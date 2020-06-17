@@ -56,24 +56,30 @@ public class CartService  implements ICartService {
         Book book = book1.get();
         int quantity =addToCartDto.quantity;
 
-        int totalPrice = 0;
+
         if (cart.isPresent()) {
             userCart = cart.get();
-            List<BookCart> bookCarts = userCart.bookCartList.stream().filter(bookCart -> bookCart.book.id == bookId).collect(Collectors.toList());
+            List<BookCart> bookCarts = userCart.bookCartList.stream()
+                    .filter(bookCart -> bookCart.book.id == bookId).collect(Collectors.toList());
             BookCart bookCart=null;
-            if(bookCarts.size()<=0)
+
+            if(bookCarts.size()==0)
             {
+
                  bookCart = new BookCart(book, userCart, quantity);
-                 userCart.quantity =  quantity;
+                 userCart.quantity = userCart.quantity+ quantity;
                  userCart.totalPrice = (int) (userCart.totalPrice+ book.price*addToCartDto.quantity);
 
+
             }
-            if(bookCarts.size()>0)
+
+            if(bookCarts.size()==1)
             {
                 int bookCartQuantity = bookCartRepository.getBookCartQuantity(bookId, userCart.id);
                 userCart.quantity=(userCart.quantity+addToCartDto.quantity)-bookCartQuantity;
                 userCart.totalPrice = (int) ((userCart.totalPrice+addToCartDto.quantity*book.price)-bookCartQuantity*book.price);
                 bookCart = new BookCart(book, userCart, quantity);
+                cartRepository.save(userCart);
             }
 
             bookCartRepository.save(bookCart);
@@ -81,7 +87,7 @@ public class CartService  implements ICartService {
             cartRepository.save(userCart);
         }
         if (!cart.isPresent()) {
-            userCart = new Cart(null, totalPrice, false, quantity);
+            userCart = new Cart(null, (int)book.price, false, quantity);
             cartRepository.save(userCart);
             user.carts.add(userCart);
             userRepository.save(user);

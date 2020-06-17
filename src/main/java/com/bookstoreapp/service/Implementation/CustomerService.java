@@ -31,14 +31,21 @@ public class CustomerService implements ICustomerService {
     @Override
     public Response userDetail(UserDetailDto userDetailsDto, String token) {
         Optional<User> savedUser = validate(token);
-        if(savedUser.isPresent()){
-            UserDetail userDetail=new UserDetail(userDetailsDto);
-            userDetailRepository.save(userDetail);
-            savedUser.get().userDetail.add(userDetail);
-            userRepository.save(savedUser.get());
-            return new Response("Added User Detail Successfully",200,"");
+        User user=savedUser.get();
+        if(!savedUser.isPresent()){ throw new UserException("User Not Found", UserException.ExceptionType.USER_NOT_FOUND); }
+        Optional<UserDetail> detail=userDetailRepository.findAll().stream()
+                .filter(details -> userDetailsDto.addressType.equals(details.addressType))
+                .findFirst();
+        if(detail.isPresent()){
+            user.userDetail.removeIf(details->detail.get().addressType.equals(details.addressType));
+            userDetailRepository.delete(detail.get());
         }
-        throw new UserException("User Not Found", UserException.ExceptionType.USER_NOT_FOUND);
+        UserDetail userDetail=new UserDetail(userDetailsDto);
+        userDetailRepository.save(userDetail);
+        System.out.println(userDetailRepository.findAll().get(0));
+        user.userDetail.add(userDetail);
+        userRepository.save(user);
+        return new Response("Added User Detail Successfully",200,"");
     }
 
     @Override
@@ -58,7 +65,4 @@ public class CustomerService implements ICustomerService {
         int userId = jwtToken.getUserId();
         return userRepository.findUserById(userId);
     }
-
-
-
 }
