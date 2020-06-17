@@ -14,6 +14,7 @@ import com.bookstoreapp.response.OrderPlacedResponse;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.ICartService;
 import com.bookstoreapp.util.IJwtToken;
+import com.bookstoreapp.util.IOrderPlaceTemplet;
 import com.bookstoreapp.util.ISendMail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,9 @@ public class CartService  implements ICartService {
 
     @Autowired
     ISendMail sendMail;
+
+    @Autowired
+    IOrderPlaceTemplet orderPlaceTemplet;
 
     @Override
     public Response addToCart(AddToCartDto addToCartDto, String token) {
@@ -136,9 +140,7 @@ public class CartService  implements ICartService {
         }
         cart.placedOrder = true;
         cart.orderPlacedDate = LocalDateTime.now();
-        String body="Hello "+user.get().name + "\tyour order Is Placed Successfully."+
-                "\nOrder Details:\n"+cart.bookCartList.stream().map(bookCart ->bookCart.book.name )
-                .collect(Collectors.toList())+"\nYou Total Price:"+cart.totalPrice+"\nTotal Book No:"+cart.quantity;
+        String body=orderPlaceTemplet.placeOrderTemplet(cart ,user.get());
         sendMail.sendMail(new NotificationDto(user.get().email,"Order Confirmation",body));
         cartRepository.save(cart);
         return new Response("Order Placed Successfully", 200, "");
