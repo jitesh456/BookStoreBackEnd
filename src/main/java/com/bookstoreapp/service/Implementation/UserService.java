@@ -11,8 +11,9 @@ import com.bookstoreapp.repository.IUserRepository;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.IUserService;
 import com.bookstoreapp.util.IJwtToken;
+import com.bookstoreapp.util.IResetPasswordTemplate;
 import com.bookstoreapp.util.ISendMail;
-import com.bookstoreapp.util.VerifyEmailTemplet;
+import com.bookstoreapp.util.IVerifyEmailTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,10 @@ public class UserService implements IUserService {
     ISendMail mailSender;
 
     @Autowired
-    VerifyEmailTemplet verifyEmailTemplet;
+    IVerifyEmailTemplate iVerifyEmailTemplate;
+
+    @Autowired
+    IResetPasswordTemplate iResetPasswordTemplate;
 
     BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
 
@@ -56,7 +60,7 @@ public class UserService implements IUserService {
             StringBuffer url = servletRequest.getRequestURL();
             String baseUrl= url.substring(0,url.length()-4);
             String appUrl =
-                    verifyEmailTemplet.verifyEmailTemplet(baseUrl+"verify?token="+jwtToken.generateToken(savedUser.id));
+                    iVerifyEmailTemplate.verifyEmailTemplet(baseUrl+"verify?token="+jwtToken.generateToken(savedUser.id));
 
             NotificationDto notificationDto=new NotificationDto(savedUser.email,"Activate account",
                     appUrl);
@@ -103,8 +107,9 @@ public class UserService implements IUserService {
             User existingUser=userdata.get();
             String appUrl =
                      servletRequest.getHeader("origin")+"/reset/password/?"+jwtToken.generateToken(existingUser.id);
+            String message=iResetPasswordTemplate.getPasswordTemplate(appUrl);
             NotificationDto notificationDto=new NotificationDto(existingUser.email,"Reset Password",
-                    appUrl);
+                    message);
             mailSender.sendMail(notificationDto);
 
             return new Response("Sent Email For Password Reset",200,"User Fetched Successfully");

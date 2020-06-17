@@ -1,12 +1,12 @@
-package com.bookstoreapp.util;
+package com.bookstoreapp.util.implementation;
 
+import com.bookstoreapp.util.IResetPasswordTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
-public class VerifyEmailTemplet {
-
-    public String verifyEmailTemplet(String url)
-    {
+public class ResetPasswordTemplate implements IResetPasswordTemplate {
+    @Override
+    public String getPasswordTemplate(String appUrl) {
         return ("<html>\n" +
                 "\n" +
                 "<head>\n" +
@@ -43,9 +43,9 @@ public class VerifyEmailTemplet {
                 "\n" +
                 "<div >\n" +
                 "\n" +
-                "<p>Thank you for registration.Please verify your email in order to continue Shopping.Click on Verify Button </p>\n" +
+                "<p>Please click the below button to reset your password.</p>\n" +
                 "\n" +
-                "<a href="+url+"><Button class=\"button\">Verify Email</Button></a>"+
+                "<a href="+appUrl+"><Button class=\"button\">Reset Password</Button></a>"+
                 "</div>\n" +
                 "\n" +
                 "</body>\n" +
