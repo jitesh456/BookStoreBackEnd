@@ -27,9 +27,9 @@ public class BookController {
         return response;
     }
 
-    @GetMapping("/books/search")
-    public Response getSearchedBook(@RequestParam ("search")String search){
-        return bookService.getSearchedBook(search);
+    @GetMapping("/books/filter")
+    public Response getSearchedBook(@RequestParam ("search") String search,@RequestParam ("sort") String sort){
+        return bookService.getBooks(search,sort);
     }
 
 }

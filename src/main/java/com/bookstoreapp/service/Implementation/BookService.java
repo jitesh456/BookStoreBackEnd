@@ -1,5 +1,6 @@
 package com.bookstoreapp.service.Implementation;
 
+import com.bookstoreapp.comparison.Comparison;
 import com.bookstoreapp.exception.BookException;
 import com.bookstoreapp.model.Book;
 import com.bookstoreapp.repository.IBookRepository;
@@ -9,22 +10,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 @Service
 public class BookService implements IBookService {
 
-
-
     @Autowired
     IBookRepository iBookRepository;
 
-
-
     public BookService() {
     }
-
 
     @Override
     public Iterable<Book> getAllBook() {
@@ -40,12 +37,15 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public Response getSearchedBook(String search) {
-        Response response = null;
-        List<Book> searchedBook= (List<Book>) iBookRepository.SearchBook(search);
-        if(searchedBook.size()>0)
-            return new Response("Book List is Searched On basic of given search",200,searchedBook);
-
-        return new Response("Books Not Found",200,searchedBook);
+    public Response getBooks(String search, String sort) {
+        List<Book> books = null;
+        if (search != null && sort != null) {
+            books = (List<Book>) iBookRepository.SearchBook(search);
+            books = Comparison.getSortedBooks(books, sort.toLowerCase().trim());
+        }
+        if (books.size() > 0)
+            return new Response("Books Found On Given Search or Sort Fields", 200, books);
+        return new Response("Books Not Found", 200, books);
     }
+
 }
