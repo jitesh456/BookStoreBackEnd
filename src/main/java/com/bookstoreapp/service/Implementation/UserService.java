@@ -12,6 +12,7 @@ import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.IUserService;
 import com.bookstoreapp.util.IJwtToken;
 import com.bookstoreapp.util.ISendMail;
+import com.bookstoreapp.util.VerifyEmailTemplet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,9 @@ public class UserService implements IUserService {
     @Autowired
     ISendMail mailSender;
 
+    @Autowired
+    VerifyEmailTemplet verifyEmailTemplet;
+
     BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
 
     @Override
@@ -52,7 +56,7 @@ public class UserService implements IUserService {
             StringBuffer url = servletRequest.getRequestURL();
             String baseUrl= url.substring(0,url.length()-4);
             String appUrl =
-                    baseUrl+"verify?token="+jwtToken.generateToken(savedUser.id);
+                    verifyEmailTemplet.verifyEmailTemplet(baseUrl+"verify?token="+jwtToken.generateToken(savedUser.id));
 
             NotificationDto notificationDto=new NotificationDto(savedUser.email,"Activate account",
                     appUrl);

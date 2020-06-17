@@ -18,10 +18,11 @@ public class SendMail implements ISendMail {
     @Override
     public String sendMail(NotificationDto notificationDto) throws MessagingException {
         MimeMessage message=javaMailSender.createMimeMessage();
-        MimeMessageHelper messageHelper=new MimeMessageHelper(message);
+        message.setContent(message,"text/html");
+        MimeMessageHelper messageHelper=new MimeMessageHelper(message,true);
         messageHelper.setTo(notificationDto.recipientAddress);
         messageHelper.setSubject(notificationDto.subject);
-        messageHelper.setText(notificationDto.body);
+        messageHelper.setText(notificationDto.body,true);
         javaMailSender.send(message);
         return "Mail Sent Successfully";
     }
