@@ -39,13 +39,10 @@ public class BookService implements IBookService {
     @Override
     public Response getBooks(String search, String sort) {
         List<Book> books = null;
-        if (search != null && sort != null) {
-            books = (List<Book>) iBookRepository.SearchBook(search);
-            books = Comparison.getSortedBooks(books, sort.toLowerCase().trim());
-        }
+        books = (List<Book>) iBookRepository.SearchBook(search);
+        books = Comparison.getSortedBooks(books, sort.toLowerCase().trim());
         if (books.size() > 0)
             return new Response("Books Found On Given Search or Sort Fields", 200, books);
         return new Response("Books Not Found", 200, books);
     }
-
 }
