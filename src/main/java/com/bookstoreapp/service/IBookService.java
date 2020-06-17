@@ -8,5 +8,5 @@ public interface IBookService {
 
     Iterable<Book> getSortedBook(String sortBookDto);
 
-    Response getBooks(String search, String sort);
+    Response getBooks(String search, String sort,int page);
 }

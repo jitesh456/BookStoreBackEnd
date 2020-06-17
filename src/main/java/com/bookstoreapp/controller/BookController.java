@@ -29,7 +29,7 @@ public class BookController {
 
     @GetMapping("/books/filter")
     public Response getSearchedBook(@RequestParam ("search") String search,@RequestParam ("sort") String sort){
-        return bookService.getBooks(search,sort);
+        return bookService.getBooks(search,sort,1);
     }
 
 }
