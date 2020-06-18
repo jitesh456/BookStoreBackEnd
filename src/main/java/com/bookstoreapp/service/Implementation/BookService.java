@@ -8,13 +8,10 @@ import com.bookstoreapp.response.BookResponse;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.IBookService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 
 @Service
 public class BookService implements IBookService {
@@ -44,25 +41,35 @@ public class BookService implements IBookService {
 
     @Override
     public Response getBooks(String search, String sort,int page) {
-        Pageable pageable=this.getPage(page);
-        List<Book> books = this.searchSort(search,sort,pageable);
-        if (count > 0)
+        List<Book> books = this.searchSort(search,sort);
+        books=this.getAllBooks(books);
+        books=this.getPage(books,page);
+        if (books.size() > 0)
             return new Response("Books Found On Given Search or Sort Fields", 200,
                     new BookResponse(books,count));
-
         return new Response("Books Not Found", 200, new BookResponse(books,count));
     }
 
-    private Pageable getPage(int page) {
-        int start=page*perPage;
-        int end=start+perPage;
-        return PageRequest.of(start,end);
+    private List<Book> getAllBooks(List<Book> books) {
+        if(books.size()==0){
+            books=bookRepository.findAll();
+            count=books.size();
+        }
+        return books;
     }
 
-    private List<Book> searchSort(String search, String sort, Pageable pageable) {
-        count= (int) bookRepository.searchBook(pageable,search).getTotalElements();
-        List<Book> books = bookRepository.searchBook(pageable,search).getContent();
-        books = Comparison.getSortedBooks(books, sort.toLowerCase().trim());
+    private List<Book> getPage(List<Book> books, int page) {
+        int start=page*perPage;
+        int end=start+perPage;
+        if(end<books.size())
+            return books.subList(start,end);
+        return books.subList(start,books.size());
+    }
+
+    private List<Book> searchSort(String search, String sort) {
+        List<Book> books = bookRepository.searchBook(search);
+        books=Comparison.getSortedBooks(books,sort.toLowerCase().trim());
+        count=books.size();
         return books;
     }
 }
