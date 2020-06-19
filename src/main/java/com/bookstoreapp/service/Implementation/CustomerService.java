@@ -42,7 +42,6 @@ public class CustomerService implements ICustomerService {
         }
         UserDetail userDetail=new UserDetail(userDetailsDto);
         userDetailRepository.save(userDetail);
-        System.out.println(userDetailRepository.findAll().get(0));
         user.userDetail.add(userDetail);
         userRepository.save(user);
         return new Response("Added User Detail Successfully",200,"");

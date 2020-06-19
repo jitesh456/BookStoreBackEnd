@@ -14,7 +14,7 @@ import com.bookstoreapp.response.OrderPlacedResponse;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.ICartService;
 import com.bookstoreapp.util.IJwtToken;
-import com.bookstoreapp.util.IOrderPlaceTemplet;
+import com.bookstoreapp.util.IOrderPlaceTemplate;
 import com.bookstoreapp.util.ISendMail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,6 @@ import javax.mail.MessagingException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class CartService  implements ICartService {
@@ -47,7 +46,7 @@ public class CartService  implements ICartService {
     ISendMail sendMail;
 
     @Autowired
-    IOrderPlaceTemplet orderPlaceTemplet;
+    IOrderPlaceTemplate orderPlaceTemplet;
 
     @Override
     public Response addToCart(AddToCartDto addToCartDto, String token) {
@@ -140,7 +139,7 @@ public class CartService  implements ICartService {
         }
         cart.placedOrder = true;
         cart.orderPlacedDate = LocalDateTime.now();
-        String body=orderPlaceTemplet.placeOrderTemplet(cart ,user.get());
+        String body=orderPlaceTemplet.placeOrderTemplate(cart ,user.get());
         sendMail.sendMail(new NotificationDto(user.get().email,"Order Confirmation",body));
         cartRepository.save(cart);
         return new Response("Order Placed Successfully", 200, "");
@@ -157,11 +156,11 @@ public class CartService  implements ICartService {
         int bookQuantity = bookCartRepository.getBookCartQuantity(id, cart.id);
         int quantity = cart.quantity - bookQuantity;
         int totalPrice= (int) (cart.totalPrice-bookQuantity-savedBook.get().price*bookQuantity);
-        bookCartRepository.updateBookCart(id, cart.id);
+        bookCartRepository.deleteBook(id, cart.id);
         cart.quantity = quantity;
         cart.totalPrice=totalPrice;
         cartRepository.save(cart);
-        return new Response("BookList", 200, "");
+        return new Response("Book is removed", 200, "");
     }
 
     @Override

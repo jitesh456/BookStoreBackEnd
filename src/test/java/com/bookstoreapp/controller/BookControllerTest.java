@@ -25,11 +25,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 
@@ -94,5 +95,20 @@ public class BookControllerTest {
         } catch (BookException e) {
             Assert.assertEquals(BookException.ExceptionType.SORT_FIELD_CAN_NOT_NULL, e.exceptionType);
         }
+    }
+
+    @Test
+    void givenSortSearchAndPage_WhenProper_shouldReturnBook() throws Exception {
+        Response response=new Response("BookList base on search sot field",200,"");
+
+        MultiValueMap<String,String> params=new LinkedMultiValueMap<>();
+        params.put("search", Collections.singletonList("a"));
+        params.put("sort", Collections.singletonList("authorName"));
+        params.put("page", Collections.singletonList("2"));
+
+        Mockito.when(bookService.getBooks(anyString(),anyString(),anyInt())).thenReturn(response);
+        MvcResult result = this.mockMvc.perform(get("/books/all").params(params)).andReturn();
+        Assert.assertEquals(200,result.getResponse().getStatus());
+        Assert.assertEquals("BookList base on search sot field",gson.fromJson(result.getResponse().getContentAsString(),Response.class).message);
     }
 }
