@@ -46,14 +46,14 @@ public class CustomerServiceTest {
 
     @InjectMocks
     CustomerService customerService;
-
+    User user;
 
     @BeforeEach
     void setUp() {
         userRegistrationDto=new UserRegistrationDto("AkhilSharma","akhil234@gmail.com",
                 "Luffy456@","8943725498");
         token="asdgj@123";
-
+        user=new User(userRegistrationDto);
     }
 
 
@@ -63,7 +63,7 @@ public class CustomerServiceTest {
         UserLoginDto userLoginDto =new UserLoginDto("luffy@gmail.com","Luffy456@");
         BCryptPasswordEncoder bCryptPasswordEncoder=new BCryptPasswordEncoder();
         userRegistrationDto.password=bCryptPasswordEncoder.encode(userLoginDto.password);
-        User user=new User(userRegistrationDto);
+
         UserDetailDto userDetailDto=new UserDetailDto("Home","435672","101 B Street",
                 "101 B Street Lucknow U.P","Lucknow","India");
         UserDetail userDetail=new UserDetail(userDetailDto);
@@ -74,5 +74,14 @@ public class CustomerServiceTest {
         Response response = customerService.userDetail(userDetailDto,token);
         Assert.assertEquals("Added User Detail Successfully",response.message);
         Assert.assertEquals(200,response.statusCode);
+    }
+
+    @Test
+    void whenUserFound_ShouldReturnUserDetails() {
+        Mockito.when(userRepository.findUserById(anyInt())).thenReturn(java.util.Optional.of(user));
+        Response response = customerService.getUserDetail(token);
+        Assert.assertEquals("User Found",response.message);
+        Assert.assertEquals(200,response.statusCode);
+
     }
 }

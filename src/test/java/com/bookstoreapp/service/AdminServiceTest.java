@@ -56,23 +56,22 @@ public class AdminServiceTest {
         Book givenBook=new Book(bookDto);
 
         UpdateBookDto bookDto1 =new UpdateBookDto(2450.0, "1234567895",12);
-        String expectedresponse="Updated Successfully";
+        String expectedResponse="Updated Successfully";
         when(iBookRepository.findByIsbn(any())).thenReturn(java.util.Optional.of(givenBook));
         when(iBookRepository.save(any())).thenReturn(givenBook);
-        String actualresponse= adminService.updatePrice(bookDto1);
-        Assert.assertEquals(expectedresponse,actualresponse);
+        String actualResponse= adminService.updatePrice(bookDto1);
+        Assert.assertEquals(expectedResponse,actualResponse);
     }
 
 
     @Test
     void givenQuantity_WhenProper_ShouldUpdateBookQuantity() {
         Book givenBook = new Book(bookDto);
-
         UpdateCartDto updateCartDto = new UpdateCartDto("1234567895", 5);
-        String expectedresponse = "Book Quantity Updated";
+        String expectedResponse = "Book Quantity Updated";
         when(iBookRepository.findByIsbn(any())).thenReturn(java.util.Optional.of(givenBook));
         when(iBookRepository.save(any())).thenReturn(givenBook);
-        String actualresponse = adminService.updateQuantity(updateCartDto);
-        Assert.assertEquals(expectedresponse, actualresponse);
+        String actualResponse = adminService.updateQuantity(updateCartDto);
+        Assert.assertEquals(expectedResponse, actualResponse);
     }
 }

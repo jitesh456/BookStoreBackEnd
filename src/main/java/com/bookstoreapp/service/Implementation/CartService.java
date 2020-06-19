@@ -23,7 +23,6 @@ import javax.mail.MessagingException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class CartService  implements ICartService {
@@ -157,11 +156,11 @@ public class CartService  implements ICartService {
         int bookQuantity = bookCartRepository.getBookCartQuantity(id, cart.id);
         int quantity = cart.quantity - bookQuantity;
         int totalPrice= (int) (cart.totalPrice-bookQuantity-savedBook.get().price*bookQuantity);
-        bookCartRepository.updateBookCart(id, cart.id);
+        bookCartRepository.deleteBook(id, cart.id);
         cart.quantity = quantity;
         cart.totalPrice=totalPrice;
         cartRepository.save(cart);
-        return new Response("BookList", 200, "");
+        return new Response("Book is removed", 200, "");
     }
 
     @Override

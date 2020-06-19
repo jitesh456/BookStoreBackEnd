@@ -46,7 +46,9 @@ public class JwtToken implements IJwtToken {
                 .parseClaimsJws(token).getBody();
 
         userId=Integer.parseInt(claims.getId());
-
+        if(token.isEmpty()){
+            throw new JwtTokenException("Token must not be empty", JwtTokenException.ExceptionType.EMPTY_TOKEN);
+        }
         if(claims.getExpiration().after(new Date(System.currentTimeMillis()))){
             return true;
         }

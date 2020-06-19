@@ -286,7 +286,7 @@ public class AdminControllerTest {
 
     @Test
     void givenFileName_WhenFound_ReturnsFile() throws Exception {
-        String fileName="dragon-ball-z-kakarot-reviews.original.jpg";
+        String fileName="notebook.jpg";
         String imagePath="//src//main//resources//Images//";
         String fileBasePath = System.getProperty("user.dir")+imagePath;
         Path path = Paths.get(fileBasePath + fileName);

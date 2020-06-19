@@ -18,5 +18,5 @@ public interface IBookCartRepository extends JpaRepository<BookCart,Integer> {
     @Transactional
     @Modifying
     @Query(value="delete from book_cart where book_id=:bookId and cart_id=:cartId",nativeQuery=true)
-    void updateBookCart(@Param("bookId") int bookid , @Param("cartId") int cartId);
+    void deleteBook(@Param("bookId") int bookid , @Param("cartId") int cartId);
 }

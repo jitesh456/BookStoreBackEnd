@@ -13,6 +13,8 @@ import com.bookstoreapp.repository.ICartRepository;
 import com.bookstoreapp.repository.IUserRepository;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.Implementation.CartService;
+import com.bookstoreapp.util.IOrderPlaceTemplet;
+import com.bookstoreapp.util.ISendMail;
 import com.bookstoreapp.util.implementation.JwtToken;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,6 +57,12 @@ public class CartServiceTest {
 
     @Mock
     IUserRepository userRepository;
+
+    @Mock
+    IOrderPlaceTemplet orderPlaceTemplet;
+
+    @Mock
+    ISendMail sendMail;
 
     UserRegistrationDto userRegistrationDto;
     Set<BookCart> bookCartSet;
@@ -112,34 +120,32 @@ public class CartServiceTest {
     }
 
     @Test
-    void whenCartFoundUpdateOrderStatus_ThenReturnProperMessage() {
+    void whenCartFoundUpdateOrderStatus_ThenReturnProperMessage() throws MessagingException {
 
         Response response = null;
-        try {
-            response = cartService.updateCart(token);
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
+        Mockito.when(orderPlaceTemplet.placeOrderTemplet(any(),any())).thenReturn("");
+        Mockito.when(sendMail.sendMail(any())).thenReturn("Mail Sent");
+        response = cartService.updateCart(token);
+
         Assert.assertEquals("Order Placed Successfully", response.message);
     }
 
 
     @Test
-    void givenBookId_WhenProper_ShouldRemoveBookFromCart() {
+    void givenBookId_WhenProper_ShouldRemoveBookFromCart() throws MessagingException {
 
         Response response = null;
-        try {
-            response = cartService.updateCart(token);
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
-        Assert.assertEquals("Order Placed Successfully", response.message);
+        Mockito.when(bookCartRepository.getBookCartQuantity(anyInt(),anyInt())).thenReturn(12);
+        Mockito.when(bookRepository.findById(anyInt())).thenReturn(java.util.Optional.of(book));
+        response = cartService.deleteBook(1,token);
+        Assert.assertEquals("Book is removed", response.message);
     }
 
     @Test
-    void whenTokenProper_ShouldOrderDetails() {
+    void whenTokenProper_ShouldReturnOrderDetails() {
 
         Mockito.when(bookRepository.findById(any())).thenReturn(java.util.Optional.of(book));
+        Mockito.when(orderPlaceTemplet.placeOrderTemplet(any(),any())).thenReturn("");
         Response response = cartService.orderDetails(token);
         Assert.assertEquals("Book Cart List", response.message);
     }

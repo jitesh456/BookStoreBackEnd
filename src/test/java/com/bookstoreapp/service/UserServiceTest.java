@@ -10,27 +10,23 @@ import com.bookstoreapp.model.User;
 import com.bookstoreapp.repository.IUserDetailRepository;
 import com.bookstoreapp.repository.IUserRepository;
 import com.bookstoreapp.response.Response;
-import com.bookstoreapp.service.Implementation.BookService;
 import com.bookstoreapp.service.Implementation.UserService;
 import com.bookstoreapp.util.IResetPasswordTemplate;
 import com.bookstoreapp.util.IVerifyEmailTemplate;
 import com.bookstoreapp.util.implementation.JwtToken;
 import com.bookstoreapp.util.implementation.SendMail;
-import javafx.beans.binding.When;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
-
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
