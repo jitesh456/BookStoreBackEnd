@@ -1,7 +1,6 @@
 package com.bookstoreapp.controller;
 
 import com.bookstoreapp.dto.BookDto;
-import com.bookstoreapp.dto.UpdateCartDto;
 import com.bookstoreapp.exception.BookException;
 import com.bookstoreapp.model.Book;
 import com.bookstoreapp.response.Response;
@@ -14,26 +13,17 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import static org.mockito.ArgumentMatchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-
-
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @WebMvcTest(controllers = BookController.class)
 @RunWith(MockitoJUnitRunner.class)
@@ -62,6 +52,7 @@ public class BookControllerTest {
 
     @Test
     void whenBookFound_ShouldReturnProperMessage() throws Exception {
+
         BookDto bookDto1 = new BookDto("Naruto", 200.0,
                 20, "makashi kissimoto", "Manga",
                 "12345678", "", "story about ninja boy ");
@@ -81,6 +72,7 @@ public class BookControllerTest {
 
     @Test
     void givenASortField_WhenNull_ShouldThrowException() throws Exception {
+
         try {
             BookDto bookDto1 = new BookDto("Naruto", 200.0,
                     20, "makashi kissimoto", "Manga",
@@ -99,13 +91,12 @@ public class BookControllerTest {
 
     @Test
     void givenSortSearchAndPage_WhenProper_shouldReturnBook() throws Exception {
-        Response response=new Response("BookList base on search sot field",200,"");
 
+        Response response=new Response("BookList base on search sot field",200,"");
         MultiValueMap<String,String> params=new LinkedMultiValueMap<>();
         params.put("search", Collections.singletonList("a"));
         params.put("sort", Collections.singletonList("authorName"));
         params.put("page", Collections.singletonList("2"));
-
         Mockito.when(bookService.getBooks(anyString(),anyString(),anyInt())).thenReturn(response);
         MvcResult result = this.mockMvc.perform(get("/books/all").params(params)).andReturn();
         Assert.assertEquals(200,result.getResponse().getStatus());

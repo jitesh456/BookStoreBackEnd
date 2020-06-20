@@ -9,7 +9,9 @@ import org.springframework.stereotype.Component;
 
 @ConfigurationProperties(prefix="application")
 public class ApplicationProperties {
+
     String secretKey;
+
     String filePath;
 
     public String getSecretKey() {

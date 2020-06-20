@@ -1,6 +1,5 @@
 package com.bookstoreapp.service;
 
-
 import com.bookstoreapp.dto.BookDto;
 import com.bookstoreapp.dto.UpdateBookDto;
 import com.bookstoreapp.dto.UpdateCartDto;
@@ -15,7 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -30,6 +28,7 @@ public class AdminServiceTest {
 
     @InjectMocks
     AdminService adminService;
+
     BookDto bookDto;
 
     @BeforeEach
@@ -42,6 +41,7 @@ public class AdminServiceTest {
 
     @Test
     void givenBookDetails_WhenAddedInStore_ShouldReturnAddedBook() {
+
         Book givenBook=new Book(bookDto);
         String expectedresponse="Insertion Successful";
         when(iBookRepository.save(any())).thenReturn(givenBook);
@@ -53,8 +53,8 @@ public class AdminServiceTest {
 
     @Test
     void givenBookDataPrice_WhenUpdated_ReturnProperMessage() throws Exception {
-        Book givenBook=new Book(bookDto);
 
+        Book givenBook=new Book(bookDto);
         UpdateBookDto bookDto1 =new UpdateBookDto(2450.0, "1234567895",12);
         String expectedResponse="Updated Successfully";
         when(iBookRepository.findByIsbn(any())).thenReturn(java.util.Optional.of(givenBook));
@@ -66,6 +66,7 @@ public class AdminServiceTest {
 
     @Test
     void givenQuantity_WhenProper_ShouldUpdateBookQuantity() {
+
         Book givenBook = new Book(bookDto);
         UpdateCartDto updateCartDto = new UpdateCartDto("1234567895", 5);
         String expectedResponse = "Book Quantity Updated";

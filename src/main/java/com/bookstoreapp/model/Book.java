@@ -2,7 +2,6 @@ package com.bookstoreapp.model;
 
 import com.bookstoreapp.dto.BookDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.util.List;
 
@@ -16,22 +15,17 @@ public class Book {
 
     public String name;
 
-
     public double price;
 
     public int quantity;
 
     public String bookCover;
 
-
     public String category;
-
 
     public String authorName;
 
-
     public String bookDetails;
-
 
     public String isbn;
 
@@ -42,7 +36,6 @@ public class Book {
     public Book(){
     }
 
-
     public Book(BookDto bookDto) {
         this.name= bookDto.name;
         this.price= bookDto.price;
@@ -52,8 +45,5 @@ public class Book {
         this.authorName = bookDto.authorName;
         this.bookDetails = bookDto.bookDetails;
         this.isbn= bookDto.isbn;
-
     }
-
-
 }

@@ -23,13 +23,13 @@ public class User {
 
     public String number;
 
-
     @OneToMany()
     public  List<Cart> carts=new ArrayList<>();
 
     @OneToMany(targetEntity = UserDetail.class)
 
     public List<UserDetail> userDetail=new ArrayList<>();
+
     public boolean isActivate;
 
     public User() { }

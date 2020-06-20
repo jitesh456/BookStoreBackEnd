@@ -2,8 +2,6 @@ package com.bookstoreapp.controller;
 
 import com.bookstoreapp.dto.AddToCartDto;
 import com.bookstoreapp.dto.BookDto;
-import com.bookstoreapp.dto.NotificationDto;
-import com.bookstoreapp.dto.UpdateCartDto;
 import com.bookstoreapp.model.Book;
 import com.bookstoreapp.response.OrderPlacedResponse;
 import com.bookstoreapp.response.Response;
@@ -25,17 +23,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-
 
 @WebMvcTest(controllers = CartController.class)
 @RunWith(MockitoJUnitRunner.class)
 public class CartControllerTest {
+
     @MockBean
     AdminService adminService;
 
@@ -51,6 +48,7 @@ public class CartControllerTest {
     CartService cartService;
 
     HttpHeaders httpHeaders=new HttpHeaders();
+
     BookDto bookDto;
 
     @Mock
@@ -58,6 +56,7 @@ public class CartControllerTest {
 
     @BeforeEach
     void setUp() {
+
         httpHeaders.set("Token","abcdef1234");
         gson = new Gson();
         bookDto =new BookDto("Secret of nagas", 2000.0,
@@ -69,6 +68,7 @@ public class CartControllerTest {
 
     @Test
     void givenCartDetails_WhenProper_ShouldReturnProperMessage() throws Exception {
+
         Response response=new Response("Book is Added To Cart",200,"");
         AddToCartDto addToCartDto=new AddToCartDto(20,2000);
         String addToCartJsonString = gson.toJson(addToCartDto);
@@ -83,6 +83,7 @@ public class CartControllerTest {
 
     @Test
     void whenUseTokenIsValid_ShouldReturnAllCartBook() throws Exception {
+
         List<Book> bookList=new ArrayList<>();
         Book book=new Book(bookDto);
         bookList.add(book);
@@ -98,6 +99,7 @@ public class CartControllerTest {
 
     @Test
     void whenUserTokenProper_ShouldPlacedOrderAndReturn() throws Exception {
+
         Response response=new Response("Order Is Placed",200,"");
         Mockito.when(cartService.updateCart(any())).thenReturn(response);
         MvcResult result = this.mockMvc.perform(put("/cart")
@@ -110,6 +112,7 @@ public class CartControllerTest {
 
     @Test
     void givenBookId_WhenProper_ShouldDeleteBook() throws Exception {
+
         Response response=new Response("Book Is Removed From Cart",200,"");
         Mockito.when(cartService.deleteBook(anyInt(),any())).thenReturn(response);
         MvcResult result = this.mockMvc.perform(delete("/book{id}",3)
@@ -122,6 +125,7 @@ public class CartControllerTest {
 
     @Test
     void whenUserTokenProper_ShouldReturnAllCart() throws Exception {
+
         List<OrderPlacedResponse> bookCartList=new ArrayList<>();
         Response response=new Response("BooK And Cart List",200,bookCartList);
         Mockito.when(cartService.orderDetails(any())).thenReturn(response);

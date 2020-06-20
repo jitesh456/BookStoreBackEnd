@@ -12,7 +12,6 @@ import com.bookstoreapp.service.ICustomerService;
 import com.bookstoreapp.util.IJwtToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @Service
@@ -27,9 +26,9 @@ public class CustomerService implements ICustomerService {
     @Autowired
     IUserDetailRepository userDetailRepository;
 
-
     @Override
     public Response userDetail(UserDetailDto userDetailsDto, String token) {
+
         Optional<User> savedUser = validate(token);
         User user=savedUser.get();
         if(!savedUser.isPresent()){ throw new UserException("User Not Found", UserException.ExceptionType.USER_NOT_FOUND); }
@@ -60,6 +59,7 @@ public class CustomerService implements ICustomerService {
     }
 
     private Optional<User> validate(String token){
+
         jwtToken.validateToken(token);
         int userId = jwtToken.getUserId();
         return userRepository.findUserById(userId);

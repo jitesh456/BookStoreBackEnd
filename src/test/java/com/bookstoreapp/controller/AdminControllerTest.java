@@ -34,12 +34,11 @@ public class AdminControllerTest {
 
     @MockBean
     AdminService adminService;
+
     BookDto bookDto;
 
     @Autowired
     MockMvc mockMvc;
-
-
 
     Gson gson;
 
@@ -55,6 +54,7 @@ public class AdminControllerTest {
 
     @Test
     void givenBookData_WhenInserted_ReturnProperMessage() throws Exception {
+
         String bookStoreDto=new Gson().toJson(this.bookDto);
         Mockito.when(adminService.addBook(any())).thenReturn("Inserted Successful");
         MvcResult result = this.mockMvc.perform(post("/admin/book")
@@ -66,14 +66,13 @@ public class AdminControllerTest {
                 new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
 
-
-
     @Test
     void givenBookData_WhenAuthorNull_ReturnProperMessage() throws Exception {
-       BookDto bookDto1 =new BookDto("Secret of nagas",2000.0,
+
+        BookDto bookDto1 =new BookDto("Secret of nagas",2000.0,
                 12,null,"comic",
                 "1234567895","Adventure","Adaptation of the first of J.K. Rowling's popular " +
-               "closest allies and help him discover the truth about his parents' mysterious deaths.");
+                "closest allies and help him discover the truth about his parents' mysterious deaths.");
 
         String bookStoreDtoString = gson.toJson(bookDto1);
         MvcResult result = this.mockMvc.perform(post("/admin/book")
@@ -87,6 +86,7 @@ public class AdminControllerTest {
 
     @Test
     void givenBookData_WhenBookNameNull_ReturnProperMessage() throws Exception {
+
         BookDto bookDto1 =new BookDto(null,2000.0,
                 12,"Amish Tiwari","comic",
                 "1234567895","sdfsfd","Adaptation of the first of J.K. Rowling's popular " +
@@ -102,10 +102,9 @@ public class AdminControllerTest {
                 new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
 
-
-
     @Test
     void givenBookData_WhenBookCoverNull_ReturnProperMessage() throws Exception {
+
         BookDto bookDto1 =new BookDto("Secret of nagas",2000.0,
                 12,"Amish Tiwari",null,
                 "1234567895","sdfsfd","Adaptation of the first of J.K. Rowling's popular " +
@@ -123,6 +122,7 @@ public class AdminControllerTest {
 
     @Test
     void givenBookData_WhenIsbnNull_ReturnProperMessage() throws Exception {
+
         BookDto bookDto1 =new BookDto("Secret of nagas",2000.0,
                 12,"Amiish Tiwari","comic",
                 null,"sdfsfd","Adaptation of the first of J.K. Rowling's popular " +
@@ -141,6 +141,7 @@ public class AdminControllerTest {
 
     @Test
     void givenBookData_WhenIsbnLessThenTen_ReturnProperMessage() throws Exception {
+
         BookDto bookDto1 =new BookDto("Secret of nagas",2000.0,
                 12,"Amish Tiwari","comic",
                 "123456","sdfsfd","Adaptation of the first of J.K. Rowling's popular " +
@@ -158,6 +159,7 @@ public class AdminControllerTest {
 
     @Test
     void givenBookData_WhenCategoryNull_ReturnProperMessage() throws Exception {
+
         BookDto bookDto1 =new BookDto("Secret of nagas",2000.0,
                 12,"Amish Tiwari","comic",
                 "1234567895",null,"Adaptation of the first of J.K. Rowling's popular " +
@@ -219,8 +221,8 @@ public class AdminControllerTest {
 
     @Test
     void givenBookDataPrice_WhenUpdated_ReturnProperMessage() throws Exception {
-        UpdateBookDto bookDto1 =new UpdateBookDto(2000.0, "1234567895",5);
 
+        UpdateBookDto bookDto1 =new UpdateBookDto(2000.0, "1234567895",5);
         String bookStoreDtoString = gson.toJson(bookDto1);
         Mockito.when(adminService.addBook(any())).thenReturn("Updated Successful");
         MvcResult result = this.mockMvc.perform(put("/admin/book")
@@ -234,8 +236,8 @@ public class AdminControllerTest {
 
     @Test
     void givenBookDataPrice_WhenPriceZero_ReturnProperMessage() throws Exception {
-        UpdateBookDto bookDto1 =new UpdateBookDto(0.0, "1234567895",5);
 
+        UpdateBookDto bookDto1 =new UpdateBookDto(0.0, "1234567895",5);
         String bookStoreDtoString = gson.toJson(bookDto1);
         MvcResult result = this.mockMvc.perform(put("/admin/book")
                 .content(bookStoreDtoString)
@@ -262,6 +264,7 @@ public class AdminControllerTest {
 
     @Test
     void givenBookData_WhenIsbnIsNotProper_ReturnProperMessage() throws Exception {
+
         UpdateBookDto bookDto1 =new UpdateBookDto(2000.0, "123456",0);
         String bookStoreDtoString = gson.toJson(bookDto1);
         MvcResult result = this.mockMvc.perform(put("/admin/book")
@@ -276,24 +279,22 @@ public class AdminControllerTest {
     void givenImageAsMultipart_shouldReturnImageViewURL() throws Exception {
         MockMultipartFile imageFile = new MockMultipartFile("file","1.png",
                 "image/png","Some data".getBytes());
-
-        MvcResult result = this.mockMvc.perform(multipart("/admin/uploadImage")
+        MvcResult result = this.mockMvc.perform(multipart("/admin/uploadimage")
                 .file(imageFile))
                 .andReturn();
-
         Assert.assertEquals(200,result.getResponse().getStatus());
     }
 
     @Test
     void givenFileName_WhenFound_ReturnsFile() throws Exception {
+
         String fileName="notebook.jpg";
         String imagePath="//src//main//resources//Images//";
         String fileBasePath = System.getProperty("user.dir")+imagePath;
         Path path = Paths.get(fileBasePath + fileName);
         Resource resource = new UrlResource(path.toUri());
         Mockito.when(adminService.loadFile(any(), any())).thenReturn(resource);
-
-        MvcResult result = this.mockMvc.perform(get("/admin/downloadFile/fileName?fileName=imageName"))
+        MvcResult result = this.mockMvc.perform(get("/admin/downloadfile/fileName?fileName=imageName"))
                 .andReturn();
         Assert.assertEquals(200,result.getResponse().getStatus());
     }

@@ -7,11 +7,9 @@ import javax.persistence.*;
 @Table(name="bookCart")
 public class BookCart  {
 
-
     @EmbeddedId
     @Column
     public BookCartId bookCartID;
-
 
     @ManyToOne()
     @MapsId("bookId")
@@ -32,7 +30,5 @@ public class BookCart  {
         this.bookQuantity = bookQuantity;
         bookCartID=new BookCartId(book.id,cart.id);
     }
-
-
 }
 

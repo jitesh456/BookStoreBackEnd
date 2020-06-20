@@ -26,13 +26,11 @@ public class Cart {
 
     public int quantity;
 
-
     @OneToMany(mappedBy = "cart",targetEntity = BookCart.class)
     @JsonIgnore
     public List<BookCart> bookCartList=new ArrayList<>();
 
     public Cart() {
-
     }
 
     public Cart( LocalDateTime orderPlacedDate, int totalPrice, boolean placedOrder, int quantity) {
@@ -42,6 +40,4 @@ public class Cart {
         this.quantity = quantity;
 
     }
-
-
 }

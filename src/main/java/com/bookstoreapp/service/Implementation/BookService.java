@@ -10,13 +10,13 @@ import com.bookstoreapp.service.IBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
 public class BookService implements IBookService {
 
     private int count=0;
+
     private int perPage=8;
 
     @Autowired
@@ -28,11 +28,13 @@ public class BookService implements IBookService {
 
     @Override
     public Iterable<Book> getAllBook() {
+
         return bookRepository.findAll();
     }
 
     @Override
     public Iterable<Book> getSortedBook(String sortField) {
+
         if(sortField != null) {
             return bookRepository.findAll(Sort.by(Sort.Direction.ASC, sortField));
         }
@@ -41,6 +43,7 @@ public class BookService implements IBookService {
 
     @Override
     public Response getBooks(String search, String sort,int page) {
+
         List<Book> books = this.searchSort(search,sort);
         books=this.getAllBooks(books);
         books=this.getPage(books,page);
@@ -51,14 +54,16 @@ public class BookService implements IBookService {
     }
 
     private List<Book> getAllBooks(List<Book> books) {
+
         if(books.size()==0){
-            books=bookRepository.findAll();
+            books= (List<Book>) this.getAllBook();
             count=books.size();
         }
         return books;
     }
 
     private List<Book> getPage(List<Book> books, int page) {
+
         int start=page*perPage;
         int end=start+perPage;
         if(end<books.size())
@@ -67,6 +72,7 @@ public class BookService implements IBookService {
     }
 
     private List<Book> searchSort(String search, String sort) {
+
         List<Book> books = bookRepository.searchBook(search);
         books=Comparison.getSortedBooks(books,sort.toLowerCase().trim());
         count=books.size();

@@ -17,7 +17,6 @@ import com.bookstoreapp.util.IVerifyEmailTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
@@ -50,6 +49,7 @@ public class UserService implements IUserService {
 
     @Override
     public Response addUser(UserRegistrationDto userRegistrationDto, HttpServletRequest servletRequest) throws MessagingException {
+
         Optional<User> userdata = userRepository.findUserByEmail(userRegistrationDto.email);
         if (!userdata.isPresent()) {
             String password = userRegistrationDto.password;
@@ -60,7 +60,7 @@ public class UserService implements IUserService {
             StringBuffer url = servletRequest.getRequestURL();
             String baseUrl = url.substring(0, url.length() - 4);
             String appUrl =
-                    iVerifyEmailTemplate.verifyEmailTemplet(baseUrl + "verify?token=" + jwtToken.generateToken(savedUser.id));
+                    iVerifyEmailTemplate.verifyEmailTemplate(baseUrl + "verify?token=" + jwtToken.generateToken(savedUser.id));
 
             NotificationDto notificationDto = new NotificationDto(savedUser.email, "Activate account",
                     appUrl);
@@ -74,6 +74,7 @@ public class UserService implements IUserService {
 
     @Override
     public String loginUser(UserLoginDto userLoginDto) {
+
         Optional<User> userData = userRepository.findUserByEmail(userLoginDto.email);
         if (userData.isPresent()) {
 
@@ -89,6 +90,7 @@ public class UserService implements IUserService {
 
     @Override
     public Response verifyEmail(String token) {
+
         boolean result = jwtToken.validateToken(token);
         int userId = jwtToken.getUserId();
         Optional<User> savedUser = userRepository.findUserById(userId);
@@ -101,6 +103,7 @@ public class UserService implements IUserService {
 
     @Override
     public Response forgetPassword(String emailID, HttpServletRequest servletRequest) throws MessagingException {
+
         Optional<User> userdata = userRepository.findUserByEmail(emailID);
         if (userdata.isPresent()) {
             User existingUser = userdata.get();
@@ -119,6 +122,7 @@ public class UserService implements IUserService {
 
     @Override
     public Response resetPassword(String token, String password) {
+
         Boolean aBoolean = jwtToken.validateToken(token);
         int userId = jwtToken.getUserId();
         Optional<User> user = userRepository.findUserById(userId);

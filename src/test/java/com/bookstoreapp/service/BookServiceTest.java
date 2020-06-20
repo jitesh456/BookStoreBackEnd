@@ -12,14 +12,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Sort;
-
 import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
 public class BookServiceTest {
-
-
 
     @Mock
     IBookRepository iBookRepository;
@@ -39,6 +36,7 @@ public class BookServiceTest {
 
     @Test
     void whenBookDetailsFound_ShouldReturnAllBookDetails(){
+
         BookDto bookDto1 =new BookDto("Naruto",200.0,
                 20,"makashi kissimoto","Manga",
                 "12345678","","story about ninja boy ");
@@ -58,6 +56,7 @@ public class BookServiceTest {
 
     @Test
     void givenSortField_WhenProper_ShouldReturnSortedBooksBasedOnPrice(){
+
         BookDto bookDto1 =new BookDto("Naruto",200.0,
                 20,"makashi kissimoto","Manga",
                 "12345678","","story about ninja boy ");
@@ -71,6 +70,4 @@ public class BookServiceTest {
         Iterable<Book> sortedBooks=bookService.getSortedBook("price");
         Assert.assertEquals(sortedBooks,bookIterable);
     }
-
-
 }

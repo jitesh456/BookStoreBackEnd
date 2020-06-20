@@ -1,7 +1,5 @@
 package com.bookstoreapp.dto;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -40,8 +38,7 @@ public class BookDto {
     public BookDto() { }
 
     public BookDto(String name, Double price, int quantity, String authorName,String bookCover, String isbn,
-                   String category,
-                   String bookDetails) {
+                   String category, String bookDetails) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;

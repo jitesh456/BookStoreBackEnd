@@ -18,7 +18,6 @@ import com.bookstoreapp.util.IOrderPlaceTemplate;
 import com.bookstoreapp.util.ISendMail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.mail.MessagingException;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -58,26 +57,18 @@ public class CartService  implements ICartService {
         Optional<Book> book1 = bookRepository.findById(bookId);
         Book book = book1.get();
         int quantity =addToCartDto.quantity;
-
-
         if (cart.isPresent()) {
             userCart = cart.get();
             List<BookCart> bookCarts = userCart.bookCartList.stream()
                     .filter(bookCart -> bookCart.book.id == bookId).collect(Collectors.toList());
             BookCart bookCart=null;
-
-            if(bookCarts.size()==0)
-            {
-
+            if(bookCarts.size()==0) {
                  bookCart = new BookCart(book, userCart, quantity);
                  userCart.quantity = userCart.quantity+ quantity;
                  userCart.totalPrice = (int) (userCart.totalPrice+ book.price*addToCartDto.quantity);
-
-
             }
 
-            if(bookCarts.size()==1)
-            {
+            if(bookCarts.size()==1) {
                 int bookCartQuantity = bookCartRepository.getBookCartQuantity(bookId, userCart.id);
                 userCart.quantity=(userCart.quantity+addToCartDto.quantity)-bookCartQuantity;
                 userCart.totalPrice = (int) ((userCart.totalPrice+addToCartDto.quantity*book.price)-bookCartQuantity*book.price);
@@ -111,8 +102,8 @@ public class CartService  implements ICartService {
         List<BookCart> bookCartList = cart.map(value -> value.bookCartList).orElse(Collections.emptyList());
         List<Book> bookList = new ArrayList<>();
         Book book;
-        for(int i=0;i<bookCartList.size();i++)
-        {
+        for(int i=0;i<bookCartList.size();i++) {
+
             book=bookRepository.findById(bookCartList.get(i).bookCartID.bookId).get();
             book.quantity=bookCartList.get(i).bookQuantity;
             bookList.add(book);
@@ -129,9 +120,8 @@ public class CartService  implements ICartService {
         List<Cart> userCart = user.map(user1 -> user.get().carts).orElse(null);
         Cart cart = userCart.stream().filter(cart1 -> !cart1.placedOrder).findAny().get();
         Book book;
+        for(int i=0;i<cart.bookCartList.size();i++) {
 
-        for(int i=0;i<cart.bookCartList.size();i++)
-        {
             int bookQuantity = cart.bookCartList.get(i).bookQuantity;
             book=bookRepository.findById(cart.bookCartList.get(i).bookCartID.bookId).get();
             book.quantity=book.quantity-bookQuantity;
@@ -152,7 +142,6 @@ public class CartService  implements ICartService {
         Optional<User> user = validate(token);
         Cart cart = user.isPresent() ? user.get().carts.stream().filter(cart1 -> !cart1.placedOrder).findAny().get() : null;
         Optional<Book> savedBook = bookRepository.findById(id);
-
         int bookQuantity = bookCartRepository.getBookCartQuantity(id, cart.id);
         int quantity = cart.quantity - bookQuantity;
         int totalPrice= (int) (cart.totalPrice-bookQuantity-savedBook.get().price*bookQuantity);
@@ -174,8 +163,7 @@ public class CartService  implements ICartService {
             Cart cart = cartIterator.next();
             List<Book> bookList = new ArrayList<>();
             Book book;
-            for(int i=0;i<cart.bookCartList.size();i++)
-            {
+            for(int i=0;i<cart.bookCartList.size();i++) {
                 book=bookRepository.findById(cart.bookCartList.get(i).bookCartID.bookId).get();
                 book.quantity=cart.bookCartList.get(i).bookQuantity;
                 bookList.add(book);

@@ -1,7 +1,6 @@
 
 package com.bookstoreapp.service;
 
-
 import com.bookstoreapp.dto.NotificationDto;
 import com.bookstoreapp.dto.UserLoginDto;
 import com.bookstoreapp.dto.UserRegistrationDto;
@@ -24,11 +23,9 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 
@@ -76,12 +73,13 @@ public class UserServiceTest {
 
     @Test
     void givenUserDetails_WhenProper_ShouldReturnTrue() throws MessagingException {
+
         userRegistrationDto = new UserRegistrationDto("AkhilSharma", "akhil234@gmail.com",
                 "Ak@1234Sh", "8943725498");
         NotificationDto notificationDto = new NotificationDto("ashish@gmail.com", "Activate account", "");
         User user = new User(userRegistrationDto);
         Mockito.when(userRepository.save(any())).thenReturn(user);
-        Mockito.when(iVerifyEmailTemplate.verifyEmailTemplet(any())).thenReturn("UrlCreated");
+        Mockito.when(iVerifyEmailTemplate.verifyEmailTemplate(any())).thenReturn("UrlCreated");
         Mockito.when(mailSender.sendMail(any())).thenReturn("Mail sent successfully");
         Response expectedResult = userService.addUser(userRegistrationDto, httpServletRequest);
         Assert.assertEquals("User Registered Successfully", expectedResult.body);
@@ -90,6 +88,7 @@ public class UserServiceTest {
 
     @Test
     void givenLoginDetails_WhenProper_ShouldReturnTrue() {
+
         UserLoginDto userLoginDto = new UserLoginDto("luffy@gmail.com", "Luffy456@");
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         userRegistrationDto.password = bCryptPasswordEncoder.encode(userLoginDto.password);
@@ -102,6 +101,7 @@ public class UserServiceTest {
 
     @Test
     void givenEmailandServletRequest_WhenProper_shouldReturnSuccessResponse() throws MessagingException {
+
         userRegistrationDto = new UserRegistrationDto("AkhilSharma", "akhil234@gmail.com",
                 "Ak@1234Sh", "8943725498");
         User user = new User(userRegistrationDto);
@@ -129,6 +129,7 @@ public class UserServiceTest {
 
     @Test
     void givenPassword_WhenUserNotExit_shouldThrowException() throws MessagingException {
+
         try {
             int userid = 2;
             User user = new User(userRegistrationDto);

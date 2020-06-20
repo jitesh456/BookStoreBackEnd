@@ -23,7 +23,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import javax.mail.MessagingException;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -76,6 +75,7 @@ public class CartServiceTest {
 
     @BeforeEach
     void setUp() {
+
         addToCartDto = new AddToCartDto(12, 2);
         token = "asbfj45";
         userRegistrationDto = new UserRegistrationDto("AkhilSharma", "akhil234@gmail.com",
@@ -89,7 +89,6 @@ public class CartServiceTest {
         book = new Book(bookDto1);
         cart = new Cart(LocalDateTime.now(), 200, false, 12);
         user.carts.add(cart);
-
         Mockito.when(jwtToken.validateToken(anyString())).thenReturn(true);
         Mockito.when(jwtToken.getUserId()).thenReturn(34);
         Mockito.when(userRepository.findUserById(anyInt())).thenReturn(java.util.Optional.of(user));
@@ -99,6 +98,7 @@ public class CartServiceTest {
 
     @Test
     void givenCartDetails_WhenProper_ReturnProperMessage() {
+
         book.id = 13;
         cart.id = 12;
         BookCart bookCart = new BookCart(book, cart, 12);
