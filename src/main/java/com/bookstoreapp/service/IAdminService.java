@@ -10,9 +10,13 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 
 public interface IAdminService {
+
     String addBook(BookDto bookDto);
+
     String updatePrice(UpdateBookDto bookDto);
+
     String updateQuantity(UpdateCartDto updateCartDto);
+
     FileResponse uploadBookCover(MultipartFile file);
 
     Resource loadFile(String fileName, HttpServletRequest request);

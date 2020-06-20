@@ -13,7 +13,7 @@ import com.bookstoreapp.repository.ICartRepository;
 import com.bookstoreapp.repository.IUserRepository;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.Implementation.CartService;
-import com.bookstoreapp.util.IOrderPlaceTemplet;
+import com.bookstoreapp.util.IOrderPlaceTemplate;
 import com.bookstoreapp.util.ISendMail;
 import com.bookstoreapp.util.implementation.JwtToken;
 import org.junit.Assert;
@@ -23,15 +23,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import javax.mail.MessagingException;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-
 import static org.mockito.ArgumentMatchers.*;
-
 
 @SpringBootTest
 public class CartServiceTest {
@@ -59,16 +56,22 @@ public class CartServiceTest {
     IUserRepository userRepository;
 
     @Mock
-    IOrderPlaceTemplet orderPlaceTemplet;
+
+    IOrderPlaceTemplate orderPlaceTemplate;
 
     @Mock
     ISendMail sendMail;
 
     UserRegistrationDto userRegistrationDto;
+
     Set<BookCart> bookCartSet;
+
     User user;
+
     BookDto bookDto1;
+
     Book book;
+
     Cart cart;
 
     @InjectMocks
@@ -76,6 +79,7 @@ public class CartServiceTest {
 
     @BeforeEach
     void setUp() {
+
         addToCartDto = new AddToCartDto(12, 2);
         token = "asbfj45";
         userRegistrationDto = new UserRegistrationDto("AkhilSharma", "akhil234@gmail.com",
@@ -89,7 +93,6 @@ public class CartServiceTest {
         book = new Book(bookDto1);
         cart = new Cart(LocalDateTime.now(), 200, false, 12);
         user.carts.add(cart);
-
         Mockito.when(jwtToken.validateToken(anyString())).thenReturn(true);
         Mockito.when(jwtToken.getUserId()).thenReturn(34);
         Mockito.when(userRepository.findUserById(anyInt())).thenReturn(java.util.Optional.of(user));
@@ -99,6 +102,7 @@ public class CartServiceTest {
 
     @Test
     void givenCartDetails_WhenProper_ReturnProperMessage() {
+
         book.id = 13;
         cart.id = 12;
         BookCart bookCart = new BookCart(book, cart, 12);
@@ -123,10 +127,9 @@ public class CartServiceTest {
     void whenCartFoundUpdateOrderStatus_ThenReturnProperMessage() throws MessagingException {
 
         Response response = null;
-        Mockito.when(orderPlaceTemplet.placeOrderTemplet(any(),any())).thenReturn("");
+        Mockito.when(orderPlaceTemplate.placeOrderTemplate(any(),any())).thenReturn("");
         Mockito.when(sendMail.sendMail(any())).thenReturn("Mail Sent");
         response = cartService.updateCart(token);
-
         Assert.assertEquals("Order Placed Successfully", response.message);
     }
 
@@ -145,7 +148,7 @@ public class CartServiceTest {
     void whenTokenProper_ShouldReturnOrderDetails() {
 
         Mockito.when(bookRepository.findById(any())).thenReturn(java.util.Optional.of(book));
-        Mockito.when(orderPlaceTemplet.placeOrderTemplet(any(),any())).thenReturn("");
+        Mockito.when(orderPlaceTemplate.placeOrderTemplate(any(),any())).thenReturn("");
         Response response = cartService.orderDetails(token);
         Assert.assertEquals("Book Cart List", response.message);
     }

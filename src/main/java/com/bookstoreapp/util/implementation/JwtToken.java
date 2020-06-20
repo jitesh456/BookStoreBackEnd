@@ -1,26 +1,20 @@
 package com.bookstoreapp.util.implementation;
 
-
 import com.bookstoreapp.exception.JwtTokenException;
-import com.bookstoreapp.exception.UserException;
 import com.bookstoreapp.properties.ApplicationProperties;
 import com.bookstoreapp.util.IJwtToken;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
 import javax.xml.bind.DatatypeConverter;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 
 @Component
 public class JwtToken implements IJwtToken {
-
 
     public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
 
@@ -39,7 +33,13 @@ public class JwtToken implements IJwtToken {
 
     @Override
     public Boolean validateToken(String token) {
+
         Boolean validate=false;
+
+        if(token.length()<=2   ){
+
+            throw new JwtTokenException("Token must not be empty", JwtTokenException.ExceptionType.EMPTY_TOKEN);
+        }
 
         Claims claims = Jwts.parser()
                 .setSigningKey(DatatypeConverter.parseBase64Binary(applicationProperties.getSecretKey()))

@@ -20,7 +20,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -53,6 +52,7 @@ public class UserControllerTest {
 
     @BeforeEach
     public void setUp() throws Exception {
+
         httpHeaders.set("token","Qwebst43Y");
         gson=new Gson();
         userRegistrationDto=new UserRegistrationDto("AkhilSharma","akhil234@gmail.com",
@@ -67,6 +67,7 @@ public class UserControllerTest {
 
     @Test
     public void givenUserDetails_WhenProper_ShouldReturn_properMessage() throws Exception {
+
         String user=new Gson().toJson(userRegistrationDto);
         Mockito.when(userService.addUser(any(),any())).thenReturn(userRegistrationResponse);
         MvcResult mvcResult=this.mockMvc.perform(post("/user")
@@ -79,6 +80,7 @@ public class UserControllerTest {
 
     @Test
     public void givenUserDetails_WhenUserNameNull_ShouldReturn_properErrorMessage() throws Exception {
+
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("","akhil234@gmail.com",
                 "Ak@1234Sh","8943725498");
         String user=new Gson().toJson(userRegistrationDto1);
@@ -94,6 +96,7 @@ public class UserControllerTest {
 
     @Test
     public void givenUserDetails_WhenUserNameEmpty_ShouldReturn_properErrorMessage() throws Exception {
+
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("","akhil234@gmail.com",
                 "Ak@1234Sh","8943725498");
         String user=new Gson().toJson(userRegistrationDto1);
@@ -108,6 +111,7 @@ public class UserControllerTest {
 
     @Test
     public void givenUserDetails_WhenUserNameNotProper_ShouldReturn_properErrorMessage() throws Exception {
+
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("ab","akhil234@gmail.com",
                 "Ak@1234Sh","8943725498");
         String user=new Gson().toJson(userRegistrationDto1);
@@ -122,6 +126,7 @@ public class UserControllerTest {
 
     @Test
     public void givenUserDetails_WhenEmailNull_ShouldReturn_properErrorMessage() throws Exception {
+
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("AkhilSharma",null,
                 "Ak@1234Sh","8943725498");
         String user=new Gson().toJson(userRegistrationDto1);
@@ -137,6 +142,7 @@ public class UserControllerTest {
 
     @Test
     public void givenUserDetails_WhenEmailEmpty_ShouldReturn_properErrorMessage() throws Exception {
+
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("AkhilSharma",null,
                 "Ak@1234Sh","8943725498");
         String user=new Gson().toJson(userRegistrationDto1);
@@ -153,6 +159,7 @@ public class UserControllerTest {
 
     @Test
     public void givenUserDetails_WhenEmailNotValid_ShouldReturn_properErrorMessage() throws Exception {
+
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("AkhilSharma","@abcd.com",
                 "Ak@1234Sh","8943725498");
         String user=new Gson().toJson(userRegistrationDto1);
@@ -168,6 +175,7 @@ public class UserControllerTest {
 
     @Test
     public void givenUserDetails_WhenPasswordNull_ShouldReturn_properErrorMessage() throws Exception {
+
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("AkhilSharma","akhil234@gmail.com",
                 null,"8943725498");
         String user=new Gson().toJson(userRegistrationDto1);
@@ -182,6 +190,7 @@ public class UserControllerTest {
 
     @Test
     public void givenUserDetails_WhenPasswordEmpty_ShouldReturn_properErrorMessage() throws Exception {
+
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("AkhilSharma","akhil234@gmail.com",
                 null,"8943725498");
         String user=new Gson().toJson(userRegistrationDto1);
@@ -196,6 +205,7 @@ public class UserControllerTest {
 
     @Test
     public void givenUserDetails_WhenPasswordNotValid_ShouldReturn_properErrorMessage() throws Exception {
+
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("AkhilSharma","akhil234@gmail.com",
                 "abcd","8943725498");
         String user=new Gson().toJson(userRegistrationDto1);
@@ -210,6 +220,7 @@ public class UserControllerTest {
 
     @Test
     public void givenUserDetails_WhenPhoneNull_ShouldReturn_properErrorMessage() throws Exception {
+
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("AkhilSharma","akhil234@gmail.com",
                 "Ak@1234Sh",null);
         String user=new Gson().toJson(userRegistrationDto1);
@@ -224,6 +235,7 @@ public class UserControllerTest {
 
     @Test
     public void givenUserDetails_WhenPhoneEmpty_ShouldReturn_properErrorMessage() throws Exception {
+
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("AkhilSharma","akhil234@gmail.com",
                 "Ak@1234Sh","");
         String user=new Gson().toJson(userRegistrationDto1);
@@ -237,6 +249,7 @@ public class UserControllerTest {
 
     @Test
     public void givenUserDetails_WhenPhoneNoLessThenTenDigit_ShouldReturn_properErrorMessage() throws Exception {
+
         UserRegistrationDto userRegistrationDto1=new UserRegistrationDto("AkhilSharma","akhil234@gmail.com",
                 "Ak@1234Sh","985642356");
         String user=new Gson().toJson(userRegistrationDto1);
@@ -252,6 +265,7 @@ public class UserControllerTest {
 
     @Test
     void givenUserLoginDetails_WhenProper_ShouldReturnProperMessage() throws Exception {
+
         UserLoginDto userLoginDto=new UserLoginDto("Luffy@gmail.com","Luffy@123");
         String userLoginDtoString = new Gson().toJson(userLoginDto);
         Mockito.when(userService.loginUser(any())).thenReturn(token);
@@ -263,6 +277,7 @@ public class UserControllerTest {
 
     @Test
     void givenUserLoginDetails_WhenEmailNull_ShouldReturnProperMessage() throws Exception {
+
         UserLoginDto userLoginDto=new UserLoginDto(null,"Luffy@123");
         String userLoginDtoString = new Gson().toJson(userLoginDto);
         Mockito.when(userService.loginUser(any())).thenReturn(token);
@@ -275,6 +290,7 @@ public class UserControllerTest {
 
     @Test
     void givenUserLoginDetails_WhenEmailEmpty_ShouldReturnProperMessage() throws Exception {
+
         UserLoginDto userLoginDto=new UserLoginDto("","Luffy@123");
         String userLoginDtoString = new Gson().toJson(userLoginDto);
         Mockito.when(userService.loginUser(any())).thenReturn(token);
@@ -286,6 +302,7 @@ public class UserControllerTest {
 
     @Test
     void givenUserLoginDetails_WhenEmailWrong_ShouldReturnProperMessage() throws Exception {
+
         UserLoginDto userLoginDto=new UserLoginDto("abc123","Jitesh@123");
         String userLoginDtoString = new Gson().toJson(userLoginDto);
         Mockito.when(userService.loginUser(any())).thenReturn(token);
@@ -297,6 +314,7 @@ public class UserControllerTest {
 
     @Test
     void givenUserLoginDetails_WhenPasswordWrong_ShouldReturnProperMessage() throws Exception {
+
         UserLoginDto userLoginDto=new UserLoginDto("Luffy@gmail.com","luffy@123");
         String userLoginDtoString = new Gson().toJson(userLoginDto);
         Mockito.when(userService.loginUser(any())).thenReturn(token);
@@ -309,6 +327,7 @@ public class UserControllerTest {
 
     @Test
     void givenUserLoginDetails_WhenPasswordNull_ShouldReturnProperMessage() throws Exception {
+
         UserLoginDto userLoginDto=new UserLoginDto("Luffy@gmail.com",null);
         String userLoginDtoString = new Gson().toJson(userLoginDto);
         Mockito.when(userService.loginUser(any())).thenReturn(token);
@@ -324,6 +343,7 @@ public class UserControllerTest {
 
     @Test
     void givenUserLoginDetails_WhenPasswordEmpty_ShouldReturnProperMessage() throws Exception {
+
         UserLoginDto userLoginDto=new UserLoginDto("Luffy@gmail.com","");
         String userLoginDtoString = new Gson().toJson(userLoginDto);
         Mockito.when(userService.loginUser(any())).thenReturn(token);
@@ -338,6 +358,7 @@ public class UserControllerTest {
 
     @Test
     void givenEmailId_WhenFound_ShouldReturnProperMessage() throws Exception{
+
         String emailId= "abcd@gmail.com";
         String email= gson.toJson(emailId);
         Mockito.when(userService.forgetPassword(any(),any())).thenReturn(new Response("Email Successfull",200,""));
@@ -351,6 +372,7 @@ public class UserControllerTest {
 
     @Test
     void givenPassword_WhenProper_ShouldReturnProperMessage() throws Exception{
+
         String password= "Abcd@1234";
         Mockito.when(userService.resetPassword(any(),any())).thenReturn(new Response("Password Reset Successfull",200,""));
         MvcResult result = this.mockMvc.perform(get("/reset/password?password=")
@@ -360,6 +382,5 @@ public class UserControllerTest {
         Assert.assertEquals(200, gson.fromJson(result.getResponse().getContentAsString(),Response.class)
                 .statusCode);
     }
-
 
 }

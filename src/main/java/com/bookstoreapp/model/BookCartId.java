@@ -8,7 +8,6 @@ import java.util.Objects;
 @Embeddable
 public class BookCartId implements Serializable {
 
-
     @Column(name="bookId")
     public int bookId;
 
@@ -21,7 +20,6 @@ public class BookCartId implements Serializable {
     }
 
     public BookCartId() {
-
     }
 
     @Override

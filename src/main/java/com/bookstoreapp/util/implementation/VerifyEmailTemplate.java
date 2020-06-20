@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class VerifyEmailTemplate implements IVerifyEmailTemplate {
 
-    public String verifyEmailTemplet(String url)
+    public String verifyEmailTemplate(String url)
     {
         return ("<html>\n" +
                 "\n" +

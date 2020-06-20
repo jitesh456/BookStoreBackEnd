@@ -3,13 +3,13 @@ package com.bookstoreapp.util.implementation;
 import com.bookstoreapp.model.BookCart;
 import com.bookstoreapp.model.Cart;
 import com.bookstoreapp.model.User;
-import com.bookstoreapp.util.IOrderPlaceTemplet;
+import com.bookstoreapp.util.IOrderPlaceTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
-public class OrderPlaceTemplet implements IOrderPlaceTemplet {
+public class OrderPlaceTemplate implements IOrderPlaceTemplate {
     @Override
-    public String placeOrderTemplet(Cart cart, User user) {
+    public String placeOrderTemplate(Cart cart, User user) {
         return ("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n" +
                 "<html xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:o=\"urn:schemas-microsoft-com:office:office\">\n" +
                 "\n" +
@@ -123,12 +123,12 @@ public class OrderPlaceTemplet implements IOrderPlaceTemplet {
                 "                                                                            <tbody>\n" +
                 "                                                                                <tr>\n" +
                 "                                                                                    <td class=\"esd-block-text\" align=\"left\">\n" +
-                "                                                                                        <table style=\"width: 100%;\" class=\"cke_show_border\" cellspacing=\"1\" cellpadding=\"1\" border=\"0\">\n" +
+                "                                                                                        <table style=\"width: 100%;\"  cellspacing=\"1\" cellpadding=\"1\" border=\"0\">\n" +
                 "                                                                                            <tbody>\n" +
                 "                                                                                                <tr>\n" +
-                "                                                                                                    <td><span style=\"font-size:13px;\">BOOK NAME</span></td>\n" +
-                "                                                                                                    <td style=\"text-align: center;\" width=\"60\"><span style=\"font-size:13px;\"><span style=\"line-height: 100%;\">QTY</span></span></td>\n" +
-                "                                                                                                    <td style=\"text-align: center;\" width=\"100\"><span style=\"font-size:13px;\"><span style=\"line-height: 100%;\">PRICE</span></span></td>\n" +
+                "                                                                                                    <td >BOOK NAME</span></td>\n" +
+                "                                                                                                    <td style=\"text-align: center\"; width=\"60\"><span style=\"font-size:13px;\"><span style=\"line-height: 100%;\">QTY</span></span></td>\n" +
+                "                                                                                                    <td style=\"text-align: center\"; width=\"100\"><span style=\"font-size:13px;\"><span style=\"line-height: 100%;\">PRICE</span></span></td>\n" +
                 "                                                                                                </tr>\n" +
                 "                                                                                            </tbody>\n" +
                 "                                                                                        </table>\n" +
@@ -215,8 +215,8 @@ public class OrderPlaceTemplet implements IOrderPlaceTemplet {
                 "                                                        <table cellspacing=\"0\" cellpadding=\"0\" align=\"right\">\n" +
                 "                                                            <tbody>\n" +
                 "                                                                <tr>\n" +
-                "                                                                    <td class=\"esd-container-frame\" width=\"362\" align=\"left\">\n" +
-                "                                                                        <table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n" +
+                "                                                                    <td class=\"esd-container-frame\" width=\"362\" align=\"right\">\n" +
+                "                                                                        <table width=\"100%\" cell-spacing=\"0\" cell-padding=\"0\">\n" +
                 "                                                                            <tbody>\n" +
                 "                                                                                <tr>\n" +
                 "                                                                                    <td class=\"esd-block-text\" align=\"left\">\n" +
@@ -224,9 +224,9 @@ public class OrderPlaceTemplet implements IOrderPlaceTemplet {
                 "                                                                                        <table style=\"width: 100%;\" class=\"cke_show_border\" cellspacing=\"1\" cellpadding=\"1\" border=\"0\">\n" +
                 "                                                                                            <tbody>\n" +
                 "                                                                                                <tr>\n" +
-                "                                                                                                    <td style=\"text-align: center;\" width=\"60\">"+bookCart.book.name+"<br></td>\n" +
-                "                                                                                                    <td style=\"text-align: center;\" width=\"60\">"+bookCart.bookQuantity+"</td>\n" +
-                "                                                                                                    <td style=\"text-align: center;\" width=\"100\">"+bookCart.book.price*bookCart.bookQuantity+"</td>\n" +
+                "                                                                                                    <td >"+bookCart.book.name+"<br></td>\n" +
+                "                                                                                                    <td style=\"text-align: center\"; width=\"60\">"+bookCart.bookQuantity+"</td>\n" +
+                "                                                                                                    <td style=\"text-align: center\"; width=\"100\">"+bookCart.book.price*bookCart.bookQuantity+"</td>\n" +
                 "                                                                                                </tr>\n" +
                 "                                                                                            </tbody>\n" +
                 "                                                                                        </table>\n" +

@@ -27,8 +27,6 @@ public class UserDetail  {
 
     public String country;
 
-
-
     public UserDetail() {
     }
 

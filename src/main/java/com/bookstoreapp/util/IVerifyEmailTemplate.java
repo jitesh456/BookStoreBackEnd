@@ -1,5 +1,6 @@
 package com.bookstoreapp.util;
 
 public interface IVerifyEmailTemplate{
-    String verifyEmailTemplet(String s);
+
+    String verifyEmailTemplate(String s);
 }

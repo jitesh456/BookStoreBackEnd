@@ -6,6 +6,7 @@ import java.util.List;
 public class BookResponse {
 
     public List<Book> books;
+
     public int count;
 
     public BookResponse(List<Book> books, int count) {

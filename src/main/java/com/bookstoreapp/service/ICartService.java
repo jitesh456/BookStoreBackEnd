@@ -2,7 +2,6 @@ package com.bookstoreapp.service;
 
 import com.bookstoreapp.dto.AddToCartDto;
 import com.bookstoreapp.response.Response;
-
 import javax.mail.MessagingException;
 
 public interface ICartService {

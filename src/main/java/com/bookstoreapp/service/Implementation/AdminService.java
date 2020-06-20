@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -26,17 +25,18 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 
-
 @Service
 public class AdminService implements IAdminService {
 
     @Autowired
     IBookRepository bookRepository;
+
     @Autowired
     ApplicationProperties applicationProperties;
 
     @Override
     public String addBook(BookDto bookDto) {
+
         Book book =new Book(bookDto);
         Optional<Book> isbn = bookRepository.findByIsbn(bookDto.isbn);
         if (isbn.isPresent()){
@@ -48,6 +48,7 @@ public class AdminService implements IAdminService {
 
     @Override
     public String updatePrice(UpdateBookDto bookDto) {
+
         Optional<Book> book=bookRepository.findByIsbn(bookDto.isbn);
         if (book.isPresent()){
             Book book1=book.get();
@@ -61,6 +62,7 @@ public class AdminService implements IAdminService {
 
     @Override
     public String updateQuantity(UpdateCartDto updateCartDto) {
+
         Optional<Book> book=bookRepository.findByIsbn(updateCartDto.isbn);
         if (book.isPresent()){
             Book book1=book.get();
@@ -73,6 +75,7 @@ public class AdminService implements IAdminService {
 
     @Override
     public FileResponse uploadBookCover(MultipartFile file) {
+
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         String fileBasePath = System.getProperty("user.dir") +applicationProperties.getFilePath();
         if (!(fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".png"))) {
@@ -86,7 +89,7 @@ public class AdminService implements IAdminService {
         }
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/downloadFile/")
+                .path("/downloadfile/")
                 .path(fileName)
                 .toUriString();
         return new FileResponse(fileName, fileDownloadUri,
@@ -95,6 +98,7 @@ public class AdminService implements IAdminService {
 
     @Override
     public Resource loadFile(String fileName, HttpServletRequest request) {
+
         try {
             String fileBasePath = System.getProperty("user.dir")+applicationProperties.getFilePath();
             Path path = Paths.get(fileBasePath + fileName);
