@@ -86,7 +86,6 @@ public class BookControllerTest {
     @Test
     void givenSortSearchAndPage_WhenSearchField_IsNull_shouldReturnBook() throws Exception {
 
-        Response response=new Response("BookList base on search sot field",200,"");
         MultiValueMap<String,String> params=new LinkedMultiValueMap<>();
         params.put("search", Collections.singletonList(""));
         params.put("sort", Collections.singletonList("authorName"));

@@ -1,6 +1,7 @@
 package com.bookstoreapp.service;
 
 import com.bookstoreapp.dto.BookDto;
+import com.bookstoreapp.exception.BookException;
 import com.bookstoreapp.model.Book;
 import com.bookstoreapp.repository.IBookRepository;
 import com.bookstoreapp.response.BookResponse;
@@ -66,5 +67,19 @@ public class BookServiceTest {
         Response response=bookService.getBooks("A","authorName",0);
         Assert.assertEquals("Books Found On Given Search or Sort Fields",response.message);
         Assert.assertEquals(200,response.statusCode);
+    }
+
+    @Test
+    void givenSearchSortField_whenBookNotFound_ShouldThrow_Exception() {
+        Book book=new Book(bookDto);
+        List<Book> books=new ArrayList<>();
+        books.add(book);
+        Mockito.when(iBookRepository.searchBook(anyString())).
+                thenThrow(new BookException("Books Not Found", BookException.ExceptionType.BOOK_NOT_FOUND));
+        try{
+            Response response=bookService.getBooks("A","authorName",0);
+        }catch (BookException be){
+            Assert.assertEquals("Book Not Found",be.message);
+        }
     }
 }
