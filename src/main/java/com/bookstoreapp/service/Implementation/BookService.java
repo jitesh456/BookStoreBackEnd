@@ -33,15 +33,6 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public Iterable<Book> getSortedBook(String sortField) {
-
-        if(sortField != null) {
-            return bookRepository.findAll(Sort.by(Sort.Direction.ASC, sortField));
-        }
-        throw new BookException("SORT FIELD CAN NOT NULL",BookException.ExceptionType.SORT_FIELD_CAN_NOT_NULL);
-    }
-
-    @Override
     public Response getBooks(String search, String sort,int page) {
 
         List<Book> books = this.searchSort(search,sort);
@@ -50,7 +41,7 @@ public class BookService implements IBookService {
         if (books.size() > 0)
             return new Response("Books Found On Given Search or Sort Fields", 200,
                     new BookResponse(books,count));
-        return new Response("Books Not Found", 200, new BookResponse(books,count));
+        throw new BookException("Books Not Found", BookException.ExceptionType.BOOK_NOT_FOUND);
     }
 
     private List<Book> getAllBooks(List<Book> books) {

@@ -6,7 +6,5 @@ public interface IBookService {
 
     Iterable<Book> getAllBook();
 
-    Iterable<Book> getSortedBook(String sortBookDto);
-
     Response getBooks(String search, String sort,int page);
 }
