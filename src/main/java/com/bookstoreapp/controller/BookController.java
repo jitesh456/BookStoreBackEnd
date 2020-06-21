@@ -20,13 +20,6 @@ public class BookController {
         return response;
     }
 
-    @GetMapping("/books/sort")
-    public Response getSortedBook(@RequestParam ("field")String field) {
-        Iterable<Book> sortedBook = bookService.getSortedBook(field);
-        Response response=new Response("Book List is Sorted On basic of given field",200,sortedBook);
-        return response;
-    }
-
     @GetMapping("/books/all")
     public Response getSearchedBook(@RequestParam ("search") String search,
                                     @RequestParam ("sort") String sort,
