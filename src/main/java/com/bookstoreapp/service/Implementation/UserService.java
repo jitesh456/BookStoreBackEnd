@@ -60,7 +60,7 @@ public class UserService implements IUserService {
             StringBuffer url = servletRequest.getRequestURL();
             String baseUrl = url.substring(0, url.length() - 4);
             String appUrl =
-                    iVerifyEmailTemplate.verifyEmailTemplate(baseUrl + "verify?token=" + jwtToken.generateToken(savedUser.id));
+                    iVerifyEmailTemplate.verifyEmailTemplate(servletRequest.getHeader("origin") + "/verify/account/?" + jwtToken.generateToken(savedUser.id));
 
             NotificationDto notificationDto = new NotificationDto(savedUser.email, "Activate account",
                     appUrl);
