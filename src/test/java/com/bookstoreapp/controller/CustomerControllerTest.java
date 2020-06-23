@@ -71,7 +71,8 @@ public class CustomerControllerTest {
         userDetailDto=new UserDetailDto("Home","435672","101 B Street",
                 "101 B Street Lucknow U.P","Lucknow","India");
         String userDetailString = new Gson().toJson(userDetailDto);
-        Mockito.when(customerService.userDetail(any(),anyString())).thenReturn(new Response("User Detail Added",200,""));
+        Mockito.when(customerService.userDetail(any(),anyString())).
+                thenReturn(new Response("User Detail Added",200,""));
         MvcResult result = this.mockMvc.perform(post("/customerdetail").
                 content(userDetailString)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -87,7 +88,8 @@ public class CustomerControllerTest {
         userDetailDto=new UserDetailDto("home","435672","101 B Street",
                 "101 B Street Lucknow U.P","Lucknow","India");
         String userDetailString = new Gson().toJson(userDetailDto);
-        Mockito.when(customerService.userDetail(any(),anyString())).thenReturn(new Response("User Detail Added",200,""));
+        Mockito.when(customerService.userDetail(any(),anyString())).
+                thenReturn(new Response("User Detail Added",200,""));
         MvcResult result = this.mockMvc.perform(post("/customerdetail").
                 content(userDetailString)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -103,7 +105,8 @@ public class CustomerControllerTest {
         userDetailDto=new UserDetailDto("Home","43572","101 B Street",
                 "101 B Street Lucknow U.P","Lucknow","India");
         String userDetailString = new Gson().toJson(userDetailDto);
-        Mockito.when(customerService.userDetail(any(),anyString())).thenReturn(new Response("User Detail Added",200,""));
+        Mockito.when(customerService.userDetail(any(),anyString())).
+                thenReturn(new Response("User Detail Added",200,""));
         MvcResult result = this.mockMvc.perform(post("/customerdetail").
                 content(userDetailString)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -119,7 +122,8 @@ public class CustomerControllerTest {
         userDetailDto=new UserDetailDto("Home","432572","101 B Street",
                 "101 B ","Lucknow","India");
         String userDetailString = new Gson().toJson(userDetailDto);
-        Mockito.when(customerService.userDetail(any(),anyString())).thenReturn(new Response("User Detail Added",200,""));
+        Mockito.when(customerService.userDetail(any(),anyString())).
+                thenReturn(new Response("User Detail Added",200,""));
         MvcResult result = this.mockMvc.perform(post("/customerdetail").
                 content(userDetailString)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -135,7 +139,8 @@ public class CustomerControllerTest {
         userDetailDto=new UserDetailDto("Home","432572","101 B Street",
                 "101 B Street UP ","cdte","India");
         String userDetailString = new Gson().toJson(userDetailDto);
-        Mockito.when(customerService.userDetail(any(),anyString())).thenReturn(new Response("User Detail Added",200,""));
+        Mockito.when(customerService.userDetail(any(),anyString())).
+                thenReturn(new Response("User Detail Added",200,""));
         MvcResult result = this.mockMvc.perform(post("/customerdetail").
                 content(userDetailString)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -151,7 +156,8 @@ public class CustomerControllerTest {
         userDetailDto=new UserDetailDto("Home","432572","101 B Street",
                 "101 B Street UP ","Lucknow","ind");
         String userDetailString = new Gson().toJson(userDetailDto);
-        Mockito.when(customerService.userDetail(any(),anyString())).thenReturn(new Response("User Detail Added",200,""));
+        Mockito.when(customerService.userDetail(any(),anyString())).
+                thenReturn(new Response("User Detail Added",200,""));
         MvcResult result = this.mockMvc.perform(post("/customerdetail").
                 content(userDetailString)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -167,7 +173,8 @@ public class CustomerControllerTest {
         userDetailDto=new UserDetailDto("Home","432572","101 B Street",
                 "101 B Street UP ","Lucknow","");
         String userDetailString = new Gson().toJson(userDetailDto);
-        Mockito.when(customerService.getUserDetail(anyString())).thenReturn(new Response("User Found",200,""));
+        Mockito.when(customerService.getUserDetail(anyString())).
+                thenReturn(new Response("User Found",200,""));
         MvcResult result = this.mockMvc.perform(get("/customerdetail")
                 .content("")
                 .contentType(MediaType.APPLICATION_JSON)

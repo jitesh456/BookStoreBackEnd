@@ -93,7 +93,8 @@ public class CartControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("utf-8")
                 .headers(httpHeaders)).andReturn();
-        Assert.assertEquals(response.message,new Gson().fromJson(result.getResponse().getContentAsString(),Response.class).message);
+        Assert.assertEquals(response.message,new Gson().
+                fromJson(result.getResponse().getContentAsString(),Response.class).message);
 
     }
 
@@ -106,7 +107,8 @@ public class CartControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("utf-8")
                 .headers(httpHeaders)).andReturn();
-        Assert.assertEquals(response.message,new Gson().fromJson(result.getResponse().getContentAsString(),Response.class).message);
+        Assert.assertEquals(response.message,new Gson().
+                fromJson(result.getResponse().getContentAsString(),Response.class).message);
 
     }
 
@@ -119,7 +121,8 @@ public class CartControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("utf-8")
                 .headers(httpHeaders)).andReturn();
-        Assert.assertEquals(response.message,new Gson().fromJson(result.getResponse().getContentAsString(),Response.class).message);
+        Assert.assertEquals(response.message,new Gson().
+                fromJson(result.getResponse().getContentAsString(),Response.class).message);
 
     }
 
@@ -133,7 +136,8 @@ public class CartControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("utf-8")
                 .headers(httpHeaders)).andReturn();
-        Assert.assertEquals(response.message,new Gson().fromJson(result.getResponse().getContentAsString(),Response.class).message);
+        Assert.assertEquals(response.message,new Gson().
+                fromJson(result.getResponse().getContentAsString(),Response.class).message);
     }
 
 }

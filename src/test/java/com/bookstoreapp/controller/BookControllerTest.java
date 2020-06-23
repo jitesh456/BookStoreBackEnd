@@ -81,7 +81,8 @@ public class BookControllerTest {
         Mockito.when(bookService.getBooks(anyString(),anyString(),anyInt())).thenReturn(response);
         MvcResult result = this.mockMvc.perform(get("/books/all").params(params)).andReturn();
         Assert.assertEquals(200,result.getResponse().getStatus());
-        Assert.assertEquals("BookList base on search sot field",gson.fromJson(result.getResponse().getContentAsString(),Response.class).message);
+        Assert.assertEquals("BookList base on search sot field",gson.fromJson(result.getResponse().
+                getContentAsString(),Response.class).message);
     }
 
     @Test
@@ -95,6 +96,7 @@ public class BookControllerTest {
                 thenThrow(new BookException("Books Not Found", BookException.ExceptionType.BOOK_NOT_FOUND));
         MvcResult result = this.mockMvc.perform(get("/books/all").params(params)).andReturn();
         Assert.assertEquals(404,result.getResponse().getStatus());
-        Assert.assertEquals("Books Not Found",gson.fromJson(result.getResponse().getContentAsString(),Response.class).message);
+        Assert.assertEquals("Books Not Found",gson.fromJson(result.getResponse().
+                getContentAsString(),Response.class).message);
     }
 }
