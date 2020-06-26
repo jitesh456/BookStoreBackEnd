@@ -26,6 +26,11 @@ public class CustomerService implements ICustomerService {
     @Autowired
     IJwtToken jwtToken;
 
+    @Autowired
+    private  IBookFeedbackRepository bookFeedbackRepository;
+
+    @Autowired
+    private  IFeedbackRepository feedbackRepository;
 
     @Autowired
     IUserDetailRepository userDetailRepository;
@@ -66,8 +71,24 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public Response addFeedback(String token, FeedbackDto feedbackDto) {
-        return null;
-       }
+
+        Feedback userFeedback = null;
+        if(token != null) {
+            User user = validate(token).get();
+            String userName = user.name;
+            String isbn = feedbackDto.isbn;
+            Optional<Book> book1 = bookRepository.findByIsbn(isbn);
+            Book book = book1.get();
+            String feedbackMessage = feedbackDto.feedbackMessage;
+            int rating = feedbackDto.rating;
+            userFeedback = new Feedback(userName, rating, feedbackMessage);
+            feedbackRepository.save(userFeedback);
+            BookFeedback bookFeedback = new BookFeedback(book, userFeedback);
+            BookFeedback bookFeedback1 = bookFeedbackRepository.save(bookFeedback);
+            return new Response("Thank you For your Feedback ", 200, "Feedback added Successfully");
+        }
+        throw new UserException("Please Login to give feedback", UserException.ExceptionType.Please_Login_To_Give_Feedback);
+   }
 
 
     private Optional<User> validate(String token) {

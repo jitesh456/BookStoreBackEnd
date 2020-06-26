@@ -2,6 +2,7 @@ package com.bookstoreapp.service;
 
 import com.bookstoreapp.dto.FeedbackDto;
 import com.bookstoreapp.dto.UserDetailDto;
+import com.bookstoreapp.model.Feedback;
 import com.bookstoreapp.response.Response;
 
 
@@ -12,5 +13,6 @@ public interface ICustomerService {
     Response getUserDetail(String token);
 
     Response addFeedback(String token, FeedbackDto feedbackDto);
+
 
 }

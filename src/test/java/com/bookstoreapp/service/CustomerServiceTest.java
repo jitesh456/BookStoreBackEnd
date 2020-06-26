@@ -34,7 +34,11 @@ public class CustomerServiceTest {
     @Mock
     IBookRepository bookRepository;
 
+    @Mock
+    IBookFeedbackRepository bookFeedbackRepository;
 
+    @Mock
+    IFeedbackRepository feedbackRepository;
 
     @Autowired
     HttpServletRequest httpServletRequest;
@@ -84,6 +88,30 @@ public class CustomerServiceTest {
         Mockito.when(userRepository.findUserById(anyInt())).thenReturn(java.util.Optional.of(user));
         Response response = customerService.getUserDetail(token);
         Assert.assertEquals("User Found",response.message);
+        Assert.assertEquals(200,response.statusCode);
+
+    }
+
+    @Test
+    void givenFeedback_WhenProper_ShouldReturnTrue(){
+        FeedbackDto feedbackDto=new FeedbackDto(3,"Good Book","9765432133");
+        String isbn = feedbackDto.isbn;
+        BookDto bookDto = new BookDto("Secret of nagas", 2000.0,
+                12, "Amish Tiwari", "comic",
+                "998542365", "sdfsfd", "ABCD");
+        Book book = new Book(bookDto);
+        book.id=3;
+        Feedback feedback=new Feedback("Max",3,"Good Book");
+        Mockito.when(userRepository.findUserById(anyInt())).thenReturn(java.util.Optional.of(user));
+        Mockito.when(jwtToken.validateToken(anyString())).thenReturn(true);
+        Mockito.when(jwtToken.getUserId()).thenReturn(1);
+        Mockito.when(jwtToken.getUserId()).thenReturn(1);
+        Mockito.when(bookRepository.findByIsbn(isbn)).thenReturn(Optional.of(book));
+        BookFeedback bookFeedback= new BookFeedback( book,feedback);
+        Mockito.when(feedbackRepository.save(any())).thenReturn(feedback);
+        Mockito.when(bookFeedbackRepository.save(any())).thenReturn(bookFeedback);
+        Response response = customerService.addFeedback(token,feedbackDto);
+//        Assert.assertEquals("Thank you For your Feedback",response.message);
         Assert.assertEquals(200,response.statusCode);
 
     }

@@ -3,6 +3,7 @@ package com.bookstoreapp.controller;
 
 import com.bookstoreapp.dto.FeedbackDto;
 import com.bookstoreapp.dto.UserDetailDto;
+import com.bookstoreapp.model.Feedback;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.Implementation.CustomerService;
 import com.bookstoreapp.util.implementation.JwtToken;
@@ -198,6 +199,28 @@ public class CustomerControllerTest {
                         .message);
     }
 
+
+    @Test
+    void givenIsbnNo_WhenProper_ShouldReturnAllFeedBack() throws Exception{
+        Feedback feedback = new Feedback("Neena", 4, "Book is Interesting");
+        Feedback feedback1 = new Feedback("John", 3 ,"Nice Book to Read");
+        List<Feedback> feedbackList = new ArrayList<>();
+        feedbackList.add(feedback);
+        feedbackList.add(feedback1);
+        Mockito.when(customerService.getAllFeedback(any())).thenReturn(feedbackList);
+        String expectedList = gson.toJson(feedbackList);
+
+
+
+//        Mockito.when(bookService.getAllBook()).thenReturn(bookList);
+//        String expectedList = gson.toJson(bookList);
+//        MvcResult result = this.mockMvc.perform(get("/books")).andReturn();
+//        Assert.assertEquals(200, result.getResponse().getStatus());
+//        Assert.assertEquals("Fetched Books", gson.fromJson(result.getResponse().
+//                getContentAsString(), Response.class).message);
+
+
+    }
 
 
 

@@ -34,6 +34,9 @@ public class Book {
     @JsonIgnore
     List<BookCart> bookCartList;
 
+    @OneToMany(mappedBy = "book",targetEntity=BookFeedback.class)
+    @JsonIgnore
+    List<BookFeedback> bookFeedbackList;
 
     public Book(){
     }
