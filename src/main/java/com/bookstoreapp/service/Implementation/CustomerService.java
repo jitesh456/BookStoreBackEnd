@@ -90,6 +90,11 @@ public class CustomerService implements ICustomerService {
         throw new UserException("Please Login to give feedback", UserException.ExceptionType.Please_Login_To_Give_Feedback);
    }
 
+    @Override
+    public Iterable<Feedback> getAllFeedback(String token) {
+        return null;
+    }
+
 
     private Optional<User> validate(String token) {
 

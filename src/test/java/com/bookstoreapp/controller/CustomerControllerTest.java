@@ -208,17 +208,10 @@ public class CustomerControllerTest {
         feedbackList.add(feedback);
         feedbackList.add(feedback1);
         Mockito.when(customerService.getAllFeedback(any())).thenReturn(feedbackList);
-        String expectedList = gson.toJson(feedbackList);
-
-
-
-//        Mockito.when(bookService.getAllBook()).thenReturn(bookList);
-//        String expectedList = gson.toJson(bookList);
-//        MvcResult result = this.mockMvc.perform(get("/books")).andReturn();
-//        Assert.assertEquals(200, result.getResponse().getStatus());
-//        Assert.assertEquals("Fetched Books", gson.fromJson(result.getResponse().
-//                getContentAsString(), Response.class).message);
-
+        MvcResult result = this.mockMvc.perform(get("/feedback?isbn=")).andReturn();
+        Assert.assertEquals(200, result.getResponse().getStatus());
+        Assert.assertEquals("Feedback Fetched", gson.fromJson(result.getResponse().
+                getContentAsString(), Response.class).message);
 
     }
 

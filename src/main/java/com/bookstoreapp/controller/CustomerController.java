@@ -2,6 +2,7 @@ package com.bookstoreapp.controller;
 
 import com.bookstoreapp.dto.FeedbackDto;
 import com.bookstoreapp.dto.UserDetailDto;
+import com.bookstoreapp.model.Feedback;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.Implementation.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,13 @@ public class CustomerController {
         }
         Response response=customerService.addFeedback(token,feedbackDto);
         return new ResponseEntity<Response>(response,HttpStatus.OK);
+    }
+
+    @GetMapping(value= "/feedback")
+    public Response getBookFeedBack(@RequestParam("isbn") String isbn){
+        Iterable<Feedback> allFeedback = customerService.getAllFeedback(isbn);
+        Response response=new Response("Feedback Fetched",200,allFeedback);
+        return response;
     }
 
 
