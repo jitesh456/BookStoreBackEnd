@@ -70,6 +70,26 @@ public class BookControllerTest {
                 getContentAsString(), Response.class).message);
     }
 
+
+    @Test
+    void givenASortField_WhenNull_ShouldThrowException() throws Exception {
+
+        try {
+            BookDto bookDto1 = new BookDto("Naruto", 200.0,
+                    20, "makashi kissimoto", "Manga",
+                    "12345678", "", "story about ninja boy ");
+            Book book = new Book(bookDto);
+            Book book1 = new Book(bookDto1);
+            List<Book> bookList = new ArrayList<>();
+            bookList.add(book);
+            bookList.add(book1);
+            Mockito.when(bookService.getSortedBook(any())).thenThrow(new BookException("SORT FIELD CAN NOT NULL", BookException.ExceptionType.SORT_FIELD_CAN_NOT_NULL));
+            MvcResult result = this.mockMvc.perform(get("/books/field?field=")).andReturn();
+        } catch (BookException e) {
+            Assert.assertEquals(BookException.ExceptionType.SORT_FIELD_CAN_NOT_NULL, e.exceptionType);
+        }
+    }
+
     @Test
     void givenSortSearchAndPage_WhenProper_shouldReturnBook() throws Exception {
 
@@ -81,22 +101,7 @@ public class BookControllerTest {
         Mockito.when(bookService.getBooks(anyString(),anyString(),anyInt())).thenReturn(response);
         MvcResult result = this.mockMvc.perform(get("/books/all").params(params)).andReturn();
         Assert.assertEquals(200,result.getResponse().getStatus());
-        Assert.assertEquals("BookList base on search sot field",gson.fromJson(result.getResponse().
-                getContentAsString(),Response.class).message);
+        Assert.assertEquals("BookList base on search sot field",gson.fromJson(result.getResponse().getContentAsString(),Response.class).message);
     }
 
-    @Test
-    void givenSortSearchAndPage_WhenSearchField_IsNull_shouldReturnBook() throws Exception {
-
-        MultiValueMap<String,String> params=new LinkedMultiValueMap<>();
-        params.put("search", Collections.singletonList(""));
-        params.put("sort", Collections.singletonList("authorName"));
-        params.put("page", Collections.singletonList("2"));
-        Mockito.when(bookService.getBooks(anyString(),anyString(),anyInt())).
-                thenThrow(new BookException("Books Not Found", BookException.ExceptionType.BOOK_NOT_FOUND));
-        MvcResult result = this.mockMvc.perform(get("/books/all").params(params)).andReturn();
-        Assert.assertEquals(404,result.getResponse().getStatus());
-        Assert.assertEquals("Books Not Found",gson.fromJson(result.getResponse().
-                getContentAsString(),Response.class).message);
-    }
 }

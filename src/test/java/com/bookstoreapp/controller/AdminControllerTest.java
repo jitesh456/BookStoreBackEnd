@@ -275,7 +275,6 @@ public class AdminControllerTest {
         Assert.assertEquals("ISBN must include 10 or 13 characters",
                 new Gson().fromJson(result.getResponse().getContentAsString(), Response.class).message);
     }
-
     @Test
     void givenImageAsMultipart_shouldReturnImageViewURL() throws Exception {
         MockMultipartFile imageFile = new MockMultipartFile("file","1.png",

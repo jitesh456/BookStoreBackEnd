@@ -1,12 +1,8 @@
 package com.bookstoreapp.service;
 
-import com.bookstoreapp.dto.UserDetailDto;
-import com.bookstoreapp.dto.UserLoginDto;
-import com.bookstoreapp.dto.UserRegistrationDto;
-import com.bookstoreapp.model.User;
-import com.bookstoreapp.model.UserDetail;
-import com.bookstoreapp.repository.IUserDetailRepository;
-import com.bookstoreapp.repository.IUserRepository;
+import com.bookstoreapp.dto.*;
+import com.bookstoreapp.model.*;
+import com.bookstoreapp.repository.*;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.Implementation.CustomerService;
 import com.bookstoreapp.util.implementation.JwtToken;
@@ -20,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
+
 import static org.mockito.ArgumentMatchers.*;
 
 @SpringBootTest
@@ -32,6 +30,11 @@ public class CustomerServiceTest {
     IUserDetailRepository userDetailRepository;
 
     UserRegistrationDto userRegistrationDto;
+
+    @Mock
+    IBookRepository bookRepository;
+
+
 
     @Autowired
     HttpServletRequest httpServletRequest;

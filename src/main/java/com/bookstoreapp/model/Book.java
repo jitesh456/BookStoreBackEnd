@@ -29,9 +29,11 @@ public class Book {
 
     public String isbn;
 
+
     @OneToMany(mappedBy = "book",targetEntity=BookCart.class)
     @JsonIgnore
     List<BookCart> bookCartList;
+
 
     public Book(){
     }

@@ -1,6 +1,7 @@
 package com.bookstoreapp.controller;
 
 
+import com.bookstoreapp.dto.FeedbackDto;
 import com.bookstoreapp.dto.UserDetailDto;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.Implementation.CustomerService;
@@ -20,6 +21,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -71,8 +76,7 @@ public class CustomerControllerTest {
         userDetailDto=new UserDetailDto("Home","435672","101 B Street",
                 "101 B Street Lucknow U.P","Lucknow","India");
         String userDetailString = new Gson().toJson(userDetailDto);
-        Mockito.when(customerService.userDetail(any(),anyString())).
-                thenReturn(new Response("User Detail Added",200,""));
+        Mockito.when(customerService.userDetail(any(),anyString())).thenReturn(new Response("User Detail Added",200,""));
         MvcResult result = this.mockMvc.perform(post("/customerdetail").
                 content(userDetailString)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -88,8 +92,7 @@ public class CustomerControllerTest {
         userDetailDto=new UserDetailDto("home","435672","101 B Street",
                 "101 B Street Lucknow U.P","Lucknow","India");
         String userDetailString = new Gson().toJson(userDetailDto);
-        Mockito.when(customerService.userDetail(any(),anyString())).
-                thenReturn(new Response("User Detail Added",200,""));
+        Mockito.when(customerService.userDetail(any(),anyString())).thenReturn(new Response("User Detail Added",200,""));
         MvcResult result = this.mockMvc.perform(post("/customerdetail").
                 content(userDetailString)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -105,8 +108,7 @@ public class CustomerControllerTest {
         userDetailDto=new UserDetailDto("Home","43572","101 B Street",
                 "101 B Street Lucknow U.P","Lucknow","India");
         String userDetailString = new Gson().toJson(userDetailDto);
-        Mockito.when(customerService.userDetail(any(),anyString())).
-                thenReturn(new Response("User Detail Added",200,""));
+        Mockito.when(customerService.userDetail(any(),anyString())).thenReturn(new Response("User Detail Added",200,""));
         MvcResult result = this.mockMvc.perform(post("/customerdetail").
                 content(userDetailString)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -122,8 +124,7 @@ public class CustomerControllerTest {
         userDetailDto=new UserDetailDto("Home","432572","101 B Street",
                 "101 B ","Lucknow","India");
         String userDetailString = new Gson().toJson(userDetailDto);
-        Mockito.when(customerService.userDetail(any(),anyString())).
-                thenReturn(new Response("User Detail Added",200,""));
+        Mockito.when(customerService.userDetail(any(),anyString())).thenReturn(new Response("User Detail Added",200,""));
         MvcResult result = this.mockMvc.perform(post("/customerdetail").
                 content(userDetailString)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -139,8 +140,7 @@ public class CustomerControllerTest {
         userDetailDto=new UserDetailDto("Home","432572","101 B Street",
                 "101 B Street UP ","cdte","India");
         String userDetailString = new Gson().toJson(userDetailDto);
-        Mockito.when(customerService.userDetail(any(),anyString())).
-                thenReturn(new Response("User Detail Added",200,""));
+        Mockito.when(customerService.userDetail(any(),anyString())).thenReturn(new Response("User Detail Added",200,""));
         MvcResult result = this.mockMvc.perform(post("/customerdetail").
                 content(userDetailString)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -156,8 +156,7 @@ public class CustomerControllerTest {
         userDetailDto=new UserDetailDto("Home","432572","101 B Street",
                 "101 B Street UP ","Lucknow","ind");
         String userDetailString = new Gson().toJson(userDetailDto);
-        Mockito.when(customerService.userDetail(any(),anyString())).
-                thenReturn(new Response("User Detail Added",200,""));
+        Mockito.when(customerService.userDetail(any(),anyString())).thenReturn(new Response("User Detail Added",200,""));
         MvcResult result = this.mockMvc.perform(post("/customerdetail").
                 content(userDetailString)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -173,8 +172,7 @@ public class CustomerControllerTest {
         userDetailDto=new UserDetailDto("Home","432572","101 B Street",
                 "101 B Street UP ","Lucknow","");
         String userDetailString = new Gson().toJson(userDetailDto);
-        Mockito.when(customerService.getUserDetail(anyString())).
-                thenReturn(new Response("User Found",200,""));
+        Mockito.when(customerService.getUserDetail(anyString())).thenReturn(new Response("User Found",200,""));
         MvcResult result = this.mockMvc.perform(get("/customerdetail")
                 .content("")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -184,6 +182,23 @@ public class CustomerControllerTest {
                 gson.fromJson(result.getResponse().getContentAsString(),Response.class)
                         .message);
     }
+
+    @Test
+    void givenUserToken_WhenIdentifiedAndAddsFeedback_ShouldReturnProperMessage() throws Exception {
+        FeedbackDto feedbackDto = new FeedbackDto(4, "Book is Interesting" ,"9876543210");
+        String feedbackString = new Gson().toJson(feedbackDto);
+        Mockito.when(customerService.addFeedback(any(),any())).
+                thenReturn(new Response("Feedback Added Successfully",200,""));
+        MvcResult result = this.mockMvc.perform(post("/feedback").content(feedbackString)
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(httpHeaders))
+                .andReturn();
+        Assert.assertEquals("Feedback Added Successfully",
+                gson.fromJson(result.getResponse().getContentAsString(),Response.class)
+                        .message);
+    }
+
+
 
 
 }

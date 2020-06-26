@@ -51,7 +51,7 @@ public class CartControllerTest {
 
     BookDto bookDto;
 
-    @Mock
+    @MockBean
     SendMail mailSender;
 
     @BeforeEach
@@ -93,8 +93,7 @@ public class CartControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("utf-8")
                 .headers(httpHeaders)).andReturn();
-        Assert.assertEquals(response.message,new Gson().
-                fromJson(result.getResponse().getContentAsString(),Response.class).message);
+        Assert.assertEquals(response.message,new Gson().fromJson(result.getResponse().getContentAsString(),Response.class).message);
 
     }
 
@@ -107,8 +106,7 @@ public class CartControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("utf-8")
                 .headers(httpHeaders)).andReturn();
-        Assert.assertEquals(response.message,new Gson().
-                fromJson(result.getResponse().getContentAsString(),Response.class).message);
+        Assert.assertEquals(response.message,new Gson().fromJson(result.getResponse().getContentAsString(),Response.class).message);
 
     }
 
@@ -117,12 +115,11 @@ public class CartControllerTest {
 
         Response response=new Response("Book Is Removed From Cart",200,"");
         Mockito.when(cartService.deleteBook(anyInt(),any())).thenReturn(response);
-        MvcResult result = this.mockMvc.perform(delete("/book{id}",3)
+        MvcResult result = this.mockMvc.perform(delete("/book/{id}",3)
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("utf-8")
                 .headers(httpHeaders)).andReturn();
-        Assert.assertEquals(response.message,new Gson().
-                fromJson(result.getResponse().getContentAsString(),Response.class).message);
+        Assert.assertEquals(response.message,new Gson().fromJson(result.getResponse().getContentAsString(),Response.class).message);
 
     }
 
@@ -136,8 +133,7 @@ public class CartControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("utf-8")
                 .headers(httpHeaders)).andReturn();
-        Assert.assertEquals(response.message,new Gson().
-                fromJson(result.getResponse().getContentAsString(),Response.class).message);
+        Assert.assertEquals(response.message,new Gson().fromJson(result.getResponse().getContentAsString(),Response.class).message);
     }
 
 }

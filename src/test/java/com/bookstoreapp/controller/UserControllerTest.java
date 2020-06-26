@@ -20,10 +20,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-
 import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @WebMvcTest(controllers =UserController.class)
 @RunWith(MockitoJUnitRunner.class)
@@ -42,6 +40,7 @@ public class UserControllerTest {
     HttpHeaders httpHeaders=new HttpHeaders();
 
     Gson gson;
+
 
     @MockBean
     JwtToken jwtToken;
@@ -90,8 +89,7 @@ public class UserControllerTest {
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
 
-        Assert.assertEquals("User name should start with upper case and minimum 3 character",
-                gson.fromJson(mvcResult.getResponse()
+        Assert.assertEquals("User name should start with upper case and minimum 3 character", gson.fromJson(mvcResult.getResponse()
                 .getContentAsString(), Response.class).message);
     }
 
@@ -106,8 +104,7 @@ public class UserControllerTest {
                 .content(user)
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
-        Assert.assertEquals("User name should start with upper case and minimum 3 character",
-                gson.fromJson(mvcResult.getResponse()
+        Assert.assertEquals("User name should start with upper case and minimum 3 character", gson.fromJson(mvcResult.getResponse()
                 .getContentAsString(), Response.class).message);
     }
 
@@ -122,8 +119,7 @@ public class UserControllerTest {
                 .content(user)
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
-        Assert.assertEquals("User name should start with upper case and minimum 3 character",
-                gson.fromJson(mvcResult.getResponse()
+        Assert.assertEquals("User name should start with upper case and minimum 3 character", gson.fromJson(mvcResult.getResponse()
                 .getContentAsString(), Response.class).message);
     }
 
@@ -187,8 +183,7 @@ public class UserControllerTest {
                 .content(user)
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
-        Assert.assertEquals("Atleast one uppercase,lowercase,number and atmost one special character with minimum length 8",
-                gson.fromJson(mvcResult.getResponse()
+        Assert.assertEquals("Atleast one uppercase,lowercase,number and atmost one special character with minimum length 8", gson.fromJson(mvcResult.getResponse()
                 .getContentAsString(), Response.class).message);
     }
 
@@ -203,8 +198,7 @@ public class UserControllerTest {
                 .content(user)
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
-        Assert.assertEquals("Atleast one uppercase,lowercase,number and atmost one special character with minimum length 8",
-                gson.fromJson(mvcResult.getResponse()
+        Assert.assertEquals("Atleast one uppercase,lowercase,number and atmost one special character with minimum length 8", gson.fromJson(mvcResult.getResponse()
                 .getContentAsString(), Response.class).message);
     }
 
@@ -219,8 +213,7 @@ public class UserControllerTest {
                 .content(user)
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)).andReturn();
-        Assert.assertEquals("Atleast one uppercase,lowercase,number and atmost one special character with minimum length 8",
-                gson.fromJson(mvcResult.getResponse()
+        Assert.assertEquals("Atleast one uppercase,lowercase,number and atmost one special character with minimum length 8", gson.fromJson(mvcResult.getResponse()
                 .getContentAsString(), Response.class).message);
     }
 
@@ -290,8 +283,7 @@ public class UserControllerTest {
         MvcResult result = this.mockMvc.perform(post("/login").
                 content(userLoginDtoString).
                 contentType(MediaType.APPLICATION_JSON)).andReturn();
-        Assert.assertEquals("Please enter valid email", gson.
-                fromJson(result.getResponse().getContentAsString(),Response.class).message);
+        Assert.assertEquals("Please enter valid email", gson.fromJson(result.getResponse().getContentAsString(),Response.class).message);
     }
 
 
@@ -304,8 +296,7 @@ public class UserControllerTest {
         MvcResult result = this.mockMvc.perform(post("/login").
                 content(userLoginDtoString).
                 contentType(MediaType.APPLICATION_JSON)).andReturn();
-        Assert.assertEquals("Please enter valid email", gson.
-                fromJson(result.getResponse().getContentAsString(),Response.class).message);
+        Assert.assertEquals("Please enter valid email", gson.fromJson(result.getResponse().getContentAsString(),Response.class).message);
     }
 
     @Test
@@ -317,8 +308,7 @@ public class UserControllerTest {
         MvcResult result = this.mockMvc.perform(post("/login").
                 content(userLoginDtoString).
                 contentType(MediaType.APPLICATION_JSON)).andReturn();
-        Assert.assertEquals("Please enter valid email", gson.
-                fromJson(result.getResponse().getContentAsString(),Response.class).message);
+        Assert.assertEquals("Please enter valid email", gson.fromJson(result.getResponse().getContentAsString(),Response.class).message);
     }
 
     @Test
@@ -331,8 +321,7 @@ public class UserControllerTest {
                 content(userLoginDtoString).
                 contentType(MediaType.APPLICATION_JSON)).andReturn();
         Assert.assertEquals("Atleast one uppercase,lowercase,number and " +
-                "atmost one special character with minimum length 8", gson.
-                fromJson(result.getResponse().getContentAsString(),Response.class).message);
+                "atmost one special character with minimum length 8", gson.fromJson(result.getResponse().getContentAsString(),Response.class).message);
     }
 
     @Test
@@ -371,28 +360,25 @@ public class UserControllerTest {
 
         String emailId= "abcd@gmail.com";
         String email= gson.toJson(emailId);
-        Mockito.when(userService.forgetPassword(any(),any())).
-                thenReturn(new Response("Email Successfull",200,""));
+        Mockito.when(userService.forgetPassword(any(),any())).thenReturn(new Response("Email Successfull",200,""));
         MvcResult result = this.mockMvc.perform(get("/forget?email="))
                 .andReturn();
-        Assert.assertEquals(200, gson.
-                fromJson(result.getResponse().getContentAsString(),Response.class)
+        Assert.assertEquals(200, gson.fromJson(result.getResponse().getContentAsString(),Response.class)
                 .statusCode);
     }
+
 
 
     @Test
     void givenPassword_WhenProper_ShouldReturnProperMessage() throws Exception{
 
         String password= "Abcd@1234";
-        Mockito.when(userService.resetPassword(any(),any())).
-                thenReturn(new Response("Password Reset Successfull",200,""));
-        MvcResult result = this.mockMvc.perform(get("/reset/password?password=")
+        Mockito.when(userService.resetPassword(any(),any())).thenReturn(new Response("Password Reset Successfull",200,""));
+        MvcResult result = this.mockMvc.perform(put("/reset/password?password=")
                 .characterEncoding("utf-8")
                 .headers(httpHeaders))
                 .andReturn();
-        Assert.assertEquals(200, gson.
-                fromJson(result.getResponse().getContentAsString(),Response.class)
+        Assert.assertEquals(200, gson.fromJson(result.getResponse().getContentAsString(),Response.class)
                 .statusCode);
     }
 

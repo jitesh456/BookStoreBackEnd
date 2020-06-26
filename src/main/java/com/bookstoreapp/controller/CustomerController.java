@@ -1,5 +1,6 @@
 package com.bookstoreapp.controller;
 
+import com.bookstoreapp.dto.FeedbackDto;
 import com.bookstoreapp.dto.UserDetailDto;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.Implementation.CustomerService;
@@ -36,5 +37,18 @@ public class CustomerController {
         Response response=customerService.getUserDetail(token);
         return new ResponseEntity<Response>(response,HttpStatus.OK);
     }
+
+    @PostMapping(value = "/feedback")
+    public ResponseEntity<Response> addUserFeedback(@RequestBody FeedbackDto feedbackDto,
+                                                    BindingResult bindingResult,
+                                                    @RequestHeader String token){
+        if(bindingResult.hasErrors()) {
+            return new ResponseEntity<Response>(new Response(bindingResult.getAllErrors().get(0).getDefaultMessage(),
+                    101,"Empty Field"), HttpStatus.BAD_REQUEST);
+        }
+        Response response=customerService.addFeedback(token,feedbackDto);
+        return new ResponseEntity<Response>(response,HttpStatus.OK);
+    }
+
 
 }

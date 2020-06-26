@@ -59,9 +59,13 @@ public class UserService implements IUserService {
             User savedUser = userRepository.save(user);
             StringBuffer url = servletRequest.getRequestURL();
             String baseUrl = url.substring(0, url.length() - 4);
+//            String appUrl =
+//                    iVerifyEmailTemplate.verifyEmailTemplate(baseUrl + "verify?token=" + jwtToken.generateToken(savedUser.id));
+
             String appUrl =
                     iVerifyEmailTemplate.verifyEmailTemplate(servletRequest.getHeader("origin") +
                             "/verify/account/?" + jwtToken.generateToken(savedUser.id));
+
 
             NotificationDto notificationDto = new NotificationDto(savedUser.email, "Activate account",
                     appUrl);
@@ -73,19 +77,19 @@ public class UserService implements IUserService {
     }
 
 
-
     @Override
     public String loginUser(UserLoginDto userLoginDto) {
 
         Optional<User> userData = userRepository.findUserByEmail(userLoginDto.email);
-        if(!userData.get().isActivate)
-            throw new UserException("Please verify your email", UserException.ExceptionType.User_Is_Not_Activated_Account);
+        if (userData.isPresent()) {
 
-        boolean booleanResult = passwordEncoder.matches(userLoginDto.password, userData.get().password);
-        if (booleanResult) {
-            return jwtToken.generateToken(userData.get().id);
+            boolean booleanResult = passwordEncoder.matches(userLoginDto.password, userData.get().password);
+            if (booleanResult) {
+                return jwtToken.generateToken(userData.get().id);
+            }
+            throw new UserException("Incorrect password", UserException.ExceptionType.INVALID_PASSWORD);
         }
-        throw new UserException("Incorrect password", UserException.ExceptionType.INVALID_PASSWORD);
+        throw new UserException("Invalid Email id", UserException.ExceptionType.INVALID_EMAIL_ID);
     }
 
 
