@@ -6,6 +6,7 @@ import com.bookstoreapp.dto.UserDetailDto;
 import com.bookstoreapp.exception.UserException;
 import com.bookstoreapp.model.*;
 import com.bookstoreapp.repository.*;
+import com.bookstoreapp.response.FeedbackResponse;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.ICustomerService;
 import com.bookstoreapp.util.IJwtToken;
@@ -73,21 +74,34 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public Response addFeedback(String token, FeedbackDto feedbackDto) {
-
+        boolean isUserFeedbackPresent= false;
         Feedback userFeedback = null;
         if(token != null) {
             User user = validate(token).get();
-            String userName = user.name;
+            int userId = user.id;
             String isbn = feedbackDto.isbn;
             Optional<Book> book1 = bookRepository.findByIsbn(isbn);
             Book book = book1.get();
-            String feedbackMessage = feedbackDto.feedbackMessage;
-            int rating = feedbackDto.rating;
-            userFeedback = new Feedback(userName, rating, feedbackMessage);
-            feedbackRepository.save(userFeedback);
-            BookFeedback bookFeedback = new BookFeedback(book, userFeedback);
-            bookFeedbackRepository.save(bookFeedback);
-            return new Response("Thank you For your Feedback ", 200, "Feedback added Successfully");
+            int bookid = book.id;
+            List<Integer> feedbackIds = bookFeedbackRepository.getfeedbackIds(bookid);
+            for (int i = 0; i < feedbackIds.size(); i++) {
+                int userFeedbackId = feedbackRepository.getUserFeedbackId(feedbackIds.get(i));
+                if (userId == userFeedbackId) {
+                    isUserFeedbackPresent = true;
+                    break;
+                }
+            }
+            if (!isUserFeedbackPresent) {
+                String feedbackMessage = feedbackDto.feedbackMessage;
+                int rating = feedbackDto.rating;
+                userFeedback = new Feedback(userId, rating, feedbackMessage);
+                feedbackRepository.save(userFeedback);
+                BookFeedback bookFeedback = new BookFeedback(book, userFeedback);
+                bookFeedbackRepository.save(bookFeedback);
+                return new Response("Thank you For your Feedback ", 200, "Feedback added Successfully");
+            }
+            else
+                throw new UserException("You had submitted feedback previously", UserException.ExceptionType.You_Had_Submitted_Feedback_Previously);
         }
         throw new UserException("Please Login to give feedback", UserException.ExceptionType.Please_Login_To_Give_Feedback);
    }
@@ -99,11 +113,16 @@ public class CustomerService implements ICustomerService {
         Book bookdData= book.get();
         Integer id = bookdData.id;
         List<Integer> feedbackIds = bookFeedbackRepository.getfeedbackIds(id);
-        List<Feedback> feedbackList= new ArrayList<>();
+        List<FeedbackResponse> feedbackList= new ArrayList<>();
+
         for(int i=0;i<feedbackIds.size();i++) {
             Optional<Feedback> feedback = feedbackRepository.findById(feedbackIds.get(i));
             Feedback feedback1 = feedback.get();
-            feedbackList.add(feedback1);
+            int userId = feedback1.userId;
+            Optional<User> userById = userRepository.findUserById(userId);
+            String name = userById.get().name;
+            feedbackList.add(new FeedbackResponse(feedback1,name));
+
         }
         return new Response("Fetched All Feedbacks",200,feedbackList);
     }

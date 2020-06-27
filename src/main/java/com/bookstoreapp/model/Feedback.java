@@ -15,7 +15,7 @@ public class Feedback {
     @GeneratedValue(strategy = GenerationType.AUTO)
     public int id;
 
-    public String userName;
+    public int userId;
 
     public int rating;
 
@@ -23,8 +23,8 @@ public class Feedback {
 
     public Feedback(){}
 
-    public Feedback(String userName, int rating ,  String feedbackMessage) {
-        this.userName = userName;
+    public Feedback(int userId, int rating ,  String feedbackMessage) {
+        this.userId = userId;
         this.rating = rating;
         this.feedbackMessage = feedbackMessage;
     }

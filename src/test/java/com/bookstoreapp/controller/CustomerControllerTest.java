@@ -202,8 +202,8 @@ public class CustomerControllerTest {
 
     @Test
     void givenIsbnNo_WhenProper_ShouldReturnAllFeedBack() throws Exception{
-        Feedback feedback = new Feedback("Neena", 4, "Book is Interesting");
-        Feedback feedback1 = new Feedback("John", 3 ,"Nice Book to Read");
+        Feedback feedback = new Feedback(3, 4, "Book is Interesting");
+        Feedback feedback1 = new Feedback(4, 3 ,"Nice Book to Read");
         List<Feedback> feedbackList = new ArrayList<>();
         feedbackList.add(feedback);
         feedbackList.add(feedback1);

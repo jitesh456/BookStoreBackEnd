@@ -104,7 +104,7 @@ public class CustomerServiceTest {
                 "998542365", "sdfsfd", "ABCD");
         Book book = new Book(bookDto);
         book.id=3;
-        Feedback feedback=new Feedback("Max",3,"Good Book");
+        Feedback feedback=new Feedback(5,3,"Good Book");
         Mockito.when(userRepository.findUserById(anyInt())).thenReturn(java.util.Optional.of(user));
         Mockito.when(jwtToken.validateToken(anyString())).thenReturn(true);
         Mockito.when(jwtToken.getUserId()).thenReturn(1);
