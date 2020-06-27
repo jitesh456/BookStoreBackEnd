@@ -14,5 +14,5 @@ public interface ICustomerService {
 
     Response addFeedback(String token, FeedbackDto feedbackDto);
 
-    Iterable<Feedback> getAllFeedback(String token);
+    Response getAllFeedback(String isbn);
 }

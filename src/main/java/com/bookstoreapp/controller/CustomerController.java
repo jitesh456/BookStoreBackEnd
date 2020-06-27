@@ -52,11 +52,8 @@ public class CustomerController {
     }
 
     @GetMapping(value= "/feedback")
-    public Response getBookFeedBack(@RequestParam("isbn") String isbn){
-        Iterable<Feedback> allFeedback = customerService.getAllFeedback(isbn);
-        Response response=new Response("Feedback Fetched",200,allFeedback);
-        return response;
+    public ResponseEntity<Response> getBookFeedBack(@RequestParam("isbn") String isbn){
+        Response response = customerService.getAllFeedback(isbn);
+        return new ResponseEntity<Response>(response,HttpStatus.OK);
     }
-
-
 }

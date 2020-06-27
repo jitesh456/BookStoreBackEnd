@@ -12,6 +12,8 @@ import com.bookstoreapp.util.IJwtToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -84,15 +86,26 @@ public class CustomerService implements ICustomerService {
             userFeedback = new Feedback(userName, rating, feedbackMessage);
             feedbackRepository.save(userFeedback);
             BookFeedback bookFeedback = new BookFeedback(book, userFeedback);
-            BookFeedback bookFeedback1 = bookFeedbackRepository.save(bookFeedback);
+            bookFeedbackRepository.save(bookFeedback);
             return new Response("Thank you For your Feedback ", 200, "Feedback added Successfully");
         }
         throw new UserException("Please Login to give feedback", UserException.ExceptionType.Please_Login_To_Give_Feedback);
    }
 
     @Override
-    public Iterable<Feedback> getAllFeedback(String token) {
-        return null;
+    public Response getAllFeedback(String isbn) {
+
+        Optional<Book> book = bookRepository.findByIsbn(isbn);
+        Book bookdData= book.get();
+        Integer id = bookdData.id;
+        List<Integer> feedbackIds = bookFeedbackRepository.getfeedbackIds(id);
+        List<Feedback> feedbackList= new ArrayList<>();
+        for(int i=0;i<feedbackIds.size();i++) {
+            Optional<Feedback> feedback = feedbackRepository.findById(feedbackIds.get(i));
+            Feedback feedback1 = feedback.get();
+            feedbackList.add(feedback1);
+        }
+        return new Response("Fetched All Feedbacks",200,feedbackList);
     }
 
 
@@ -103,3 +116,6 @@ public class CustomerService implements ICustomerService {
         return userRepository.findUserById(userId);
     }
 }
+
+
+

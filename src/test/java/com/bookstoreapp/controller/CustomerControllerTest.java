@@ -207,7 +207,8 @@ public class CustomerControllerTest {
         List<Feedback> feedbackList = new ArrayList<>();
         feedbackList.add(feedback);
         feedbackList.add(feedback1);
-        Mockito.when(customerService.getAllFeedback(any())).thenReturn(feedbackList);
+        Response response=new Response("Feedback Fetched",200,feedbackList);
+        Mockito.when(customerService.getAllFeedback(any())).thenReturn(response);
         MvcResult result = this.mockMvc.perform(get("/feedback?isbn=")).andReturn();
         Assert.assertEquals(200, result.getResponse().getStatus());
         Assert.assertEquals("Feedback Fetched", gson.fromJson(result.getResponse().

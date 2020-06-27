@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.*;
@@ -52,6 +53,8 @@ public class CustomerServiceTest {
     CustomerService customerService;
 
     User user;
+
+    Feedback feedback;
 
     @BeforeEach
     void setUp() {
@@ -111,8 +114,6 @@ public class CustomerServiceTest {
         Mockito.when(feedbackRepository.save(any())).thenReturn(feedback);
         Mockito.when(bookFeedbackRepository.save(any())).thenReturn(bookFeedback);
         Response response = customerService.addFeedback(token,feedbackDto);
-//        Assert.assertEquals("Thank you For your Feedback",response.message);
         Assert.assertEquals(200,response.statusCode);
-
     }
 }
