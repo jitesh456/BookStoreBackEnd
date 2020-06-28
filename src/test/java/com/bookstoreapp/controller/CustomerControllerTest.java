@@ -1,8 +1,10 @@
 package com.bookstoreapp.controller;
 
 
+import com.bookstoreapp.dto.BookDto;
 import com.bookstoreapp.dto.FeedbackDto;
 import com.bookstoreapp.dto.UserDetailDto;
+import com.bookstoreapp.model.Book;
 import com.bookstoreapp.model.Feedback;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.Implementation.CustomerService;
@@ -202,8 +204,18 @@ public class CustomerControllerTest {
 
     @Test
     void givenIsbnNo_WhenProper_ShouldReturnAllFeedBack() throws Exception{
-        Feedback feedback = new Feedback(3, 4, "Book is Interesting");
-        Feedback feedback1 = new Feedback(4, 3 ,"Nice Book to Read");
+        BookDto bookDto = new BookDto("Secret of nagas", 2000.0,
+                12, "Amish Tiwari", "comic",
+                "987564236578", "sdfsfd", "Adaptation of the first of J.K. Rowling's popular " +
+                "children's novels about Harry Potter, a boy who learns on his eleventh birthday that he is the orphaned son ");
+
+        BookDto bookDto1 = new BookDto("Naruto", 200.0,
+                20, "makashi kissimoto", "Manga",
+                "12345678", "", "story about ninja boy ");
+        Book book = new Book(bookDto);
+        Book book1 = new Book(bookDto1);
+        Feedback feedback = new Feedback(3, 4, "Book is Interesting",book);
+        Feedback feedback1 = new Feedback(4, 3 ,"Nice Book to Read",book1);
         List<Feedback> feedbackList = new ArrayList<>();
         feedbackList.add(feedback);
         feedbackList.add(feedback1);
