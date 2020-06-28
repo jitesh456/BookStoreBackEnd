@@ -29,8 +29,8 @@ public class CustomerService implements ICustomerService {
     @Autowired
     IJwtToken jwtToken;
 
-    @Autowired
-    private  IBookFeedbackRepository bookFeedbackRepository;
+//    @Autowired
+//    private  IBookFeedbackRepository bookFeedbackRepository;
 
     @Autowired
     private  IFeedbackRepository feedbackRepository;
@@ -83,21 +83,21 @@ public class CustomerService implements ICustomerService {
             Optional<Book> book1 = bookRepository.findByIsbn(isbn);
             Book book = book1.get();
             int bookid = book.id;
-            List<Integer> feedbackIds = bookFeedbackRepository.getfeedbackIds(bookid);
-            for (int i = 0; i < feedbackIds.size(); i++) {
-                int userFeedbackId = feedbackRepository.getUserFeedbackId(feedbackIds.get(i));
-                if (userId == userFeedbackId) {
-                    isUserFeedbackPresent = true;
-                    break;
+            List<Integer> feedbackIds = feedbackRepository.getfeedbackIds(bookid);
+            if(feedbackIds.size()>0) {
+                for (int i = 0; i < feedbackIds.size(); i++) {
+                    int userFeedbackId = feedbackRepository.getUserFeedbackId(feedbackIds.get(i));
+                    if (userId == userFeedbackId) {
+                        isUserFeedbackPresent = true;
+                        break;
+                    }
                 }
             }
             if (!isUserFeedbackPresent) {
                 String feedbackMessage = feedbackDto.feedbackMessage;
                 int rating = feedbackDto.rating;
-                userFeedback = new Feedback(userId, rating, feedbackMessage);
+                userFeedback = new Feedback(userId, rating, feedbackMessage,book);
                 feedbackRepository.save(userFeedback);
-                BookFeedback bookFeedback = new BookFeedback(book, userFeedback);
-                bookFeedbackRepository.save(bookFeedback);
                 return new Response("Thank you For your Feedback ", 200, "Feedback added Successfully");
             }
             else
@@ -112,7 +112,7 @@ public class CustomerService implements ICustomerService {
         Optional<Book> book = bookRepository.findByIsbn(isbn);
         Book bookdData= book.get();
         Integer id = bookdData.id;
-        List<Integer> feedbackIds = bookFeedbackRepository.getfeedbackIds(id);
+        List<Integer> feedbackIds = feedbackRepository.getfeedbackIds(id);
         List<FeedbackResponse> feedbackList= new ArrayList<>();
 
         for(int i=0;i<feedbackIds.size();i++) {
@@ -121,7 +121,7 @@ public class CustomerService implements ICustomerService {
             int userId = feedback1.userId;
             Optional<User> userById = userRepository.findUserById(userId);
             String name = userById.get().name;
-            feedbackList.add(new FeedbackResponse(feedback1,name));
+            feedbackList.add(new FeedbackResponse(feedback1.rating,feedback1.feedbackMessage,name));
 
         }
         return new Response("Fetched All Feedbacks",200,feedbackList);

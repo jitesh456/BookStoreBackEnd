@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table
@@ -22,6 +23,7 @@ public class User {
     public String password;
 
     public String number;
+
 
     @OneToMany()
     public  List<Cart> carts=new ArrayList<>();

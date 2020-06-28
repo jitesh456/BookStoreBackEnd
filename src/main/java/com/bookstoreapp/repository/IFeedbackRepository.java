@@ -14,4 +14,8 @@ public interface IFeedbackRepository extends JpaRepository<Feedback,Integer> {
     int getUserFeedbackId(@Param("feedbackId") int id );
 
 
+    @Query(value="select id from feedback where book_id=:bookId",nativeQuery=true)
+    List<Integer> getfeedbackIds(@Param("bookId") int id );
+
+
 }

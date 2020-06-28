@@ -4,6 +4,7 @@ import com.bookstoreapp.dto.BookDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="bookdetails")
@@ -34,9 +35,8 @@ public class Book {
     @JsonIgnore
     List<BookCart> bookCartList;
 
-    @OneToMany(mappedBy = "book",targetEntity=BookFeedback.class)
-    @JsonIgnore
-    List<BookFeedback> bookFeedbackList;
+    @OneToMany(mappedBy = "book",targetEntity=Feedback.class)
+    private Set<Feedback> feedback;
 
     public Book(){
     }
