@@ -127,6 +127,23 @@ public class CustomerService implements ICustomerService {
         return new Response("Fetched All Feedbacks",200,feedbackList);
     }
 
+    @Override
+    public Response getUserFeedback(int id, String token) {
+        Optional<User> user = validate(token);
+        List<FeedbackResponse> feedbackList= new ArrayList<>();
+        if (user.isPresent()){
+            User userDetails=user.get();
+            Integer userId=userDetails.id;
+            String userName=userDetails.name;
+            int feedbackId = feedbackRepository.getFeedbackId(userId,id);
+            Optional<Feedback> feedback = feedbackRepository.findById(feedbackId);
+            Feedback feedbackDetails=feedback.get();
+            feedbackList.add(new FeedbackResponse(feedbackDetails.rating,feedbackDetails.feedbackMessage,userName));
+            return new Response("User Feedback Fetched",200,feedbackList);
+        }
+        throw new UserException("User not Found", UserException.ExceptionType.USER_NOT_FOUND);
+    }
+
 
     private Optional<User> validate(String token) {
 

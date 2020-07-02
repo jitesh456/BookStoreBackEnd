@@ -4,6 +4,7 @@ import com.bookstoreapp.exception.JwtTokenException;
 import com.bookstoreapp.properties.ApplicationProperties;
 import com.bookstoreapp.util.IJwtToken;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,19 +42,19 @@ public class JwtToken implements IJwtToken {
             throw new JwtTokenException("Token must not be empty", JwtTokenException.ExceptionType.EMPTY_TOKEN);
         }
 
-        Claims claims = Jwts.parser()
-                .setSigningKey(DatatypeConverter.parseBase64Binary(applicationProperties.getSecretKey()))
-                .parseClaimsJws(token).getBody();
+        Claims claims;
+
+        try {
+            claims = Jwts.parser()
+                    .setSigningKey(DatatypeConverter.parseBase64Binary(applicationProperties.getSecretKey()))
+                    .parseClaimsJws(token).getBody();
+        }
+        catch( JwtException e){
+            throw new JwtTokenException("Token Expired", JwtTokenException.ExceptionType.TOKEN_EXPIRED);
+        }
 
         userId=Integer.parseInt(claims.getId());
-        if(token.isEmpty()){
-            throw new JwtTokenException("Token must not be empty", JwtTokenException.ExceptionType.EMPTY_TOKEN);
-        }
-        if(claims.getExpiration().after(new Date(System.currentTimeMillis()))){
-            return true;
-        }
-        throw new JwtTokenException("Token Expired", JwtTokenException.ExceptionType.TOKEN_EXPIRED);
-
+        return true;
     }
 
     @Override

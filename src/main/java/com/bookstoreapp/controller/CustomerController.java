@@ -5,6 +5,7 @@ import com.bookstoreapp.dto.UserDetailDto;
 import com.bookstoreapp.model.Feedback;
 import com.bookstoreapp.response.Response;
 import com.bookstoreapp.service.Implementation.CustomerService;
+import org.aspectj.weaver.patterns.IToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,5 +56,11 @@ public class CustomerController {
     public ResponseEntity<Response> getBookFeedBack(@RequestParam("isbn") String isbn){
         Response response = customerService.getAllFeedback(isbn);
         return new ResponseEntity<Response>(response,HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/customer/feedback")
+    public ResponseEntity<Response> getCustomerFeedback(@RequestParam("id") int id,@RequestHeader String token){
+        Response customerFeedback = customerService.getUserFeedback(id,token);
+        return new ResponseEntity<>(customerFeedback,HttpStatus.OK);
     }
 }

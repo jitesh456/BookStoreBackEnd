@@ -106,4 +106,20 @@ public class CustomerServiceTest {
         Response response = customerService.addFeedback(token,feedbackDto);
         Assert.assertEquals(200,response.statusCode);
     }
+
+//    @Test
+//    void givenUserToken_WhenIdentified_ShouldReturnProperMessage() {
+//        BookDto bookDto = new BookDto("Secret of nagas", 2000.0,12, "Amish Tiwari", "comic",
+//                "998542365", "sdfsfd", "ABCD");
+//        Book book = new Book(bookDto);
+//        book.id=3;
+//        Feedback feedback=new Feedback(5,3,"Good Book",book);
+//        Mockito.when(userRepository.findUserById(anyInt())).thenReturn(java.util.Optional.of(user));
+//        Mockito.when(jwtToken.validateToken(anyString())).thenReturn(true);
+//        Mockito.when(jwtToken.getUserId()).thenReturn(1);
+//        Mockito.when(feedbackRepository.findById(any())).thenReturn(Optional.of(feedback));
+//        Response response = customerService.getUserFeedback(token);
+//        Assert.assertEquals("User Feedback Fetched",response.message);
+//        Assert.assertEquals(200,response.statusCode);
+//    }
 }

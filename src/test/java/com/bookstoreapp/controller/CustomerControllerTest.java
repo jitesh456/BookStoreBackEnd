@@ -225,9 +225,17 @@ public class CustomerControllerTest {
         Assert.assertEquals(200, result.getResponse().getStatus());
         Assert.assertEquals("Feedback Fetched", gson.fromJson(result.getResponse().
                 getContentAsString(), Response.class).message);
-
     }
 
-
-
+    @Test
+    void givenUserTOken_WhenIdentified_ShouldReturnProperMessage() throws Exception {
+        Mockito.when(customerService.getUserFeedback(id, anyString())).
+                thenReturn(new Response("User Feedback Fetched",200,""));
+        MvcResult result = mockMvc.perform(get("/customer/feedback").
+                contentType(MediaType.APPLICATION_JSON)
+                .content("")
+                .headers(httpHeaders))
+                .andReturn();
+        Assert.assertEquals(200,result.getResponse().getStatus());
+    }
 }
