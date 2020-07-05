@@ -139,7 +139,7 @@ public class UserService implements IUserService {
                 userRepository.save(user1);
                 return new Response("Password Reset Successfully", 200, "");
             }
-            throw new UserException("User is not Activated Account", UserException.ExceptionType.User_Is_Not_Activated_Account);
+            throw new UserException("User is not Activated Account", UserException.ExceptionType.USER_HAS_NOT_ACTIVATED_ACCOUNT);
 
         }
         throw new UserException("No Such User", UserException.ExceptionType.USER_NOT_FOUND);
