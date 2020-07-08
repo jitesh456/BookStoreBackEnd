@@ -29,9 +29,6 @@ public class CustomerService implements ICustomerService {
     @Autowired
     IJwtToken jwtToken;
 
-//    @Autowired
-//    private  IBookFeedbackRepository bookFeedbackRepository;
-
     @Autowired
     private  IFeedbackRepository feedbackRepository;
 
@@ -101,9 +98,9 @@ public class CustomerService implements ICustomerService {
                 return new Response("Thank you For your Feedback ", 200, "Feedback added Successfully");
             }
             else
-                throw new UserException("You had submitted feedback previously", UserException.ExceptionType.You_Had_Submitted_Feedback_Previously);
+                throw new UserException("You had submitted feedback previously", UserException.ExceptionType.YOU_HAD_SUBMITTED_FEEDBACK_PREVIOUSLY);
         }
-        throw new UserException("Please Login to give feedback", UserException.ExceptionType.Please_Login_To_Give_Feedback);
+        throw new UserException("Please Login to give feedback", UserException.ExceptionType.PLEASE_LOGIN_TO_GIVE_FEEDBACK);
    }
 
     @Override
@@ -135,11 +132,17 @@ public class CustomerService implements ICustomerService {
             User userDetails=user.get();
             Integer userId=userDetails.id;
             String userName=userDetails.name;
-            int feedbackId = feedbackRepository.getFeedbackId(userId,id);
-            Optional<Feedback> feedback = feedbackRepository.findById(feedbackId);
-            Feedback feedbackDetails=feedback.get();
-            feedbackList.add(new FeedbackResponse(feedbackDetails.rating,feedbackDetails.feedbackMessage,userName));
-            return new Response("User Feedback Fetched",200,feedbackList);
+            Integer feedbackId=0;
+                feedbackId = feedbackRepository.getFeedbackId(userId, id);
+            if(feedbackId==null){
+                throw new UserException("Feedback not found for this user", UserException.ExceptionType.FEEDBACK_NOT_FOUND);
+            }
+            else {
+                Optional<Feedback> feedback = feedbackRepository.findById(feedbackId);
+                Feedback feedbackDetails = feedback.get();
+                feedbackList.add(new FeedbackResponse(feedbackDetails.rating, feedbackDetails.feedbackMessage, userName));
+                return new Response("User Feedback Fetched", 200, feedbackList);
+            }
         }
         throw new UserException("User not Found", UserException.ExceptionType.USER_NOT_FOUND);
     }

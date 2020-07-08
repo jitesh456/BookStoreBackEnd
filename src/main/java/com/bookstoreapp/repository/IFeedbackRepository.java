@@ -18,6 +18,6 @@ public interface IFeedbackRepository extends JpaRepository<Feedback,Integer> {
     List<Integer> getfeedbackIds(@Param("bookId") int id );
 
     @Query(value="select id from feedback where user_id=:userId and book_id=:bookId",nativeQuery=true)
-    int getFeedbackId(@Param("userId") int userId,@Param("bookId") int bookId);
+    Integer getFeedbackId(@Param("userId") int userId,@Param("bookId") int bookId);
 
 }
