@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -107,19 +108,39 @@ public class CustomerServiceTest {
         Assert.assertEquals(200,response.statusCode);
     }
 
-//    @Test
-//    void givenUserToken_WhenIdentified_ShouldReturnProperMessage() {
-//        BookDto bookDto = new BookDto("Secret of nagas", 2000.0,12, "Amish Tiwari", "comic",
-//                "998542365", "sdfsfd", "ABCD");
-//        Book book = new Book(bookDto);
-//        book.id=3;
-//        Feedback feedback=new Feedback(5,3,"Good Book",book);
-//        Mockito.when(userRepository.findUserById(anyInt())).thenReturn(java.util.Optional.of(user));
-//        Mockito.when(jwtToken.validateToken(anyString())).thenReturn(true);
-//        Mockito.when(jwtToken.getUserId()).thenReturn(1);
-//        Mockito.when(feedbackRepository.findById(any())).thenReturn(Optional.of(feedback));
-//        Response response = customerService.getUserFeedback(token);
-//        Assert.assertEquals("User Feedback Fetched",response.message);
-//        Assert.assertEquals(200,response.statusCode);
-//    }
+    @Test
+    void givenISBN_WhenIdentified_ShouldReturnProperMessage(){
+        FeedbackDto feedbackDto=new FeedbackDto(3,"Good Book","9765432133");
+        BookDto bookDto = new BookDto("Secret of nagas", 2000.0,12, "Amish Tiwari", "comic",
+                "998542365", "sdfsfd", "ABCD");
+        Book book = new Book(bookDto);
+        book.id=1;
+        List<Integer> feedbackIds=new ArrayList<>();
+        Feedback feedback=new Feedback(5,3,"Good Book",book);
+        feedback.id=1;
+        feedbackIds.add(feedback.id);
+        Mockito.when(bookRepository.findByIsbn(any())).thenReturn(Optional.of(book));
+        Mockito.when(feedbackRepository.getfeedbackIds(anyInt())).thenReturn(feedbackIds);
+        Mockito.when(feedbackRepository.findById(any())).thenReturn(Optional.of(feedback));
+        Mockito.when(userRepository.findUserById(anyInt())).thenReturn(java.util.Optional.of(user));
+        Response response = customerService.getAllFeedback(feedbackDto.isbn);
+        Assert.assertEquals(200,response.statusCode);
+    }
+
+    @Test
+    void givenUserToken_WhenIdentified_ShouldReturnProperMessage() {
+        BookDto bookDto = new BookDto("Secret of nagas", 2000.0,12, "Amish Tiwari", "comic",
+                "998542365", "sdfsfd", "ABCD");
+        Book book = new Book(bookDto);
+        book.id=3;
+        Feedback feedback=new Feedback(5,3,"Good Book",book);
+        Mockito.when(userRepository.findUserById(anyInt())).thenReturn(java.util.Optional.of(user));
+        Mockito.when(jwtToken.validateToken(anyString())).thenReturn(true);
+        Mockito.when(jwtToken.getUserId()).thenReturn(1);
+        Mockito.when(feedbackRepository.findById(any())).thenReturn(Optional.of(feedback));
+        Response response = customerService.getUserFeedback(3,token);
+        Assert.assertEquals("User Feedback Fetched",response.message);
+        Assert.assertEquals(200,response.statusCode);
+    }
+
 }

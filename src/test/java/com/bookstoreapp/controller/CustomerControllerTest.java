@@ -229,7 +229,7 @@ public class CustomerControllerTest {
 
     @Test
     void givenUserTOken_WhenIdentified_ShouldReturnProperMessage() throws Exception {
-        Mockito.when(customerService.getUserFeedback(id, anyString())).
+        Mockito.when(customerService.getUserFeedback(any(), anyString())).
                 thenReturn(new Response("User Feedback Fetched",200,""));
         MvcResult result = mockMvc.perform(get("/customer/feedback").
                 contentType(MediaType.APPLICATION_JSON)
