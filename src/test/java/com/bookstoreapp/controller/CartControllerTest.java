@@ -13,7 +13,6 @@ import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,7 +98,6 @@ public class CartControllerTest {
 
     @Test
     void whenUserTokenProper_ShouldPlacedOrderAndReturn() throws Exception {
-
         Response response=new Response("Order Is Placed",200,"");
         Mockito.when(cartService.updateCart(any())).thenReturn(response);
         MvcResult result = this.mockMvc.perform(put("/cart")

@@ -13,9 +13,7 @@ public interface IAdminService {
 
     String addBook(BookDto bookDto);
 
-    String updatePrice(UpdateBookDto bookDto);
-
-    String updateQuantity(UpdateCartDto updateCartDto);
+    String updateBook(UpdateBookDto bookDto);
 
     FileResponse uploadBookCover(MultipartFile file);
 

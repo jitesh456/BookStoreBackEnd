@@ -22,6 +22,7 @@ import javax.mail.MessagingException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 public class CartService  implements ICartService {
@@ -50,45 +51,17 @@ public class CartService  implements ICartService {
     @Override
     public Response addToCart(AddToCartDto addToCartDto, String token) {
 
-        Cart userCart=null;
         User user = validate(token).get();
         Optional<Cart> cart = user.carts.stream().filter(cart1 -> !cart1.placedOrder).findFirst();
         int bookId = addToCartDto.bookId;
         Optional<Book> book1 = bookRepository.findById(bookId);
         Book book = book1.get();
-        int quantity =addToCartDto.quantity;
         if (cart.isPresent()) {
-            userCart = cart.get();
-            List<BookCart> bookCarts = userCart.bookCartList.stream()
-                    .filter(bookCart -> bookCart.book.id == bookId).collect(Collectors.toList());
-            BookCart bookCart=null;
-            if(bookCarts.size()==0) {
-                 bookCart = new BookCart(book, userCart, quantity);
-                 userCart.quantity = userCart.quantity+ quantity;
-                 userCart.totalPrice = (int) (userCart.totalPrice+ book.price*addToCartDto.quantity);
-            }
-
-            if(bookCarts.size()==1) {
-                int bookCartQuantity = bookCartRepository.getBookCartQuantity(bookId, userCart.id);
-                userCart.quantity=(userCart.quantity+addToCartDto.quantity)-bookCartQuantity;
-                userCart.totalPrice = (int) ((userCart.totalPrice+addToCartDto.quantity*book.price)-bookCartQuantity*book.price);
-                bookCart = new BookCart(book, userCart, quantity);
-                cartRepository.save(userCart);
-            }
-
-            bookCartRepository.save(bookCart);
-            userCart.bookCartList.add(bookCart);
-            cartRepository.save(userCart);
+          addBookForUserCart(cart,book,bookId,addToCartDto);
         }
+
         if (!cart.isPresent()) {
-            userCart = new Cart(null, (int)book.price, false, quantity);
-            cartRepository.save(userCart);
-            user.carts.add(userCart);
-            userRepository.save(user);
-            BookCart bookCart = new BookCart(book, userCart, quantity);
-            bookCartRepository.save(bookCart);
-            userCart.bookCartList.add(bookCart);
-            cartRepository.save(userCart);
+           addBookForNewCart(book,user,addToCartDto.quantity);
         }
         return new Response("Added to Cart", 200, "Book Is Added To Cart");
     }
@@ -101,14 +74,9 @@ public class CartService  implements ICartService {
         Optional<Cart> cart = userCart.stream().filter(cart1 -> !cart1.placedOrder).findAny();
         List<BookCart> bookCartList = cart.map(value -> value.bookCartList).orElse(Collections.emptyList());
         List<Book> bookList = new ArrayList<>();
-        Book book;
-        for(int i=0;i<bookCartList.size();i++) {
-
-            book=bookRepository.findById(bookCartList.get(i).bookCartID.bookId).get();
-            book.quantity=bookCartList.get(i).bookQuantity;
-            bookList.add(book);
-        }
-
+        IntStream.range(0,bookCartList.size()).forEach(i -> {
+            bookList.add(changeBookQuantity(bookCartList.get(i).book,cart.get(),i));
+        });
         return new Response("BookList", 200, bookList);
 
     }
@@ -120,6 +88,7 @@ public class CartService  implements ICartService {
         List<Cart> userCart = user.map(user1 -> user.get().carts).orElse(null);
         Cart cart = userCart.stream().filter(cart1 -> !cart1.placedOrder).findAny().get();
         Book book;
+
         for(int i=0;i<cart.bookCartList.size();i++) {
 
             int bookQuantity = cart.bookCartList.get(i).bookQuantity;
@@ -157,26 +126,66 @@ public class CartService  implements ICartService {
         Optional<User> user = validate(token);
         List<Cart> userCart = user.map(user1 -> user.get().carts).orElse(null);
         Iterator<Cart> cartIterator = userCart.stream().filter(cart1 -> cart1.placedOrder).iterator();
-
         List<OrderPlacedResponse> bookCartList = new ArrayList<>();
+
         while (cartIterator.hasNext()) {
-            Cart cart = cartIterator.next();
             List<Book> bookList = new ArrayList<>();
-            Book book;
-            for(int i=0;i<cart.bookCartList.size();i++) {
-                book=bookRepository.findById(cart.bookCartList.get(i).bookCartID.bookId).get();
-                book.quantity=cart.bookCartList.get(i).bookQuantity;
-                bookList.add(book);
-            }
+            Cart cart = cartIterator.next();
+            IntStream.range(0,cart.bookCartList.size()).forEach(i -> {
+                bookList.add(changeBookQuantity(cart.bookCartList.get(i).book,cart,i));
+            });
             bookCartList.add(new OrderPlacedResponse(bookList, cart));
         }
         return new Response("Book Cart List", 200, bookCartList);
     }
 
+
     private Optional<User> validate(String token){
         jwtToken.validateToken(token);
         int userId = jwtToken.getUserId();
         return userRepository.findUserById(userId);
+    }
+
+    public Book changeBookQuantity(Book paramBook ,Cart cart,int i){
+        Book book=paramBook;
+        book.quantity=cart.bookCartList.get(i).bookQuantity;
+        return book;
+    }
+
+    public void addBookForNewCart(Book book,User user,int quantity){
+        Cart cart = new Cart(null, (int)book.price, false, quantity);
+        cartRepository.save(cart);
+        user.carts.add(cart);
+        userRepository.save(user);
+        BookCart bookCart = new BookCart(book, cart, quantity);
+        bookCartRepository.save(bookCart);
+        cart.bookCartList.add(bookCart);
+        cartRepository.save(cart);
+    }
+
+    public void addBookForUserCart(Optional<Cart> cart,Book book,int bookId,AddToCartDto addToCartDto){
+        Cart userCart = cart.get();
+        List<BookCart> bookCarts = userCart.bookCartList.stream()
+                .filter(bookCart -> bookCart.book.id == bookId).collect(Collectors.toList());
+        BookCart bookCart=null;
+        if(bookCarts.size()==0) {
+
+            userCart.quantity = userCart.quantity+ addToCartDto.quantity;
+            userCart.totalPrice = (int) (userCart.totalPrice+ book.price*addToCartDto.quantity);
+            bookCart = new BookCart(book, userCart, addToCartDto.quantity);
+        }
+
+        if(bookCarts.size()==1) {
+            int bookCartQuantity = bookCartRepository.getBookCartQuantity(bookId, userCart.id);
+            userCart.quantity=(userCart.quantity+addToCartDto.quantity)-bookCartQuantity;
+            userCart.totalPrice = (int) ((userCart.totalPrice+addToCartDto.quantity*book.price)-bookCartQuantity*book.price);
+            bookCart = new BookCart(book, userCart, addToCartDto.quantity);
+            cartRepository.save(userCart);
+        }
+
+        bookCartRepository.save(bookCart);
+        userCart.bookCartList.add(bookCart);
+        cartRepository.save(userCart);
     }
 
 }

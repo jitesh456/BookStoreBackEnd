@@ -47,7 +47,7 @@ public class AdminService implements IAdminService {
     }
 
     @Override
-    public String updatePrice(UpdateBookDto bookDto) {
+    public String updateBook(UpdateBookDto bookDto) {
 
         Optional<Book> book=bookRepository.findByIsbn(bookDto.isbn);
         if (book.isPresent()){
@@ -60,18 +60,6 @@ public class AdminService implements IAdminService {
         throw new BookException("BOOK DOES NOT EXISTS",BookException.ExceptionType.BOOK_DOES_NOT_EXIST);
     }
 
-    @Override
-    public String updateQuantity(UpdateCartDto updateCartDto) {
-
-        Optional<Book> book=bookRepository.findByIsbn(updateCartDto.isbn);
-        if (book.isPresent()){
-            Book book1=book.get();
-            book1.quantity=updateCartDto.quantity;
-            bookRepository.save(book1);
-            return "Book Quantity Updated";
-        }
-        throw new BookException("BOOK DOES NOT EXISTS",BookException.ExceptionType.BOOK_DOES_NOT_EXIST);
-    }
 
     @Override
     public FileResponse uploadBookCover(MultipartFile file) {

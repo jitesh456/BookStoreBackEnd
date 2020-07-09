@@ -2,7 +2,6 @@ package com.bookstoreapp.service;
 
 import com.bookstoreapp.dto.BookDto;
 import com.bookstoreapp.dto.UpdateBookDto;
-import com.bookstoreapp.dto.UpdateCartDto;
 import com.bookstoreapp.model.Book;
 import com.bookstoreapp.repository.IBookRepository;
 import com.bookstoreapp.service.Implementation.AdminService;
@@ -14,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -59,20 +59,8 @@ public class AdminServiceTest {
         String expectedResponse="Updated Successfully";
         when(iBookRepository.findByIsbn(any())).thenReturn(java.util.Optional.of(givenBook));
         when(iBookRepository.save(any())).thenReturn(givenBook);
-        String actualResponse= adminService.updatePrice(bookDto1);
+        String actualResponse= adminService.updateBook(bookDto1);
         Assert.assertEquals(expectedResponse,actualResponse);
     }
 
-
-    @Test
-    void givenQuantity_WhenProper_ShouldUpdateBookQuantity() {
-
-        Book givenBook = new Book(bookDto);
-        UpdateCartDto updateCartDto = new UpdateCartDto("1234567895", 5);
-        String expectedResponse = "Book Quantity Updated";
-        when(iBookRepository.findByIsbn(any())).thenReturn(java.util.Optional.of(givenBook));
-        when(iBookRepository.save(any())).thenReturn(givenBook);
-        String actualResponse = adminService.updateQuantity(updateCartDto);
-        Assert.assertEquals(expectedResponse, actualResponse);
-    }
 }

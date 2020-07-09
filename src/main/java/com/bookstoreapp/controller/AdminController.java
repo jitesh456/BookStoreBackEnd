@@ -46,7 +46,7 @@ public class AdminController {
             return new ResponseEntity<Response>(new Response(bindingResult.getAllErrors().get(0).getDefaultMessage(),
                     101,"Empty Field"), HttpStatus.BAD_REQUEST);
         }
-        String responseMessage= adminService.updatePrice(updateBookDto);
+        String responseMessage= adminService.updateBook(updateBookDto);
         return new ResponseEntity<Response>(new Response("Book is Updated",200, responseMessage),
                 HttpStatus.OK);
     }
