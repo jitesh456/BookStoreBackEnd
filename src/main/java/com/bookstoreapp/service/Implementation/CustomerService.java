@@ -1,6 +1,5 @@
 package com.bookstoreapp.service.Implementation;
 
-
 import com.bookstoreapp.dto.FeedbackDto;
 import com.bookstoreapp.dto.UserDetailDto;
 import com.bookstoreapp.exception.UserException;
@@ -38,11 +37,8 @@ public class CustomerService implements ICustomerService {
     @Override
     public Response userDetail(UserDetailDto userDetailsDto, String token) {
 
-        Optional<User> savedUser = validate(token);
-        User user = savedUser.get();
-        if (!savedUser.isPresent()) {
-            throw new UserException("User Not Found", UserException.ExceptionType.USER_NOT_FOUND);
-        }
+        User user = validate(token).get();
+        if (user != null) { throw new UserException("User Not Found", UserException.ExceptionType.USER_NOT_FOUND); }
         Optional<UserDetail> detail = userDetailRepository.findAll().stream()
                 .filter(details -> userDetailsDto.addressType.equals(details.addressType))
                 .findFirst();
@@ -61,11 +57,7 @@ public class CustomerService implements ICustomerService {
     public Response getUserDetail(String token) {
 
         Optional<User> savedUser = validate(token);
-
-        if (savedUser.isPresent()) {
-
-            return new Response("User Found", 200, savedUser.get());
-        }
+        if (savedUser.isPresent()) { return new Response("User Found", 200, savedUser.get()); }
         throw new UserException("User Not Found", UserException.ExceptionType.USER_NOT_FOUND);
     }
 

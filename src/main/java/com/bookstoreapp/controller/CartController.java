@@ -27,17 +27,14 @@ public class CartController {
     @Autowired
     SendMail mailSender;
 
-
     @PostMapping("/book")
     public ResponseEntity<Response> addToCart(@Valid @RequestBody AddToCartDto addToCartDto,
                                               BindingResult result,
                                               @RequestHeader String token) {
-        if(result.hasErrors())
-        {
+        if(result.hasErrors()) {
             return new  ResponseEntity<>(new Response(result.getAllErrors().get(0).getDefaultMessage(),400,""),
                     HttpStatus.BAD_REQUEST);
         }
-
         Response response = cartService.addToCart(addToCartDto, token);
         return new  ResponseEntity<>(response,HttpStatus.CREATED);
     }

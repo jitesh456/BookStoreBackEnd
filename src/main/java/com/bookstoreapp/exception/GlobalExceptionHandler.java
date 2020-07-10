@@ -3,8 +3,10 @@ package com.bookstoreapp.exception;
 import com.bookstoreapp.response.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+@ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(BookException.class)
@@ -22,7 +24,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserException.class)
     public ResponseEntity<Response> globalHandler(UserException userException) {
-        System.out.println("hhek");
         return new ResponseEntity<Response>(new Response(userException.message,
                 101, userException.exceptionType), HttpStatus.OK);
     }
