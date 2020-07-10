@@ -8,20 +8,21 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(BookException.class)
-    public ResponseEntity<Response> bookHandler(BookException bookException){
+    public ResponseEntity<Response> globalHandler(BookException bookException){
         return new ResponseEntity(new Response(bookException.message,
                 101,bookException.exceptionType),
                 HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(JwtTokenException.class)
-    public ResponseEntity<Response> bookHandler(JwtTokenException jwtTokenException){
+    public ResponseEntity<Response> globalHandler(JwtTokenException jwtTokenException){
         return new ResponseEntity<Response>(new Response(jwtTokenException.message,
                 101, jwtTokenException.exceptionType), HttpStatus.OK);
     }
 
     @ExceptionHandler(UserException.class)
-    public ResponseEntity<Response> bookHandler(UserException userException) {
+    public ResponseEntity<Response> globalHandler(UserException userException) {
+        System.out.println("hhek");
         return new ResponseEntity<Response>(new Response(userException.message,
                 101, userException.exceptionType), HttpStatus.OK);
     }

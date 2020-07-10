@@ -10,8 +10,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 
 @SpringBootApplication
-
-
 @EnableConfigurationProperties(ApplicationProperties.class)
 public class BookstoreappApplication {
 

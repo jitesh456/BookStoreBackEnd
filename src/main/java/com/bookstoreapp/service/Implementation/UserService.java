@@ -51,29 +51,17 @@ public class UserService implements IUserService {
     public Response addUser(UserRegistrationDto userRegistrationDto, HttpServletRequest servletRequest) throws MessagingException {
 
         Optional<User> userdata = userRepository.findUserByEmail(userRegistrationDto.email);
-        if (!userdata.isPresent()) {
-            String password = userRegistrationDto.password;
-            String encodedPassowrd = passwordEncoder.encode(password);
-            userRegistrationDto.password = encodedPassowrd;
-            User user = new User(userRegistrationDto);
-            User savedUser = userRepository.save(user);
-            StringBuffer url = servletRequest.getRequestURL();
-            String baseUrl = url.substring(0, url.length() - 4);
-//            String appUrl =
-//                    iVerifyEmailTemplate.verifyEmailTemplate(baseUrl + "verify?token=" + jwtToken.generateToken(savedUser.id));
+        if (userdata.isPresent()) {
+            throw new UserException("User Exists", UserException.ExceptionType.USER_ALREADY_EXIST); }
 
-            String appUrl =
-                    iVerifyEmailTemplate.verifyEmailTemplate(servletRequest.getHeader("origin") +
-                            "/verify/account/?" + jwtToken.generateToken(savedUser.id));
-
-
-            NotificationDto notificationDto = new NotificationDto(savedUser.email, "Activate account",
-                    appUrl);
-            mailSender.sendMail(notificationDto);
-            return new Response("User Registered Successfully", 200, "User Registered Successfully");
-        }
-
-        throw new UserException("User Exists", UserException.ExceptionType.USER_ALREADY_EXIST);
+        userRegistrationDto.password = passwordEncoder.encode(userRegistrationDto.password);
+        User user = new User(userRegistrationDto);
+        User savedUser = userRepository.save(user);
+        String appUrl = iVerifyEmailTemplate.verifyEmailTemplate(servletRequest.getHeader("origin") +
+                "/verify/account/?" + jwtToken.generateToken(savedUser.id));
+        NotificationDto notificationDto = new NotificationDto(savedUser.email, "Activate account", appUrl);
+        mailSender.sendMail(notificationDto);
+        return new Response("User Registered Successfully", 200, "User Registered Successfully");
     }
 
 
@@ -81,13 +69,14 @@ public class UserService implements IUserService {
     public String loginUser(UserLoginDto userLoginDto) {
 
         Optional<User> userData = userRepository.findUserByEmail(userLoginDto.email);
-        if (userData.isPresent()) {
 
-            boolean booleanResult = passwordEncoder.matches(userLoginDto.password, userData.get().password);
-            if (booleanResult) {
-                return jwtToken.generateToken(userData.get().id);
-            }
-            throw new UserException("Incorrect password", UserException.ExceptionType.INVALID_PASSWORD);
+        if (userData.isPresent()) {
+            boolean booleanResult=false;
+            booleanResult = passwordEncoder.matches(userLoginDto.password, userData.get().password);
+            System.out.println("Boolean "+booleanResult);
+            if (!booleanResult) {
+                throw new UserException("Incorrect password", UserException.ExceptionType.INVALID_PASSWORD); }
+            return jwtToken.generateToken(userData.get().id);
         }
         throw new UserException("Invalid Email id", UserException.ExceptionType.INVALID_EMAIL_ID);
     }
@@ -115,10 +104,8 @@ public class UserService implements IUserService {
             String appUrl =
                     servletRequest.getHeader("origin") + "/reset/password/?" + jwtToken.generateToken(existingUser.id);
             String message = iResetPasswordTemplate.getPasswordTemplate(appUrl);
-            NotificationDto notificationDto = new NotificationDto(existingUser.email, "Reset Password",
-                    message);
+            NotificationDto notificationDto = new NotificationDto(existingUser.email, "Reset Password", message);
             mailSender.sendMail(notificationDto);
-
             return new Response("Sent Email For Password Reset", 200, "User Fetched Successfully");
         }
         throw new UserException("No Such User", UserException.ExceptionType.USER_NOT_FOUND);
@@ -128,22 +115,16 @@ public class UserService implements IUserService {
     @Override
     public Response resetPassword(String token, String password) {
 
-        Boolean aBoolean = jwtToken.validateToken(token);
-        int userId = jwtToken.getUserId();
-        Optional<User> user = userRepository.findUserById(userId);
+        jwtToken.validateToken(token);
+        Optional<User> user = userRepository.findUserById(jwtToken.getUserId());
         if (user.isPresent()) {
             if (user.get().isActivate) {
-                User user1 = user.get();
-                String encodedPassowrd = passwordEncoder.encode(password);
-                user1.password = encodedPassowrd;
-                userRepository.save(user1);
+                user.get().password = passwordEncoder.encode(password);
+                userRepository.save(user.get());
                 return new Response("Password Reset Successfully", 200, "");
             }
             throw new UserException("User is not Activated Account", UserException.ExceptionType.USER_HAS_NOT_ACTIVATED_ACCOUNT);
-
         }
         throw new UserException("No Such User", UserException.ExceptionType.USER_NOT_FOUND);
     }
-
-
 }
