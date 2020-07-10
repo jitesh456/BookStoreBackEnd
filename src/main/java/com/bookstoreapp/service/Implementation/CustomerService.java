@@ -63,34 +63,17 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public Response addFeedback(String token, FeedbackDto feedbackDto) {
-        boolean isUserFeedbackPresent= false;
-        Feedback userFeedback = null;
+
         if(token != null) {
             User user = validate(token).get();
-            int userId = user.id;
-            String isbn = feedbackDto.isbn;
-            Optional<Book> book1 = bookRepository.findByIsbn(isbn);
+            Optional<Book> book1 = bookRepository.findByIsbn(feedbackDto.isbn);
             Book book = book1.get();
-            int bookid = book.id;
-            List<Integer> feedbackIds = feedbackRepository.getfeedbackIds(bookid);
-            if(feedbackIds.size()>0) {
-                for (int i = 0; i < feedbackIds.size(); i++) {
-                    int userFeedbackId = feedbackRepository.getUserFeedbackId(feedbackIds.get(i));
-                    if (userId == userFeedbackId) {
-                        isUserFeedbackPresent = true;
-                        break;
-                    }
-                }
-            }
-            if (!isUserFeedbackPresent) {
-                String feedbackMessage = feedbackDto.feedbackMessage;
-                int rating = feedbackDto.rating;
-                userFeedback = new Feedback(userId, rating, feedbackMessage,book);
-                feedbackRepository.save(userFeedback);
+            List<Integer> feedbackIds = feedbackRepository.getfeedbackIds(book1.get().id);
+            if (feedbackIds.size()==0) {
+                feedbackRepository.save(new Feedback(user.id, feedbackDto.rating, feedbackDto.feedbackMessage,book));
                 return new Response("Thank you For your Feedback ", 200, "Feedback added Successfully");
             }
-            else
-                throw new UserException("You had submitted feedback previously", UserException.ExceptionType.YOU_HAD_SUBMITTED_FEEDBACK_PREVIOUSLY);
+            throw new UserException("You had submitted feedback previously", UserException.ExceptionType.YOU_HAD_SUBMITTED_FEEDBACK_PREVIOUSLY);
         }
         throw new UserException("Please Login to give feedback", UserException.ExceptionType.PLEASE_LOGIN_TO_GIVE_FEEDBACK);
    }
@@ -98,43 +81,29 @@ public class CustomerService implements ICustomerService {
     @Override
     public Response getAllFeedback(String isbn) {
 
-        Optional<Book> book = bookRepository.findByIsbn(isbn);
-        Book bookdData= book.get();
-        Integer id = bookdData.id;
-        List<Integer> feedbackIds = feedbackRepository.getfeedbackIds(id);
+        List<Integer> feedbackIds = feedbackRepository.getfeedbackIds(bookRepository.findByIsbn(isbn).get().id);
         List<FeedbackResponse> feedbackList= new ArrayList<>();
 
         for(int i=0;i<feedbackIds.size();i++) {
             Optional<Feedback> feedback = feedbackRepository.findById(feedbackIds.get(i));
-            Feedback feedback1 = feedback.get();
-            int userId = feedback1.userId;
-            Optional<User> userById = userRepository.findUserById(userId);
-            String name = userById.get().name;
-            feedbackList.add(new FeedbackResponse(feedback1.rating,feedback1.feedbackMessage,name));
-
+            Optional<User> userById = userRepository.findUserById(feedback.get().userId);
+            feedbackList.add(new FeedbackResponse(feedback.get().rating,feedback.get().feedbackMessage,userById.get().name));
         }
         return new Response("Fetched All Feedbacks",200,feedbackList);
     }
 
     @Override
-    public Response getUserFeedback(int id, String token) {
+    public Response getUserFeedback(int bookId, String token) {
         Optional<User> user = validate(token);
         List<FeedbackResponse> feedbackList= new ArrayList<>();
         if (user.isPresent()){
-            User userDetails=user.get();
-            Integer userId=userDetails.id;
-            String userName=userDetails.name;
-            Integer feedbackId=0;
-                feedbackId = feedbackRepository.getFeedbackId(userId, id);
-            if(feedbackId==null){
-                throw new UserException("Feedback not found for this user", UserException.ExceptionType.FEEDBACK_NOT_FOUND);
-            }
-            else {
-                Optional<Feedback> feedback = feedbackRepository.findById(feedbackId);
-                Feedback feedbackDetails = feedback.get();
-                feedbackList.add(new FeedbackResponse(feedbackDetails.rating, feedbackDetails.feedbackMessage, userName));
-                return new Response("User Feedback Fetched", 200, feedbackList);
-            }
+            Integer feedbackId= feedbackRepository.getFeedbackId(user.get().id, bookId);
+            if(feedbackId == null){
+                throw new UserException("Feedback not found for this user", UserException.ExceptionType.FEEDBACK_NOT_FOUND); }
+            Optional<Feedback> feedback = feedbackRepository.findById(feedbackId);
+            feedbackList.add(new FeedbackResponse(feedback.get().rating, feedback.get().feedbackMessage, user.get().name));
+            return new Response("User Feedback Fetched", 200, feedbackList);
+
         }
         throw new UserException("User not Found", UserException.ExceptionType.USER_NOT_FOUND);
     }
@@ -147,6 +116,3 @@ public class CustomerService implements ICustomerService {
         return userRepository.findUserById(userId);
     }
 }
-
-
-

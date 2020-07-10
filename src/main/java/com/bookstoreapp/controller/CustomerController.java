@@ -59,8 +59,8 @@ public class CustomerController {
     }
 
     @GetMapping(value = "/customer/feedback")
-    public ResponseEntity<Response> getCustomerFeedback(@RequestParam("id") int id,@RequestHeader String token){
-        Response customerFeedback = customerService.getUserFeedback(id,token);
+    public ResponseEntity<Response> getCustomerFeedback(@RequestParam("bookId") int bookId,@RequestHeader String token){
+        Response customerFeedback = customerService.getUserFeedback(bookId,token);
         return new ResponseEntity<>(customerFeedback,HttpStatus.OK);
     }
 }
