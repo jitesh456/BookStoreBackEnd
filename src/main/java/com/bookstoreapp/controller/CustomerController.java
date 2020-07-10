@@ -41,7 +41,7 @@ public class CustomerController {
     }
 
     @PostMapping(value = "/feedback")
-    public ResponseEntity<Response> addUserFeedback(@RequestBody FeedbackDto feedbackDto,
+    public ResponseEntity<Response> addUserFeedback(@Valid @RequestBody FeedbackDto feedbackDto,
                                                     BindingResult bindingResult,
                                                     @RequestHeader String token){
         if(bindingResult.hasErrors()) {

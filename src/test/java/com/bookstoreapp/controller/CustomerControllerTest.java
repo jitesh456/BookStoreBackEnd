@@ -28,8 +28,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
@@ -38,7 +37,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 public class CustomerControllerTest {
 
     @MockBean
-
     CustomerService customerService;
 
     @Autowired
@@ -201,6 +199,50 @@ public class CustomerControllerTest {
                         .message);
     }
 
+    @Test
+    void givenFeedbackMessage_WhenNotProper_ShouldReturnProperMessgae() throws Exception {
+        FeedbackDto feedbackDto = new FeedbackDto(4, "bad" ,"9876543210");
+        String feedbackString = new Gson().toJson(feedbackDto);
+        Mockito.when(customerService.addFeedback(any(),any())).
+                thenReturn(new Response("Feedback Added Successfully",200,""));
+        MvcResult result = this.mockMvc.perform(post("/feedback").
+                 content(feedbackString)
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(httpHeaders))
+                .andReturn();
+        Assert.assertEquals("Feedback must include 10-200 characters",
+                gson.fromJson(result.getResponse().getContentAsString(),Response.class).message);
+    }
+
+    @Test
+    void givenFeedback_WhenNoMessageFound_ShouldReturnProperMessgae() throws Exception {
+        FeedbackDto feedbackDto = new FeedbackDto(4, null ,"9876543210");
+        String feedbackString = new Gson().toJson(feedbackDto);
+        Mockito.when(customerService.addFeedback(any(),any())).
+                thenReturn(new Response("Feedback Added Successfully",200,""));
+        MvcResult result = this.mockMvc.perform(post("/feedback").
+                content(feedbackString)
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(httpHeaders))
+                .andReturn();
+        Assert.assertEquals("Feedback cannot be null",
+                gson.fromJson(result.getResponse().getContentAsString(),Response.class).message);
+    }
+
+    @Test
+    void givenFeedback_WhenNoRatingFound_ShouldReturnProperMessgae() throws Exception {
+        FeedbackDto feedbackDto = new FeedbackDto(null, "good book to read" ,"9876543210");
+        String feedbackString = new Gson().toJson(feedbackDto);
+        Mockito.when(customerService.addFeedback(any(),any())).
+                thenReturn(new Response("Feedback Added Successfully",200,""));
+        MvcResult result = this.mockMvc.perform(post("/feedback").
+                content(feedbackString)
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(httpHeaders))
+                .andReturn();
+        Assert.assertEquals("Rating cannot be null",
+                gson.fromJson(result.getResponse().getContentAsString(),Response.class).message);
+    }
 
     @Test
     void givenIsbnNo_WhenProper_ShouldReturnAllFeedBack() throws Exception{
@@ -228,12 +270,11 @@ public class CustomerControllerTest {
     }
 
     @Test
-    void givenUserTOken_WhenIdentified_ShouldReturnProperMessage() throws Exception {
-        Mockito.when(customerService.getUserFeedback(any(), anyString())).
+    void givenUserToken_WhenIdentified_ShouldReturnProperMessage() throws Exception {
+        Mockito.when(customerService.getUserFeedback(anyInt(), anyString())).
                 thenReturn(new Response("User Feedback Fetched",200,""));
-        MvcResult result = mockMvc.perform(get("/customer/feedback").
+        MvcResult result = mockMvc.perform(get("/customer/feedback?id=2").
                 contentType(MediaType.APPLICATION_JSON)
-                .content("")
                 .headers(httpHeaders))
                 .andReturn();
         Assert.assertEquals(200,result.getResponse().getStatus());
